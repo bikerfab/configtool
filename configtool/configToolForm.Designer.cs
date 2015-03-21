@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridViewConfig = new System.Windows.Forms.DataGridView();
             this.buttonSend = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
@@ -52,24 +52,24 @@
             // 
             // dataGridViewConfig
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewConfig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewConfig.Location = new System.Drawing.Point(0, 27);
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dataGridViewConfig.Location = new System.Drawing.Point(10, 27);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
             this.dataGridViewConfig.Size = new System.Drawing.Size(435, 386);
             this.dataGridViewConfig.TabIndex = 0;
@@ -80,9 +80,9 @@
             // 
             // buttonSend
             // 
-            this.buttonSend.Location = new System.Drawing.Point(440, 144);
+            this.buttonSend.Location = new System.Drawing.Point(456, 149);
             this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(143, 44);
+            this.buttonSend.Size = new System.Drawing.Size(143, 39);
             this.buttonSend.TabIndex = 1;
             this.buttonSend.Text = "Send to device";
             this.buttonSend.UseVisualStyleBackColor = true;
@@ -90,9 +90,9 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(440, 96);
+            this.buttonSave.Location = new System.Drawing.Point(456, 100);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(143, 42);
+            this.buttonSave.Size = new System.Drawing.Size(143, 39);
             this.buttonSave.TabIndex = 2;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -100,7 +100,7 @@
             // 
             // buttonOpen
             // 
-            this.buttonOpen.Location = new System.Drawing.Point(440, 51);
+            this.buttonOpen.Location = new System.Drawing.Point(456, 51);
             this.buttonOpen.Name = "buttonOpen";
             this.buttonOpen.Size = new System.Drawing.Size(143, 39);
             this.buttonOpen.TabIndex = 3;
@@ -111,7 +111,7 @@
             // comboBoxPorts
             // 
             this.comboBoxPorts.FormattingEnabled = true;
-            this.comboBoxPorts.Location = new System.Drawing.Point(440, 309);
+            this.comboBoxPorts.Location = new System.Drawing.Point(456, 309);
             this.comboBoxPorts.Name = "comboBoxPorts";
             this.comboBoxPorts.Size = new System.Drawing.Size(97, 21);
             this.comboBoxPorts.TabIndex = 4;
@@ -122,7 +122,7 @@
             this.editToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(596, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(611, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -175,9 +175,9 @@
             // 
             // buttonFromDevice
             // 
-            this.buttonFromDevice.Location = new System.Drawing.Point(440, 195);
+            this.buttonFromDevice.Location = new System.Drawing.Point(456, 198);
             this.buttonFromDevice.Name = "buttonFromDevice";
-            this.buttonFromDevice.Size = new System.Drawing.Size(143, 45);
+            this.buttonFromDevice.Size = new System.Drawing.Size(143, 39);
             this.buttonFromDevice.TabIndex = 6;
             this.buttonFromDevice.Text = "Load from device";
             this.buttonFromDevice.UseVisualStyleBackColor = true;
@@ -185,9 +185,9 @@
             // 
             // buttonErase
             // 
-            this.buttonErase.Location = new System.Drawing.Point(442, 247);
+            this.buttonErase.Location = new System.Drawing.Point(456, 247);
             this.buttonErase.Name = "buttonErase";
-            this.buttonErase.Size = new System.Drawing.Size(141, 41);
+            this.buttonErase.Size = new System.Drawing.Size(143, 39);
             this.buttonErase.TabIndex = 7;
             this.buttonErase.Text = "Erase device";
             this.buttonErase.UseVisualStyleBackColor = true;
@@ -197,7 +197,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(596, 475);
+            this.ClientSize = new System.Drawing.Size(611, 421);
             this.Controls.Add(this.buttonErase);
             this.Controls.Add(this.buttonFromDevice);
             this.Controls.Add(this.comboBoxPorts);
@@ -206,6 +206,7 @@
             this.Controls.Add(this.buttonSend);
             this.Controls.Add(this.dataGridViewConfig);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormConfig";
             this.Text = "Configuration Tool";

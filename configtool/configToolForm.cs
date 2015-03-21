@@ -119,16 +119,17 @@ namespace configtool
 
 
                 if (rxdata == Configuration.CFG_LOAD_OK)
-                    Debug.Print("download ok");
+                    MessageBox.Show("Configuration sent", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 if (rxdata == Configuration.CFG_LOAD_WRONGCHECK)
-                    Debug.Print("wrong checksum");
+                    MessageBox.Show("Wrong checksum, communication error", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
                 serialPort.Close();
             }
             catch(TimeoutException)
             {
                 Debug.Print("Timeout");
+                MessageBox.Show("Timeout, device not responding", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 tout.stop();
                 serialPort.Close();
             }
@@ -229,7 +230,7 @@ namespace configtool
                 Debug.Print("received");
 
                 if (buffer[0] == Configuration.CFG_NOT_CONFIGURED)
-                    Debug.Print("not configured");
+                    MessageBox.Show("Device not configured", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else if (buffer[0] == Configuration.CFG_PRESENT)
                 {
                     Debug.Print("load configuration from device");
@@ -243,12 +244,16 @@ namespace configtool
                     {
                         cfg.fromBuffer(buffer);
                         initGridView();
+                        MessageBox.Show("Configuration loaded", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
-                        MessageBox.Show("No template for version ID = product ID =",
+                    {
+                        String msg = String.Format("No template for version ID={0} product ID={1}");
+                        MessageBox.Show(msg,
                                         "Error",
                                         MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);
+                    }
 
                 }
 
@@ -257,6 +262,7 @@ namespace configtool
             catch(TimeoutException)
             {
                 Debug.Print("Timeout");
+                MessageBox.Show("Timeout, device not responding", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 serialPort.Close();
             }
  
@@ -360,6 +366,7 @@ namespace configtool
             serialPort.Open();
             serialPort.Write("e");
             serialPort.Close();
+            MessageBox.Show("Device erased", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ChangeCellToComboBox(int iRowIndex)
