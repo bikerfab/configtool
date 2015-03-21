@@ -10,7 +10,8 @@ namespace configtool
     {
         Configuration cfg;
         bool bIsComboBox = false;
-        delegate void SetComboBoxCellType(int iRowIndex); 
+        delegate void SetComboBoxCellType(int iRowIndex);
+        bool editMode = false;
 
         public FormConfig()
         {
@@ -57,14 +58,8 @@ namespace configtool
 
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            
-        }
-
         private void buttonSend_Click(object sender, EventArgs e)
-        {
-            int i = 0;
+        {            
             int j = 0;
             byte[] rx = new byte[16];
             int rxdata = 0;
@@ -161,17 +156,13 @@ namespace configtool
             
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void modifyConfigurationStructureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dataGridViewConfig.AllowUserToAddRows = true;
             dataGridViewConfig.AllowUserToDeleteRows = true;
             dataGridViewConfig.Columns["param"].ReadOnly = false;
-            dataGridViewConfig.Columns["dataType"].Visible = true;
+            dataGridViewConfig.Columns["dataType"].Visible = true;          
+            editMode = true;
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -242,21 +233,25 @@ namespace configtool
  
         }
 
-
-
-        private void stopEditingToolStripMenuItem_Click(object sender, EventArgs e)
+        void stopEditing()
         {
             dataGridViewConfig.AllowUserToAddRows = false;
             dataGridViewConfig.AllowUserToDeleteRows = false;
             dataGridViewConfig.Columns["param"].ReadOnly = true;
             dataGridViewConfig.Columns["dataType"].Visible = false;
+            editMode = false;
+        }
+
+        private void stopEditingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            stopEditing();
         }
 
         void gridViewToData()
         {
             configItem item;
             String sParam;
-            int dataType;
+            String dataType;
             String sValue;
             byte size = 0;
 
@@ -267,8 +262,11 @@ namespace configtool
                 if (row.Index < dataGridViewConfig.RowCount)
                 {
                     sParam = row.Cells["param"].Value.ToString();
-                    dataType = Convert.ToInt32(row.Cells["dataType"].Value);
-                    sValue = row.Cells["val"].Value.ToString();
+                    dataType = row.Cells["dataType"].Value.ToString();
+                    if (row.Cells["val"].Value != null)
+                        sValue = row.Cells["val"].Value.ToString();
+                    else
+                        sValue = "";
                     item = new configItem(sParam, sValue, dataType);
                     size += item.getSize();
 
@@ -283,18 +281,23 @@ namespace configtool
         {
             configItem item;
             String sParam;
-            int sDataType;
+            String sDataType;
             byte size = 0;
             templateDlg dlg;
 
-            cfg.setNumItems(dataGridViewConfig.RowCount-1);
+            if(editMode)
+            {
+                stopEditing();
+            }
+
+            cfg.setNumItems(dataGridViewConfig.RowCount);
 
             foreach (DataGridViewRow row in dataGridViewConfig.Rows)
             {
-                if (row.Index < dataGridViewConfig.RowCount-1)
+                if (row.Index < dataGridViewConfig.RowCount)
                 {
                     sParam = row.Cells["param"].Value.ToString();
-                    sDataType = Convert.ToInt32(row.Cells["dataType"].Value);
+                    sDataType = row.Cells["dataType"].Value.ToString();
                     item = new configItem(sParam, "", sDataType);
                     size += item.getSize();
 
@@ -315,6 +318,7 @@ namespace configtool
                 cfgSelect.InitialDirectory = Application.StartupPath;
                 if (cfgSelect.ShowDialog() == DialogResult.OK)
                 {
+                    gridViewToData();
                     cfg.saveData(cfgSelect.FileName.ToString());
                 }
             }
@@ -333,7 +337,7 @@ namespace configtool
         {
             if (bIsComboBox == false)
             {
-                String[] dataTypeNames = { "Float", "UInt16", "Int16", "UInt32", "Int32" };
+               // String[] dataTypeNames = { "Float", "UInt16", "Int16", "UInt32", "Int32" };
 
                 DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
 
@@ -346,7 +350,7 @@ namespace configtool
 
                     DataRow dr = dt.NewRow();
 
-                    dr["dataType"] = dataTypeNames[i];
+                    dr["dataType"] = configItem.dataTypeNames[i];
                     dt.Rows.Add(dr);
                 }
 
@@ -373,11 +377,15 @@ namespace configtool
         private void dataGridViewConfig_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == this.dataGridViewConfig.Columns["dataType"].Index)
-            {
-                int a = 0;
+            {              
                 DataGridViewRow row = dataGridViewConfig.Rows[e.RowIndex];
-                row.Cells["dataType"].Value = 1;
+                row.Cells["dataType"].Value = configItem.dataTypeNames[e.ColumnIndex];
             }
+        }
+
+        private void dataGridViewConfig_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            Debug.Print(e.ToString());
         }
     }
 }

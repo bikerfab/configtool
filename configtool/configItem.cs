@@ -11,32 +11,30 @@ namespace configtool
     {
         public String tag;
         public String value;
-        public int type;
+        public String type;
+        public int typeCode;
         public byte numBytes;
+        public static String[] dataTypeNames = { "Float", "UInt16", "Int16", "UInt32", "Int32" };
+        static byte[] itemNumBytes = { 4, 2, 2, 4, 4 };
 
-        public configItem(String t, String v, int ty)
+        public configItem(String t, String v, String ty)
         {
             tag = t;
             value = v;
             type = ty;
+            typeCode = getTypeCode(ty);
+            numBytes = configItem.itemNumBytes[typeCode];
+        }
 
-            switch(type)
+        public int getTypeCode(String typeName)
+        {
+            for(int i = 0; i < dataTypeNames.Count(); i++)
             {
-                case 1:
-                case 4:
-                case 5:
-                    numBytes = 4;
-                    break;
-
-                case 2:
-                case 3:
-                    numBytes = 2;
-                    break;
-
-                default:
-                    numBytes = 0;
-                    break;
+                if (dataTypeNames[i] == typeName)
+                    return i;
             }
+
+            return -1;
         }
 
         public byte getSize()
@@ -48,25 +46,25 @@ namespace configtool
         {
             byte[] raw = new byte[4];
 
-            switch (type)
+            switch (typeCode)
             {
-                case 1:     // float
+                case 0:     // float
                     raw = BitConverter.GetBytes(Convert.ToSingle(value));
                     break;
 
-                case 2:     // 16 bit uint
+                case 1:     // 16 bit uint
                     raw = BitConverter.GetBytes(Convert.ToUInt16(value));
                     break;
 
-                case 3:     // 16 bit int
+                case 2:     // 16 bit int
                     raw = BitConverter.GetBytes(Convert.ToInt16(value));
                     break;
 
-                case 4:     // 32 bit uint
+                case 3:     // 32 bit uint
                     raw = BitConverter.GetBytes(Convert.ToUInt32(value));
                     break;
 
-                case 5:     // 32 bit int
+                case 4:     // 32 bit int
                     raw = BitConverter.GetBytes(Convert.ToInt32(value));
                     break;
 
@@ -79,25 +77,25 @@ namespace configtool
 
         public void setValueFromBuffer(byte[] buffer, int offset)
         {
-            switch (type)
+            switch (typeCode)
             {
-                case 1:     // float
+                case 0:     // float
                     value = BitConverter.ToSingle(buffer, offset).ToString();
                     break;
 
-                case 2:     // 16 bit uint
+                case 1:     // 16 bit uint
                     value = BitConverter.ToUInt16(buffer, offset).ToString();
                     break;
 
-                case 3:     // 16 bit int
+                case 2:     // 16 bit int
                     value = BitConverter.ToInt16(buffer, offset).ToString();
                     break;
 
-                case 4:     // 32 bit uint
+                case 3:     // 32 bit uint
                     value = BitConverter.ToUInt32(buffer, offset).ToString();
                     break;
 
-                case 5:     // 32 bit int
+                case 4:     // 32 bit int
                     value = BitConverter.ToInt32(buffer, offset).ToString();
                     break;
 
