@@ -371,12 +371,31 @@ namespace configtool
 
         private void buttonErase_Click(object sender, EventArgs e)
         {
-            serialPort.PortName = comboBoxPorts.GetItemText(comboBoxPorts.SelectedItem);
-            serialPort.BaudRate = 115200;
-            serialPort.Open();
-            serialPort.Write("e");
-            serialPort.Close();
-            MessageBox.Show("Device erased", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            int rxdata = 0;
+            tout = new Timeout(5000);
+
+            try
+            {
+                serialPort.PortName = comboBoxPorts.GetItemText(comboBoxPorts.SelectedItem);
+                serialPort.BaudRate = 115200;
+                serialPort.Open();
+                serialPort.Write("e");
+
+                do
+                {
+                    rxdata = serialPort.ReadChar();
+                    tout.check();
+                } while (rxdata != Configuration.CFG_ERASED);
+
+                serialPort.Close();
+                MessageBox.Show("Device erased", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (TimeoutException)
+            {
+                Debug.Print("Timeout");
+                MessageBox.Show("Timeout, device not responding", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                serialPort.Close();
+            }
         }
 
         private void ChangeCellToComboBox(int iRowIndex)
