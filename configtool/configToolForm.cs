@@ -189,7 +189,8 @@ namespace configtool
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            cfg.clear();
+            initGridView();
         }
 
         private void removeSelectedFieldToolStripMenuItem_Click(object sender, EventArgs e)
@@ -322,41 +323,48 @@ namespace configtool
             byte size = 0;
             templateDlg dlg;
 
-            if(editMode)
+            if (dataGridViewConfig.Rows.Count == 0)
             {
-                stopEditing();
+                MessageBox.Show("Parameters table is empty", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-
-            cfg.setNumItems(dataGridViewConfig.RowCount);
-
-            foreach (DataGridViewRow row in dataGridViewConfig.Rows)
+            else
             {
-                if (row.Index < dataGridViewConfig.RowCount)
+                if (editMode)
                 {
-                    sParam = row.Cells["param"].Value.ToString();
-                    sDataType = row.Cells["dataType"].Value.ToString();
-                    item = new configItem(sParam, "", sDataType);
-                    size += item.getSize();
-
-                    cfg.addItem(item);
+                    stopEditing();
                 }
-            }
 
-            dlg = new templateDlg();
-                        
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                cfg.setProductId(dlg.getProductID());
-                cfg.setVersionId(dlg.getVersionID());
-                SaveFileDialog cfgSelect = new SaveFileDialog();
+                cfg.setNumItems(dataGridViewConfig.RowCount);
 
-                cfgSelect.Title = "Save template";
-                cfgSelect.Filter = "ctp files|*.ctp";
-                cfgSelect.InitialDirectory = Application.StartupPath;
-                if (cfgSelect.ShowDialog() == DialogResult.OK)
+                foreach (DataGridViewRow row in dataGridViewConfig.Rows)
                 {
-                    gridViewToData();
-                    cfg.saveData(cfgSelect.FileName.ToString());
+                    if (row.Index < dataGridViewConfig.RowCount)
+                    {
+                        sParam = row.Cells["param"].Value.ToString();
+                        sDataType = row.Cells["dataType"].Value.ToString();
+                        item = new configItem(sParam, "", sDataType);
+                        size += item.getSize();
+
+                        cfg.addItem(item);
+                    }
+                }
+
+                dlg = new templateDlg();
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    cfg.setProductId(dlg.getProductID());
+                    cfg.setVersionId(dlg.getVersionID());
+                    SaveFileDialog cfgSelect = new SaveFileDialog();
+
+                    cfgSelect.Title = "Save template";
+                    cfgSelect.Filter = "ctp files|*.ctp";
+                    cfgSelect.InitialDirectory = Application.StartupPath;
+                    if (cfgSelect.ShowDialog() == DialogResult.OK)
+                    {
+                        gridViewToData();
+                        cfg.saveData(cfgSelect.FileName.ToString());
+                    }
                 }
             }
         }
