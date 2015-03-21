@@ -60,6 +60,7 @@
     <Compile Include="templateDlg.Designer.cs">
       <DependentUpon>templateDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Timeout.cs" />
     <EmbeddedResource Include="configToolForm.resx">
       <DependentUpon>configToolForm.cs</DependentUpon>
     </EmbeddedResource>

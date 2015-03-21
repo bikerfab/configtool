@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-
-
 namespace configtool
 {
     [Serializable]
@@ -23,8 +21,14 @@ namespace configtool
     public class Configuration
     {
         configHeader header;
-
         List<configItem> data = new List<configItem>();
+
+        public static int CFG_LOAD_OK = 1;
+        public static int CFG_LOAD_WRONGCHECK = 2;
+        public static int CFG_LOAD_PROCEED = 8;
+        public static int CFG_NOT_CONFIGURED = 9;
+        public static int CFG_ERASED = 10;
+        public static int CFG_PRESENT = 0xA5;
 
         public Configuration()
         {
@@ -58,9 +62,9 @@ namespace configtool
             }            
         }
 
-        // the template is an empty configuration (i.e. all values zero) with the                            
-        // same product id and version. Load this config then fill values with the data
-        // read from the device.
+        // the template is an empty configuration (i.e. all values are null strings) with the                            
+        // same product id and version used to get the parameters tags and data types. 
+        // Load this config then fill values with the data read from the device.
         // Templates are stored in the application folder (or a user folder)
         public bool loadTemplate(byte prodId, byte verId, string folder)
         {
