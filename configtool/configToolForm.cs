@@ -2,12 +2,15 @@
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Data;
 
 namespace configtool
 {
     public partial class FormConfig : Form
     {
         Configuration cfg;
+        bool bIsComboBox = false;
+        delegate void SetComboBoxCellType(int iRowIndex); 
 
         public FormConfig()
         {
@@ -324,6 +327,57 @@ namespace configtool
             serialPort.Open();
             serialPort.Write("e");
             serialPort.Close();
+        }
+
+        private void ChangeCellToComboBox(int iRowIndex)
+        {
+            if (bIsComboBox == false)
+            {
+                String[] dataTypeNames = { "Float", "UInt16", "Int16", "UInt32", "Int32" };
+
+                DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
+
+                dgComboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataTable dt = new DataTable();              
+                dt.Columns.Add("dataType", typeof(string));
+
+                for (int i = 0; i < 5; i++)
+                {
+
+                    DataRow dr = dt.NewRow();
+
+                    dr["dataType"] = dataTypeNames[i];
+                    dt.Rows.Add(dr);
+                }
+
+                dgComboCell.DataSource = dt;
+                dgComboCell.ValueMember = "dataType";
+                dgComboCell.DisplayMember = "dataType";
+                dataGridViewConfig.Rows[iRowIndex].Cells[dataGridViewConfig.CurrentCell.ColumnIndex] = dgComboCell;
+
+                bIsComboBox = true;
+            }
+        }
+
+        private void dataGridViewConfig_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            SetComboBoxCellType objChangeCellType = new SetComboBoxCellType(ChangeCellToComboBox);
+
+            if (e.ColumnIndex == this.dataGridViewConfig.Columns["dataType"].Index)
+            {
+                this.dataGridViewConfig.BeginInvoke(objChangeCellType, e.RowIndex);
+                bIsComboBox = false;
+            } 
+        }
+
+        private void dataGridViewConfig_CellLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == this.dataGridViewConfig.Columns["dataType"].Index)
+            {
+                int a = 0;
+                DataGridViewRow row = dataGridViewConfig.Rows[e.RowIndex];
+                row.Cells["dataType"].Value = 1;
+            }
         }
     }
 }
