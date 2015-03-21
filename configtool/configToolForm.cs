@@ -39,7 +39,9 @@ namespace configtool
             for (int i = 0; i < ports.Length; i++)
             {
                 comboBoxPorts.Items.Add(ports[i]);
-            }                       
+            }
+
+            comboBoxPorts.SelectedIndex = 0;
         }
 
 
