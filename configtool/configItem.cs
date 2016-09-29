@@ -12,16 +12,18 @@ namespace configtool
         public String tag;
         public String value;
         public String type;
+        public String descript;
         public int typeCode;
         public byte numBytes;
         public static String[] dataTypeNames = { "Float", "UInt16", "Int16", "UInt32", "Int32" };
         static byte[] itemNumBytes = { 4, 2, 2, 4, 4 };
 
-        public configItem(String t, String v, String ty)
+        public configItem(String t, String v, String ty, String desc)
         {
             tag = t;
             value = v;
             type = ty;
+            descript = desc;
             typeCode = getTypeCode(ty);
             numBytes = configItem.itemNumBytes[typeCode];
         }

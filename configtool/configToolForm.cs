@@ -25,6 +25,10 @@ namespace configtool
             dataGridViewConfig.Columns.Add("param", "Parameter");
             dataGridViewConfig.Columns.Add("val", "Value");
             dataGridViewConfig.Columns.Add("dataType", "Type");
+            dataGridViewConfig.Columns.Add("description", "Description");
+
+            DataGridViewColumn colDesc = dataGridViewConfig.Columns[3];
+            colDesc.Width = 300;
             dataGridViewConfig.AllowUserToAddRows = false;
             dataGridViewConfig.AllowUserToDeleteRows = false;
             dataGridViewConfig.Columns["dataType"].Visible = false;
@@ -55,7 +59,10 @@ namespace configtool
 
             for (i = 0; i < cfg.getNumItems(); i++)
             {
-                String[] row = new String[] { cfg.getItem(i).tag, cfg.getItem(i).value, Convert.ToString(cfg.getItem(i).type) };
+                String[] row = new String[] { cfg.getItem(i).tag, 
+                                              cfg.getItem(i).value, 
+                                              Convert.ToString(cfg.getItem(i).type),
+                                              cfg.getItem(i).descript};
                 dataGridViewConfig.Rows.Add(row);
             }
 
@@ -291,6 +298,7 @@ namespace configtool
             String sParam;
             String dataType;
             String sValue;
+            String description;
             byte size = 0;
 
             cfg.clear();
@@ -305,7 +313,8 @@ namespace configtool
                         sValue = row.Cells["val"].Value.ToString();
                     else
                         sValue = "";
-                    item = new configItem(sParam, sValue, dataType);
+                    description = row.Cells["description"].Value.ToString();
+                    item = new configItem(sParam, sValue, dataType, description);
                     size += item.getSize();
 
                     cfg.addItem(item);
@@ -342,7 +351,7 @@ namespace configtool
                     {
                         sParam = row.Cells["param"].Value.ToString();
                         sDataType = row.Cells["dataType"].Value.ToString();
-                        item = new configItem(sParam, "", sDataType);
+                        item = new configItem(sParam, "", sDataType, "");
                         size += item.getSize();
 
                         cfg.addItem(item);
@@ -449,5 +458,6 @@ namespace configtool
         {
             Debug.Print(e.ToString());
         }
+
     }
 }

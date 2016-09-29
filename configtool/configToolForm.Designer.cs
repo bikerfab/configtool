@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridViewConfig = new System.Windows.Forms.DataGridView();
             this.buttonSend = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
@@ -52,26 +52,27 @@
             // 
             // dataGridViewConfig
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewConfig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridViewConfig.Location = new System.Drawing.Point(10, 27);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridViewConfig.Location = new System.Drawing.Point(13, 33);
+            this.dataGridViewConfig.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
-            this.dataGridViewConfig.Size = new System.Drawing.Size(435, 386);
+            this.dataGridViewConfig.Size = new System.Drawing.Size(580, 475);
             this.dataGridViewConfig.TabIndex = 0;
             this.dataGridViewConfig.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellEnter);
             this.dataGridViewConfig.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellLeave);
@@ -80,9 +81,10 @@
             // 
             // buttonSend
             // 
-            this.buttonSend.Location = new System.Drawing.Point(456, 149);
+            this.buttonSend.Location = new System.Drawing.Point(608, 183);
+            this.buttonSend.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(143, 39);
+            this.buttonSend.Size = new System.Drawing.Size(191, 48);
             this.buttonSend.TabIndex = 1;
             this.buttonSend.Text = "Send to device";
             this.buttonSend.UseVisualStyleBackColor = true;
@@ -90,9 +92,10 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(456, 100);
+            this.buttonSave.Location = new System.Drawing.Point(608, 123);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(143, 39);
+            this.buttonSave.Size = new System.Drawing.Size(191, 48);
             this.buttonSave.TabIndex = 2;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -100,9 +103,10 @@
             // 
             // buttonOpen
             // 
-            this.buttonOpen.Location = new System.Drawing.Point(456, 51);
+            this.buttonOpen.Location = new System.Drawing.Point(608, 63);
+            this.buttonOpen.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(143, 39);
+            this.buttonOpen.Size = new System.Drawing.Size(191, 48);
             this.buttonOpen.TabIndex = 3;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
@@ -111,18 +115,21 @@
             // comboBoxPorts
             // 
             this.comboBoxPorts.FormattingEnabled = true;
-            this.comboBoxPorts.Location = new System.Drawing.Point(456, 309);
+            this.comboBoxPorts.Location = new System.Drawing.Point(608, 380);
+            this.comboBoxPorts.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxPorts.Name = "comboBoxPorts";
-            this.comboBoxPorts.Size = new System.Drawing.Size(97, 21);
+            this.comboBoxPorts.Size = new System.Drawing.Size(128, 24);
             this.comboBoxPorts.TabIndex = 4;
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(611, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(815, 28);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -135,49 +142,50 @@
             this.removeSelectedFieldToolStripMenuItem,
             this.createTemplateToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(47, 24);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // modifyConfigurationStructureToolStripMenuItem
             // 
             this.modifyConfigurationStructureToolStripMenuItem.Name = "modifyConfigurationStructureToolStripMenuItem";
-            this.modifyConfigurationStructureToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.modifyConfigurationStructureToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
             this.modifyConfigurationStructureToolStripMenuItem.Text = "Edit fields";
             this.modifyConfigurationStructureToolStripMenuItem.Click += new System.EventHandler(this.modifyConfigurationStructureToolStripMenuItem_Click);
             // 
             // stopEditingToolStripMenuItem
             // 
             this.stopEditingToolStripMenuItem.Name = "stopEditingToolStripMenuItem";
-            this.stopEditingToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.stopEditingToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
             this.stopEditingToolStripMenuItem.Text = "Stop editing";
             this.stopEditingToolStripMenuItem.Click += new System.EventHandler(this.stopEditingToolStripMenuItem_Click);
             // 
             // removeSelectedFieldToolStripMenuItem
             // 
             this.removeSelectedFieldToolStripMenuItem.Name = "removeSelectedFieldToolStripMenuItem";
-            this.removeSelectedFieldToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.removeSelectedFieldToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
             this.removeSelectedFieldToolStripMenuItem.Text = "Remove selected parameter";
             this.removeSelectedFieldToolStripMenuItem.Click += new System.EventHandler(this.removeSelectedFieldToolStripMenuItem_Click);
             // 
             // createTemplateToolStripMenuItem
             // 
             this.createTemplateToolStripMenuItem.Name = "createTemplateToolStripMenuItem";
-            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
             this.createTemplateToolStripMenuItem.Text = "Create template";
             this.createTemplateToolStripMenuItem.Click += new System.EventHandler(this.createTemplateToolStripMenuItem_Click);
             // 
             // buttonFromDevice
             // 
-            this.buttonFromDevice.Location = new System.Drawing.Point(456, 198);
+            this.buttonFromDevice.Location = new System.Drawing.Point(608, 244);
+            this.buttonFromDevice.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFromDevice.Name = "buttonFromDevice";
-            this.buttonFromDevice.Size = new System.Drawing.Size(143, 39);
+            this.buttonFromDevice.Size = new System.Drawing.Size(191, 48);
             this.buttonFromDevice.TabIndex = 6;
             this.buttonFromDevice.Text = "Load from device";
             this.buttonFromDevice.UseVisualStyleBackColor = true;
@@ -185,9 +193,10 @@
             // 
             // buttonErase
             // 
-            this.buttonErase.Location = new System.Drawing.Point(456, 247);
+            this.buttonErase.Location = new System.Drawing.Point(608, 304);
+            this.buttonErase.Margin = new System.Windows.Forms.Padding(4);
             this.buttonErase.Name = "buttonErase";
-            this.buttonErase.Size = new System.Drawing.Size(143, 39);
+            this.buttonErase.Size = new System.Drawing.Size(191, 48);
             this.buttonErase.TabIndex = 7;
             this.buttonErase.Text = "Erase device";
             this.buttonErase.UseVisualStyleBackColor = true;
@@ -195,9 +204,9 @@
             // 
             // FormConfig
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 421);
+            this.ClientSize = new System.Drawing.Size(815, 518);
             this.Controls.Add(this.buttonErase);
             this.Controls.Add(this.buttonFromDevice);
             this.Controls.Add(this.comboBoxPorts);
@@ -208,6 +217,7 @@
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormConfig";
             this.Text = "Configuration Tool";
             this.Load += new System.EventHandler(this.FormConfig_Load);
