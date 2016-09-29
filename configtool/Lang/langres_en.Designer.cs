@@ -115,6 +115,15 @@ namespace configtool.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing data.
+        /// </summary>
+        internal static string msgMissingData {
+            get {
+                return ResourceManager.GetString("msgMissingData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Device not configured.
         /// </summary>
         internal static string msgNotCfg {

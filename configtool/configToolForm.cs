@@ -25,8 +25,9 @@ namespace configtool
         public const int MSG_LOADED = 5;
         public const int MSG_EMPTY = 6;
         public const int MSG_ERASED = 7;
+        public const int MSG_MISSING_DATA = 8;
 
-        String[] msgBoxStrings = new String[8];
+        String[] msgBoxStrings = new String[9];
 
         public FormConfig()
         {
@@ -121,6 +122,7 @@ namespace configtool
             msgBoxStrings[MSG_LOADED] = rm.GetString("msgCfgLoaded");
             msgBoxStrings[MSG_EMPTY] = rm.GetString("msgCfgEmpty");
             msgBoxStrings[MSG_ERASED] = rm.GetString("msgErased");
+            msgBoxStrings[MSG_MISSING_DATA] = rm.GetString("msgMissingData");
         }
 
         // hides admin menu items if no admin user
@@ -161,6 +163,7 @@ namespace configtool
             byte[] rx = new byte[16];
             int rxdata = 0;
             tout = new Timeout(5000);
+            Cursor.Current = Cursors.WaitCursor;
 
             gridViewToData(true);
 
@@ -221,9 +224,13 @@ namespace configtool
                     MessageBox.Show(msgBoxStrings[MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
                 serialPort.Close();
+                Cursor.Current = Cursors.Default;
+
             }
             catch(TimeoutException)
             {
+                Cursor.Current = Cursors.Default;
+
                 Debug.Print("Timeout");
                 MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 tout.stop();
@@ -245,14 +252,19 @@ namespace configtool
             cfg.clearDataOnly();
             gridViewToData(false);
 
-            SaveFileDialog cfgSave = new SaveFileDialog();
-            cfgSave.Title = "Save Configuration";
-            cfgSave.Filter = "cfg files|*.cfg";
-
-            if (cfgSave.ShowDialog() == DialogResult.OK)
+            if (cfg.checkData())
             {
-                cfg.saveData(cfgSave.FileName.ToString());
-            }            
+                SaveFileDialog cfgSave = new SaveFileDialog();
+                cfgSave.Title = "Save Configuration";
+                cfgSave.Filter = "cfg files|*.cfg";
+
+                if (cfgSave.ShowDialog() == DialogResult.OK)
+                {
+                    cfg.saveData(cfgSave.FileName.ToString());
+                }
+            }
+            else
+                MessageBox.Show(msgBoxStrings[MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
         private void buttonLoad_Click(object sender, EventArgs e)
@@ -330,7 +342,7 @@ namespace configtool
             serialPort.WriteTimeout = 5000;
             serialPort.ReadTimeout = 5000;
             serialPort.Open();
-
+            Cursor.Current = Cursors.WaitCursor;
             try
             {
                 serialPort.Write("d");
@@ -358,6 +370,7 @@ namespace configtool
 
                     if (cfg.loadTemplate(cfgHeader.prodId, cfgHeader.versionId, Application.StartupPath))
                     {
+                        Cursor.Current = Cursors.Default;
                         cfg.fromBuffer(buffer);
                         initGridView();
                         setLanguage(languageCode);
@@ -365,6 +378,7 @@ namespace configtool
                     }
                     else
                     {
+                        Cursor.Current = Cursors.Default;
                         String msg = String.Format(msgBoxStrings[MSG_NO_TEMPL]);
                         MessageBox.Show(msg,
                                         "Error",
@@ -378,6 +392,7 @@ namespace configtool
             }
             catch(TimeoutException)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 Debug.Print("Timeout");
                 MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 serialPort.Close();
@@ -493,6 +508,7 @@ namespace configtool
         {
             int rxdata = 0;
             tout = new Timeout(5000);
+            Cursor.Current = Cursors.WaitCursor;
 
             try
             {
@@ -508,11 +524,13 @@ namespace configtool
                 } while (rxdata != Configuration.CFG_ERASED);
 
                 serialPort.Close();
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show(msgBoxStrings[MSG_ERASED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (TimeoutException)
             {
                 Debug.Print("Timeout");
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 serialPort.Close();
             }

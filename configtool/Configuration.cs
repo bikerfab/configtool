@@ -150,6 +150,17 @@ namespace configtool
             data.Clear();
         }
 
+        public bool checkData()
+        {
+            foreach (configItem item in data)
+            {
+                if (item.value.Length == 0)
+                    return false;
+            }
+
+            return true;
+        }
+
         public List<configItem> getData()
         {
             return data;

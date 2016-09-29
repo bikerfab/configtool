@@ -165,4 +165,7 @@
   <data name="tblValueCol" xml:space="preserve">
     <value>Valore</value>
   </data>
+  <data name="msgMissingData" xml:space="preserve">
+    <value>Tabella dati incompleta</value>
+  </data>
 </root>
