@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Data;
+using System.Globalization;
 
 namespace configtool
 {
@@ -12,6 +13,9 @@ namespace configtool
         bool bIsComboBox = false;
         delegate void SetComboBoxCellType(int iRowIndex);
         bool editMode = false;
+        bool adminMode = false;
+        int languageCode;
+
         Timeout tout;
         public const int MSG_SENT = 0;
         public const int MSG_CHKSUM_ERR = 1;
@@ -47,7 +51,28 @@ namespace configtool
         private void FormConfig_Load(object sender, EventArgs e)
         {
             initTable();
-            setLanguage(0);
+
+            String[] args = Environment.GetCommandLineArgs();
+            if (args.Length == 1)   // no arguments
+                languageCode =-1;    // system default language
+            else
+                languageCode = int.Parse(args[1]);  // force language 0-1 (EN-IT)
+
+            setLanguage(languageCode);
+
+            if (args.Length == 3)   // with admin mode argument, lang is mandatory
+            {
+                if (int.Parse(args[2]) == 1)
+                    adminMode = true;
+                else
+                    adminMode = false;
+            }
+            else
+            {
+                adminMode = false;
+            }
+
+            setAdmin(adminMode);    // true shows admin menu items
 
             cfg = new Configuration();
 
@@ -61,13 +86,24 @@ namespace configtool
 
         }
 
+        // lang code = -1 sets system language (IT/EN)
+        // lang code = 0 sets EN
+        // lang code = 1 sets IT
         private void setLanguage(int langCode)
         {
             String[] langs = { "en", "it" };
+            String language;
+
+            CultureInfo ci = CultureInfo.CurrentUICulture;
+
+            if (langCode == -1)  // use system default
+                language = ci.Name.Substring(0, 2);
+            else
+                language = langs[langCode];
 
             System.Reflection.Assembly cfgAssembly;
             cfgAssembly = this.GetType().Assembly;
-            System.Resources.ResourceManager rm = new System.Resources.ResourceManager("configtool.Lang.langres_" + langs[langCode], cfgAssembly);
+            System.Resources.ResourceManager rm = new System.Resources.ResourceManager("configtool.Lang.langres_" + language, cfgAssembly);
             buttonOpen.Text = rm.GetString("open");
             buttonSave.Text = rm.GetString("save");
             buttonSend.Text = rm.GetString("send");
@@ -85,6 +121,19 @@ namespace configtool
             msgBoxStrings[MSG_LOADED] = rm.GetString("msgCfgLoaded");
             msgBoxStrings[MSG_EMPTY] = rm.GetString("msgCfgEmpty");
             msgBoxStrings[MSG_ERASED] = rm.GetString("msgErased");
+        }
+
+        // hides admin menu items if no admin user
+        private void setAdmin(bool mode)
+        {
+            if(mode == false)
+            {
+                modifyConfigurationStructureToolStripMenuItem.Visible = false;
+                stopEditingToolStripMenuItem.Visible = false;
+                removeSelectedFieldToolStripMenuItem.Visible = false;
+                createTemplateToolStripMenuItem.Visible = false;
+            }
+
         }
 
         private void initGridView()
@@ -113,7 +162,7 @@ namespace configtool
             int rxdata = 0;
             tout = new Timeout(5000);
 
-            gridViewToData();
+            gridViewToData(true);
 
             int chk = cfg.checksum();
 
@@ -193,7 +242,8 @@ namespace configtool
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            gridViewToData();
+            cfg.clearDataOnly();
+            gridViewToData(false);
 
             SaveFileDialog cfgSave = new SaveFileDialog();
             cfgSave.Title = "Save Configuration";
@@ -217,7 +267,8 @@ namespace configtool
                     cfg.clear();
 
                 cfg.loadData(cfgSelect.FileName.ToString());
-                initGridView();             
+                initGridView();
+                setLanguage(languageCode);
             }
 
             
@@ -234,8 +285,25 @@ namespace configtool
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            templateDlg dlg;
+
             cfg.clear();
             initGridView();
+            setLanguage(languageCode);
+
+            dlg = new templateDlg();
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                cfg.setProductId(dlg.getProductID());
+                cfg.setVersionId(dlg.getVersionID());
+
+                if (cfg.loadTemplate(cfg.getProductId(), cfg.getVersionId(), Application.StartupPath))
+                {
+                    initGridView();
+                    setLanguage(languageCode);
+                }
+            }
         }
 
         private void removeSelectedFieldToolStripMenuItem_Click(object sender, EventArgs e)
@@ -292,6 +360,7 @@ namespace configtool
                     {
                         cfg.fromBuffer(buffer);
                         initGridView();
+                        setLanguage(languageCode);
                         MessageBox.Show(msgBoxStrings[MSG_LOADED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
@@ -330,7 +399,7 @@ namespace configtool
             stopEditing();
         }
 
-        void gridViewToData()
+        void gridViewToData(bool clr)
         {
             configItem item;
             String sParam;
@@ -339,7 +408,8 @@ namespace configtool
             String description;
             byte size = 0;
 
-            cfg.clear();
+            if(clr == true)
+                cfg.clearDataOnly();
 
             foreach (DataGridViewRow row in dataGridViewConfig.Rows)
             {
@@ -351,6 +421,7 @@ namespace configtool
                         sValue = row.Cells["val"].Value.ToString();
                     else
                         sValue = "";
+
                     description = row.Cells["description"].Value.ToString();
                     item = new configItem(sParam, sValue, dataType, description);
                     size += item.getSize();
@@ -359,7 +430,7 @@ namespace configtool
                 }
             }
 
-            cfg.updateHeader(0, 0);
+            cfg.updateHeader();
         }
 
         private void createTemplateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -367,6 +438,7 @@ namespace configtool
             configItem item;
             String sParam;
             String sDataType;
+            String desc;
             byte size = 0;
             templateDlg dlg;
 
@@ -389,7 +461,8 @@ namespace configtool
                     {
                         sParam = row.Cells["param"].Value.ToString();
                         sDataType = row.Cells["dataType"].Value.ToString();
-                        item = new configItem(sParam, "", sDataType, "");
+                        desc = row.Cells["description"].Value.ToString();
+                        item = new configItem(sParam, "", sDataType, desc);
                         size += item.getSize();
 
                         cfg.addItem(item);
@@ -409,7 +482,7 @@ namespace configtool
                     cfgSelect.InitialDirectory = Application.StartupPath;
                     if (cfgSelect.ShowDialog() == DialogResult.OK)
                     {
-                        gridViewToData();
+                 //       gridViewToData(false);
                         cfg.saveData(cfgSelect.FileName.ToString());
                     }
                 }

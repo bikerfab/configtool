@@ -35,7 +35,7 @@ namespace configtool
             header = new configHeader();
         }
                
-        public void updateHeader(byte prodId, byte verId)
+        public void updateHeader()
         {
             header.numItems = (byte)data.Count();
 
@@ -142,6 +142,11 @@ namespace configtool
             header.prodId = 0;
             header.versionId = 0;
 
+            data.Clear();
+        }
+
+        public void clearDataOnly()
+        {
             data.Clear();
         }
 
