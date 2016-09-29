@@ -13,6 +13,16 @@ namespace configtool
         delegate void SetComboBoxCellType(int iRowIndex);
         bool editMode = false;
         Timeout tout;
+        public const int MSG_SENT = 0;
+        public const int MSG_CHKSUM_ERR = 1;
+        public const int MSG_NOT_RESP = 2;
+        public const int MSG_NO_CFG = 3;
+        public const int MSG_NO_TEMPL = 4;
+        public const int MSG_LOADED = 5;
+        public const int MSG_EMPTY = 6;
+        public const int MSG_ERASED = 7;
+
+        String[] msgBoxStrings = new String[8];
 
         public FormConfig()
         {
@@ -36,8 +46,10 @@ namespace configtool
 
         private void FormConfig_Load(object sender, EventArgs e)
         {
-            cfg = new Configuration();
             initTable();
+            setLanguage(0);
+
+            cfg = new Configuration();
 
             string[] ports = SerialPort.GetPortNames();
             for (int i = 0; i < ports.Length; i++)
@@ -46,8 +58,34 @@ namespace configtool
             }
 
             comboBoxPorts.SelectedIndex = 0;
+
         }
 
+        private void setLanguage(int langCode)
+        {
+            String[] langs = { "en", "it" };
+
+            System.Reflection.Assembly cfgAssembly;
+            cfgAssembly = this.GetType().Assembly;
+            System.Resources.ResourceManager rm = new System.Resources.ResourceManager("configtool.Lang.langres_" + langs[langCode], cfgAssembly);
+            buttonOpen.Text = rm.GetString("open");
+            buttonSave.Text = rm.GetString("save");
+            buttonSend.Text = rm.GetString("send");
+            buttonFromDevice.Text = rm.GetString("load");
+            buttonErase.Text = rm.GetString("erase");
+            dataGridViewConfig.Columns["param"].HeaderText = rm.GetString("tblParamCol");
+            dataGridViewConfig.Columns["val"].HeaderText = rm.GetString("tblValueCol");
+            dataGridViewConfig.Columns["description"].HeaderText = rm.GetString("tblDescCol");
+
+            msgBoxStrings[MSG_SENT] = rm.GetString("msgSent");
+            msgBoxStrings[MSG_CHKSUM_ERR] = rm.GetString("msgChksum");
+            msgBoxStrings[MSG_NOT_RESP] = rm.GetString("msgNotResp");
+            msgBoxStrings[MSG_NO_CFG] = rm.GetString("msgNotCfg");
+            msgBoxStrings[MSG_NO_TEMPL] = rm.GetString("msgNoTempl");
+            msgBoxStrings[MSG_LOADED] = rm.GetString("msgCfgLoaded");
+            msgBoxStrings[MSG_EMPTY] = rm.GetString("msgCfgEmpty");
+            msgBoxStrings[MSG_ERASED] = rm.GetString("msgErased");
+        }
 
         private void initGridView()
         {                                
@@ -128,17 +166,17 @@ namespace configtool
 
 
                 if (rxdata == Configuration.CFG_LOAD_OK)
-                    MessageBox.Show("Configuration sent", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(msgBoxStrings[MSG_SENT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 if (rxdata == Configuration.CFG_LOAD_WRONGCHECK)
-                    MessageBox.Show("Wrong checksum, communication error", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show(msgBoxStrings[MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
                 serialPort.Close();
             }
             catch(TimeoutException)
             {
                 Debug.Print("Timeout");
-                MessageBox.Show("Timeout, device not responding", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 tout.stop();
                 serialPort.Close();
             }
@@ -240,7 +278,7 @@ namespace configtool
                 Debug.Print("received");
 
                 if (buffer[0] == Configuration.CFG_NOT_CONFIGURED)
-                    MessageBox.Show("Device not configured", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(msgBoxStrings[MSG_NO_CFG], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else if (buffer[0] == Configuration.CFG_PRESENT)
                 {
                     Debug.Print("load configuration from device");
@@ -254,11 +292,11 @@ namespace configtool
                     {
                         cfg.fromBuffer(buffer);
                         initGridView();
-                        MessageBox.Show("Configuration loaded", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(msgBoxStrings[MSG_LOADED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        String msg = String.Format("No template for version ID={0} product ID={1}");
+                        String msg = String.Format(msgBoxStrings[MSG_NO_TEMPL]);
                         MessageBox.Show(msg,
                                         "Error",
                                         MessageBoxButtons.OK,
@@ -272,7 +310,7 @@ namespace configtool
             catch(TimeoutException)
             {
                 Debug.Print("Timeout");
-                MessageBox.Show("Timeout, device not responding", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 serialPort.Close();
             }
  
@@ -334,7 +372,7 @@ namespace configtool
 
             if (dataGridViewConfig.Rows.Count == 0)
             {
-                MessageBox.Show("Parameters table is empty", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(msgBoxStrings[MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -397,12 +435,12 @@ namespace configtool
                 } while (rxdata != Configuration.CFG_ERASED);
 
                 serialPort.Close();
-                MessageBox.Show("Device erased", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(msgBoxStrings[MSG_ERASED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (TimeoutException)
             {
                 Debug.Print("Timeout");
-                MessageBox.Show("Timeout, device not responding", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 serialPort.Close();
             }
         }
