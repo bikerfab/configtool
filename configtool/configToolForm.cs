@@ -520,7 +520,7 @@ namespace configtool
                     SaveFileDialog cfgSelect = new SaveFileDialog();
 
                     cfgSelect.Title = "Save template";
-                    cfgSelect.Filter = "ctp files|*.ctp";
+                    cfgSelect.Filter = "Configuration template files|*.cft";
                     cfgSelect.InitialDirectory = Application.StartupPath;
                     if (cfgSelect.ShowDialog() == DialogResult.OK)
                     {

@@ -81,7 +81,7 @@ namespace configtool
             // search for all templates in app folder
             byte pid, vid;
 
-            string[] filePaths = Directory.GetFiles(folder, "*.ctp");
+            string[] filePaths = Directory.GetFiles(folder, "*.cft");
 
             // open each template
             foreach(string template in filePaths)
