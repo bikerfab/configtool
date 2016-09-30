@@ -169,7 +169,7 @@ namespace configtool.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apri file di configurazione.
+        ///   Looks up a localized string similar to Apri configurazione.
         /// </summary>
         internal static string open {
             get {
@@ -178,7 +178,7 @@ namespace configtool.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Salva configurazione su file.
+        ///   Looks up a localized string similar to Salva configurazione.
         /// </summary>
         internal static string save {
             get {
@@ -187,7 +187,7 @@ namespace configtool.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invia al dispositivo.
+        ///   Looks up a localized string similar to Configura dispositivo.
         /// </summary>
         internal static string send {
             get {

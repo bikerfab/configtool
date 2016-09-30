@@ -226,7 +226,7 @@ namespace configtool
                         MessageBox.Show(msgBoxStrings[MSG_SENT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     if (rxdata == Configuration.CFG_LOAD_WRONGCHECK)
-                        MessageBox.Show(msgBoxStrings[MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show(msgBoxStrings[MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     serialPort.Close();
                     Cursor.Current = Cursors.Default;
@@ -237,13 +237,13 @@ namespace configtool
                     Cursor.Current = Cursors.Default;
 
                     Debug.Print("Timeout");
-                    MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     tout.stop();
                     serialPort.Close();
                 }
             }
             else
-                MessageBox.Show(msgBoxStrings[MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(msgBoxStrings[MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         }
 
@@ -257,22 +257,29 @@ namespace configtool
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            cfg.clearDataOnly();
-            gridViewToData(false);
-
-            if (cfg.checkData())
+            if (dataGridViewConfig.Rows.Count == 0)
             {
-                SaveFileDialog cfgSave = new SaveFileDialog();
-                cfgSave.Title = "Save Configuration";
-                cfgSave.Filter = "cfg files|*.cfg";
-
-                if (cfgSave.ShowDialog() == DialogResult.OK)
-                {
-                    cfg.saveData(cfgSave.FileName.ToString());
-                }
+                MessageBox.Show(msgBoxStrings[MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
-                MessageBox.Show(msgBoxStrings[MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            {
+                cfg.clearDataOnly();
+                gridViewToData(false);
+
+                if (cfg.checkData())
+                {
+                    SaveFileDialog cfgSave = new SaveFileDialog();
+                    cfgSave.Title = "Save Configuration";
+                    cfgSave.Filter = "cfg files|*.cfg";
+
+                    if (cfgSave.ShowDialog() == DialogResult.OK)
+                    {
+                        cfg.saveData(cfgSave.FileName.ToString());
+                    }
+                }
+                else
+                    MessageBox.Show(msgBoxStrings[MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void buttonLoad_Click(object sender, EventArgs e)
@@ -297,7 +304,7 @@ namespace configtool
                     setLanguage(languageCode);
                 }
                 else
-                    MessageBox.Show(msgBoxStrings[MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(msgBoxStrings[MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }            
         }
 
@@ -421,7 +428,7 @@ namespace configtool
             {
                 Cursor.Current = Cursors.WaitCursor;
                 Debug.Print("Timeout");
-                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 serialPort.Close();
             }
  
@@ -486,7 +493,7 @@ namespace configtool
 
             if (dataGridViewConfig.Rows.Count == 0)
             {
-                MessageBox.Show(msgBoxStrings[MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(msgBoxStrings[MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
@@ -558,7 +565,7 @@ namespace configtool
             {
                 Debug.Print("Timeout");
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 serialPort.Close();
             }
         }

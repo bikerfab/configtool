@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConfig));
             this.dataGridViewConfig = new System.Windows.Forms.DataGridView();
             this.buttonSend = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
@@ -81,10 +82,12 @@
             // 
             // buttonSend
             // 
-            this.buttonSend.Location = new System.Drawing.Point(608, 183);
+            this.buttonSend.Image = ((System.Drawing.Image)(resources.GetObject("buttonSend.Image")));
+            this.buttonSend.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonSend.Location = new System.Drawing.Point(608, 153);
             this.buttonSend.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(191, 48);
+            this.buttonSend.Size = new System.Drawing.Size(224, 48);
             this.buttonSend.TabIndex = 1;
             this.buttonSend.Text = "Send to device";
             this.buttonSend.UseVisualStyleBackColor = true;
@@ -92,10 +95,12 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(608, 123);
+            this.buttonSave.Image = ((System.Drawing.Image)(resources.GetObject("buttonSave.Image")));
+            this.buttonSave.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonSave.Location = new System.Drawing.Point(608, 93);
             this.buttonSave.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(191, 48);
+            this.buttonSave.Size = new System.Drawing.Size(224, 48);
             this.buttonSave.TabIndex = 2;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -103,10 +108,12 @@
             // 
             // buttonOpen
             // 
-            this.buttonOpen.Location = new System.Drawing.Point(608, 63);
+            this.buttonOpen.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpen.Image")));
+            this.buttonOpen.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonOpen.Location = new System.Drawing.Point(608, 33);
             this.buttonOpen.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(191, 48);
+            this.buttonOpen.Size = new System.Drawing.Size(224, 48);
             this.buttonOpen.TabIndex = 3;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
@@ -129,7 +136,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(815, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(845, 28);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -182,10 +189,12 @@
             // 
             // buttonFromDevice
             // 
-            this.buttonFromDevice.Location = new System.Drawing.Point(608, 244);
+            this.buttonFromDevice.Image = ((System.Drawing.Image)(resources.GetObject("buttonFromDevice.Image")));
+            this.buttonFromDevice.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonFromDevice.Location = new System.Drawing.Point(608, 214);
             this.buttonFromDevice.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFromDevice.Name = "buttonFromDevice";
-            this.buttonFromDevice.Size = new System.Drawing.Size(191, 48);
+            this.buttonFromDevice.Size = new System.Drawing.Size(224, 48);
             this.buttonFromDevice.TabIndex = 6;
             this.buttonFromDevice.Text = "Load from device";
             this.buttonFromDevice.UseVisualStyleBackColor = true;
@@ -193,10 +202,12 @@
             // 
             // buttonErase
             // 
-            this.buttonErase.Location = new System.Drawing.Point(608, 304);
+            this.buttonErase.Image = ((System.Drawing.Image)(resources.GetObject("buttonErase.Image")));
+            this.buttonErase.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonErase.Location = new System.Drawing.Point(608, 274);
             this.buttonErase.Margin = new System.Windows.Forms.Padding(4);
             this.buttonErase.Name = "buttonErase";
-            this.buttonErase.Size = new System.Drawing.Size(191, 48);
+            this.buttonErase.Size = new System.Drawing.Size(224, 48);
             this.buttonErase.TabIndex = 7;
             this.buttonErase.Text = "Erase device";
             this.buttonErase.UseVisualStyleBackColor = true;
@@ -206,7 +217,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(815, 518);
+            this.ClientSize = new System.Drawing.Size(845, 518);
             this.Controls.Add(this.buttonErase);
             this.Controls.Add(this.buttonFromDevice);
             this.Controls.Add(this.comboBoxPorts);

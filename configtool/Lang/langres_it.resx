@@ -148,13 +148,13 @@
     <value>Configurazione inviata</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>Apri file di configurazione</value>
+    <value>Apri configurazione</value>
   </data>
   <data name="save" xml:space="preserve">
-    <value>Salva configurazione su file</value>
+    <value>Salva configurazione</value>
   </data>
   <data name="send" xml:space="preserve">
-    <value>Invia al dispositivo</value>
+    <value>Configura dispositivo</value>
   </data>
   <data name="tblDescCol" xml:space="preserve">
     <value>Descrizione</value>
