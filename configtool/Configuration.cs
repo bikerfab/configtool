@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 using System.IO;
 
 namespace configtool
@@ -45,21 +46,30 @@ namespace configtool
             }
         }
 
-        public void loadData(String filename)
+        public bool loadData(String filename)
         {
             header = new configHeader();
 
-            using (Stream stream = File.Open(filename, FileMode.Open))
+            try
             {
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                using (Stream stream = File.Open(filename, FileMode.Open))
+                {
+                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                header.size = (byte)bformatter.Deserialize(stream);
-                header.numItems = (byte)bformatter.Deserialize(stream);
-                header.prodId = (byte)bformatter.Deserialize(stream);
-                header.versionId = (byte)bformatter.Deserialize(stream);
+                    header.size = (byte)bformatter.Deserialize(stream);
+                    header.numItems = (byte)bformatter.Deserialize(stream);
+                    header.prodId = (byte)bformatter.Deserialize(stream);
+                    header.versionId = (byte)bformatter.Deserialize(stream);
 
-                data = (List<configItem>)bformatter.Deserialize(stream);                
-            }            
+                    data = (List<configItem>)bformatter.Deserialize(stream);
+
+                    return true;
+                }
+            }
+            catch(SerializationException e)
+            {
+                return false;
+            }
         }
 
         // the template is an empty configuration (i.e. all values are null strings) with the                            
@@ -76,15 +86,23 @@ namespace configtool
             // open each template
             foreach(string template in filePaths)
             {
-                using (Stream stream = File.Open(template, FileMode.Open))
+                try
                 {
-                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    using (Stream stream = File.Open(template, FileMode.Open))
+                    {
+                        var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                    bformatter.Deserialize(stream);
-                    bformatter.Deserialize(stream);
-                    pid = (byte)bformatter.Deserialize(stream);
-                    vid = (byte)bformatter.Deserialize(stream);
+                        bformatter.Deserialize(stream);
+                        bformatter.Deserialize(stream);
+                        pid = (byte)bformatter.Deserialize(stream);
+                        vid = (byte)bformatter.Deserialize(stream);
+                    }
                 }
+                catch(SerializationException e)
+                {
+                    return false;
+                }
+
                 // check for prodId,verId
                 if (prodId == pid && verId == vid)
                 {

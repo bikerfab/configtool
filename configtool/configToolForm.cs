@@ -26,8 +26,9 @@ namespace configtool
         public const int MSG_EMPTY = 6;
         public const int MSG_ERASED = 7;
         public const int MSG_MISSING_DATA = 8;
+        public const int MSG_FORMAT = 9;
 
-        String[] msgBoxStrings = new String[9];
+        String[] msgBoxStrings = new String[10];
 
         public FormConfig()
         {
@@ -123,6 +124,7 @@ namespace configtool
             msgBoxStrings[MSG_EMPTY] = rm.GetString("msgCfgEmpty");
             msgBoxStrings[MSG_ERASED] = rm.GetString("msgErased");
             msgBoxStrings[MSG_MISSING_DATA] = rm.GetString("msgMissingData");
+            msgBoxStrings[MSG_FORMAT] = rm.GetString("msgFormat");
         }
 
         // hides admin menu items if no admin user
@@ -162,80 +164,86 @@ namespace configtool
             int j = 0;
             byte[] rx = new byte[16];
             int rxdata = 0;
-            tout = new Timeout(5000);
-            Cursor.Current = Cursors.WaitCursor;
 
-            gridViewToData(true);
-
-            int chk = cfg.checksum();
-
-            rx[0] = 0;
-
-            serialPort.PortName = comboBoxPorts.GetItemText(comboBoxPorts.SelectedItem);
-            serialPort.BaudRate = 115200;
-            serialPort.WriteTimeout = 5000;
-            serialPort.ReadTimeout = 5000;
-            serialPort.Open();
-
-            try
+            if (cfg.checkData())
             {
-                serialPort.Write("c");
+                tout = new Timeout(5000);
+                Cursor.Current = Cursors.WaitCursor;
 
-                do
+                gridViewToData(true);
+
+                int chk = cfg.checksum();
+
+                rx[0] = 0;
+
+                serialPort.PortName = comboBoxPorts.GetItemText(comboBoxPorts.SelectedItem);
+                serialPort.BaudRate = 115200;
+                serialPort.WriteTimeout = 5000;
+                serialPort.ReadTimeout = 5000;
+                serialPort.Open();
+
+                try
                 {
-                    rxdata = serialPort.ReadChar();
-                    tout.check();
-                } while (rxdata != Configuration.CFG_LOAD_PROCEED);
+                    serialPort.Write("c");
 
-
-                Debug.Print("Proceed received");
-
-                serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getSize())), 0, 1);
-                serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getNumItems())), 0, 1);
-                serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getProductId())), 0, 1);
-                serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getVersionId())), 0, 1);
-
-                foreach (configItem item in cfg.getData())
-                {
-                    byte[] raw = item.getRawData();
-
-                    for (j = 0; j < item.numBytes; j++)
+                    do
                     {
-                        String s2 = String.Format("{0}", raw[j]);
-                        Debug.Print(s2);
-                        serialPort.Write(raw, j, 1);
+                        rxdata = serialPort.ReadChar();
                         tout.check();
+                    } while (rxdata != Configuration.CFG_LOAD_PROCEED);
+
+
+                    Debug.Print("Proceed received");
+
+                    serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getSize())), 0, 1);
+                    serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getNumItems())), 0, 1);
+                    serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getProductId())), 0, 1);
+                    serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getVersionId())), 0, 1);
+
+                    foreach (configItem item in cfg.getData())
+                    {
+                        byte[] raw = item.getRawData();
+
+                        for (j = 0; j < item.numBytes; j++)
+                        {
+                            String s2 = String.Format("{0}", raw[j]);
+                            Debug.Print(s2);
+                            serialPort.Write(raw, j, 1);
+                            tout.check();
+                        }
                     }
+
+                    serialPort.Write(BitConverter.GetBytes(cfg.checksum()), 0, 1);
+
+                    do
+                    {
+                        rxdata = serialPort.ReadChar();
+                        tout.check();
+                    } while (rxdata != Configuration.CFG_LOAD_OK && rxdata != Configuration.CFG_LOAD_WRONGCHECK);
+
+
+                    if (rxdata == Configuration.CFG_LOAD_OK)
+                        MessageBox.Show(msgBoxStrings[MSG_SENT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    if (rxdata == Configuration.CFG_LOAD_WRONGCHECK)
+                        MessageBox.Show(msgBoxStrings[MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+
+                    serialPort.Close();
+                    Cursor.Current = Cursors.Default;
+
                 }
-
-                serialPort.Write(BitConverter.GetBytes(cfg.checksum()), 0, 1);
-
-                do
+                catch (TimeoutException)
                 {
-                    rxdata = serialPort.ReadChar();
-                    tout.check();
-                } while (rxdata != Configuration.CFG_LOAD_OK && rxdata != Configuration.CFG_LOAD_WRONGCHECK);
+                    Cursor.Current = Cursors.Default;
 
-
-                if (rxdata == Configuration.CFG_LOAD_OK)
-                    MessageBox.Show(msgBoxStrings[MSG_SENT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                if (rxdata == Configuration.CFG_LOAD_WRONGCHECK)
-                    MessageBox.Show(msgBoxStrings[MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-
-                serialPort.Close();
-                Cursor.Current = Cursors.Default;
-
+                    Debug.Print("Timeout");
+                    MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    tout.stop();
+                    serialPort.Close();
+                }
             }
-            catch(TimeoutException)
-            {
-                Cursor.Current = Cursors.Default;
-
-                Debug.Print("Timeout");
-                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                tout.stop();
-                serialPort.Close();
-            }
+            else
+                MessageBox.Show(msgBoxStrings[MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
         }
 
@@ -270,6 +278,11 @@ namespace configtool
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             OpenFileDialog cfgSelect = new OpenFileDialog();
+
+            // http://stackoverflow.com/questions/6751188/openfiledialog-c-slow-on-any-file-better-solution
+            cfgSelect.AutoUpgradeEnabled = false;
+            cfgSelect.DereferenceLinks = false;
+            
             cfgSelect.Title = "Open Configuration";
             cfgSelect.Filter = "cfg files|*.cfg";
      
@@ -278,12 +291,14 @@ namespace configtool
                 if (!cfg.isEmpty())
                     cfg.clear();
 
-                cfg.loadData(cfgSelect.FileName.ToString());
-                initGridView();
-                setLanguage(languageCode);
-            }
-
-            
+                if (cfg.loadData(cfgSelect.FileName.ToString()))
+                {
+                    initGridView();
+                    setLanguage(languageCode);
+                }
+                else
+                    MessageBox.Show(msgBoxStrings[MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }            
         }
 
         private void modifyConfigurationStructureToolStripMenuItem_Click(object sender, EventArgs e)
@@ -314,6 +329,16 @@ namespace configtool
                 {
                     initGridView();
                     setLanguage(languageCode);
+                }
+                else
+                {
+                    String msg = String.Format(msgBoxStrings[MSG_NO_TEMPL],
+                                                dlg.getProductID(),
+                                                dlg.getVersionID());
+                    MessageBox.Show(msg,
+                                    "Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
                 }
             }
         }
@@ -379,7 +404,9 @@ namespace configtool
                     else
                     {
                         Cursor.Current = Cursors.Default;
-                        String msg = String.Format(msgBoxStrings[MSG_NO_TEMPL]);
+                        String msg = String.Format(msgBoxStrings[MSG_NO_TEMPL],
+                                                    cfgHeader.prodId,
+                                                    cfgHeader.versionId);
                         MessageBox.Show(msg,
                                         "Error",
                                         MessageBoxButtons.OK,

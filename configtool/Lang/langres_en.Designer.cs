@@ -115,6 +115,15 @@ namespace configtool.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid file format.
+        /// </summary>
+        internal static string msgFormat {
+            get {
+                return ResourceManager.GetString("msgFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing data.
         /// </summary>
         internal static string msgMissingData {
@@ -133,7 +142,7 @@ namespace configtool.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No template for version ID={0} product ID={1}.
+        ///   Looks up a localized string similar to No template for product ID={0} version ID={1}.
         /// </summary>
         internal static string msgNoTempl {
             get {

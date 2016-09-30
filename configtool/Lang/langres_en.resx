@@ -139,7 +139,7 @@
     <value>Device not configured</value>
   </data>
   <data name="msgNoTempl" xml:space="preserve">
-    <value>No template for version ID={0} product ID={1}</value>
+    <value>No template for product ID={0} version ID={1}</value>
   </data>
   <data name="msgNotResp" xml:space="preserve">
     <value>Timeout, device not responding</value>
@@ -167,5 +167,8 @@
   </data>
   <data name="msgMissingData" xml:space="preserve">
     <value>Missing data</value>
+  </data>
+  <data name="msgFormat" xml:space="preserve">
+    <value>Invalid file format</value>
   </data>
 </root>

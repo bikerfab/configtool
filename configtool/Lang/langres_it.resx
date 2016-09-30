@@ -139,7 +139,7 @@
     <value>Il dispositivo non è configurato</value>
   </data>
   <data name="msgNoTempl" xml:space="preserve">
-    <value>Template mancante per versione {0} prodotto {1}</value>
+    <value>Template mancante per prodotto {0} versione {1}</value>
   </data>
   <data name="msgNotResp" xml:space="preserve">
     <value>Il dispositivo non risponde</value>
@@ -167,5 +167,8 @@
   </data>
   <data name="msgMissingData" xml:space="preserve">
     <value>Tabella dati incompleta</value>
+  </data>
+  <data name="msgFormat" xml:space="preserve">
+    <value>Formato file non valido</value>
   </data>
 </root>
