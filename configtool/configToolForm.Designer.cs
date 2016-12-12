@@ -70,10 +70,9 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewConfig.Location = new System.Drawing.Point(13, 33);
-            this.dataGridViewConfig.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewConfig.Location = new System.Drawing.Point(10, 27);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
-            this.dataGridViewConfig.Size = new System.Drawing.Size(580, 475);
+            this.dataGridViewConfig.Size = new System.Drawing.Size(435, 386);
             this.dataGridViewConfig.TabIndex = 0;
             this.dataGridViewConfig.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellEnter);
             this.dataGridViewConfig.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellLeave);
@@ -84,10 +83,9 @@
             // 
             this.buttonSend.Image = ((System.Drawing.Image)(resources.GetObject("buttonSend.Image")));
             this.buttonSend.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonSend.Location = new System.Drawing.Point(608, 153);
-            this.buttonSend.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSend.Location = new System.Drawing.Point(456, 124);
             this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(224, 48);
+            this.buttonSend.Size = new System.Drawing.Size(168, 39);
             this.buttonSend.TabIndex = 1;
             this.buttonSend.Text = "Send to device";
             this.buttonSend.UseVisualStyleBackColor = true;
@@ -97,10 +95,9 @@
             // 
             this.buttonSave.Image = ((System.Drawing.Image)(resources.GetObject("buttonSave.Image")));
             this.buttonSave.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonSave.Location = new System.Drawing.Point(608, 93);
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonSave.Location = new System.Drawing.Point(456, 76);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(224, 48);
+            this.buttonSave.Size = new System.Drawing.Size(168, 39);
             this.buttonSave.TabIndex = 2;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -110,10 +107,9 @@
             // 
             this.buttonOpen.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpen.Image")));
             this.buttonOpen.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonOpen.Location = new System.Drawing.Point(608, 33);
-            this.buttonOpen.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonOpen.Location = new System.Drawing.Point(456, 27);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(224, 48);
+            this.buttonOpen.Size = new System.Drawing.Size(168, 39);
             this.buttonOpen.TabIndex = 3;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
@@ -122,11 +118,11 @@
             // comboBoxPorts
             // 
             this.comboBoxPorts.FormattingEnabled = true;
-            this.comboBoxPorts.Location = new System.Drawing.Point(608, 380);
-            this.comboBoxPorts.Margin = new System.Windows.Forms.Padding(4);
+            this.comboBoxPorts.Location = new System.Drawing.Point(456, 309);
             this.comboBoxPorts.Name = "comboBoxPorts";
-            this.comboBoxPorts.Size = new System.Drawing.Size(128, 24);
+            this.comboBoxPorts.Size = new System.Drawing.Size(97, 21);
             this.comboBoxPorts.TabIndex = 4;
+            this.comboBoxPorts.SelectedIndexChanged += new System.EventHandler(this.comboBoxPorts_SelectedIndexChanged);
             // 
             // menuStrip1
             // 
@@ -135,8 +131,7 @@
             this.editToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(845, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(634, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -149,41 +144,41 @@
             this.removeSelectedFieldToolStripMenuItem,
             this.createTemplateToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(47, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // modifyConfigurationStructureToolStripMenuItem
             // 
             this.modifyConfigurationStructureToolStripMenuItem.Name = "modifyConfigurationStructureToolStripMenuItem";
-            this.modifyConfigurationStructureToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
+            this.modifyConfigurationStructureToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.modifyConfigurationStructureToolStripMenuItem.Text = "Edit fields";
             this.modifyConfigurationStructureToolStripMenuItem.Click += new System.EventHandler(this.modifyConfigurationStructureToolStripMenuItem_Click);
             // 
             // stopEditingToolStripMenuItem
             // 
             this.stopEditingToolStripMenuItem.Name = "stopEditingToolStripMenuItem";
-            this.stopEditingToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
+            this.stopEditingToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.stopEditingToolStripMenuItem.Text = "Stop editing";
             this.stopEditingToolStripMenuItem.Click += new System.EventHandler(this.stopEditingToolStripMenuItem_Click);
             // 
             // removeSelectedFieldToolStripMenuItem
             // 
             this.removeSelectedFieldToolStripMenuItem.Name = "removeSelectedFieldToolStripMenuItem";
-            this.removeSelectedFieldToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
+            this.removeSelectedFieldToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.removeSelectedFieldToolStripMenuItem.Text = "Remove selected parameter";
             this.removeSelectedFieldToolStripMenuItem.Click += new System.EventHandler(this.removeSelectedFieldToolStripMenuItem_Click);
             // 
             // createTemplateToolStripMenuItem
             // 
             this.createTemplateToolStripMenuItem.Name = "createTemplateToolStripMenuItem";
-            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(264, 24);
+            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.createTemplateToolStripMenuItem.Text = "Create template";
             this.createTemplateToolStripMenuItem.Click += new System.EventHandler(this.createTemplateToolStripMenuItem_Click);
             // 
@@ -191,10 +186,9 @@
             // 
             this.buttonFromDevice.Image = ((System.Drawing.Image)(resources.GetObject("buttonFromDevice.Image")));
             this.buttonFromDevice.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonFromDevice.Location = new System.Drawing.Point(608, 214);
-            this.buttonFromDevice.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonFromDevice.Location = new System.Drawing.Point(456, 174);
             this.buttonFromDevice.Name = "buttonFromDevice";
-            this.buttonFromDevice.Size = new System.Drawing.Size(224, 48);
+            this.buttonFromDevice.Size = new System.Drawing.Size(168, 39);
             this.buttonFromDevice.TabIndex = 6;
             this.buttonFromDevice.Text = "Load from device";
             this.buttonFromDevice.UseVisualStyleBackColor = true;
@@ -204,10 +198,9 @@
             // 
             this.buttonErase.Image = ((System.Drawing.Image)(resources.GetObject("buttonErase.Image")));
             this.buttonErase.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonErase.Location = new System.Drawing.Point(608, 274);
-            this.buttonErase.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonErase.Location = new System.Drawing.Point(456, 223);
             this.buttonErase.Name = "buttonErase";
-            this.buttonErase.Size = new System.Drawing.Size(224, 48);
+            this.buttonErase.Size = new System.Drawing.Size(168, 39);
             this.buttonErase.TabIndex = 7;
             this.buttonErase.Text = "Erase device";
             this.buttonErase.UseVisualStyleBackColor = true;
@@ -215,9 +208,9 @@
             // 
             // FormConfig
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(845, 518);
+            this.ClientSize = new System.Drawing.Size(634, 421);
             this.Controls.Add(this.buttonErase);
             this.Controls.Add(this.buttonFromDevice);
             this.Controls.Add(this.comboBoxPorts);
@@ -228,7 +221,6 @@
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormConfig";
             this.Text = "Configuration Tool";
             this.Load += new System.EventHandler(this.FormConfig_Load);
