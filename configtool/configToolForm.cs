@@ -79,13 +79,16 @@ namespace configtool
             cfg = new Configuration();
 
             string[] ports = SerialPort.GetPortNames();
-            for (int i = 0; i < ports.Length; i++)
+
+            if (ports.Length > 0)
             {
-                comboBoxPorts.Items.Add(ports[i]);
+                for (int i = 0; i < ports.Length; i++)
+                {
+                    comboBoxPorts.Items.Add(ports[i]);
+                }
+
+                comboBoxPorts.SelectedIndex = 0;
             }
-
-            comboBoxPorts.SelectedIndex = 0;
-
         }
 
         // lang code = -1 sets system language (IT/EN)
@@ -621,6 +624,5 @@ namespace configtool
         {
             Debug.Print(e.ToString());
         }
-
     }
 }

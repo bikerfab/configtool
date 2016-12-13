@@ -122,7 +122,6 @@
             this.comboBoxPorts.Name = "comboBoxPorts";
             this.comboBoxPorts.Size = new System.Drawing.Size(97, 21);
             this.comboBoxPorts.TabIndex = 4;
-            this.comboBoxPorts.SelectedIndexChanged += new System.EventHandler(this.comboBoxPorts_SelectedIndexChanged);
             // 
             // menuStrip1
             // 
