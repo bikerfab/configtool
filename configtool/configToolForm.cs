@@ -163,16 +163,18 @@ namespace configtool
             }
 
         }
-
-        private void waitTargetProceed()
+    
+        private void waitTargetReply(int reply)
         {
             int rxdata = 0;
 
             do
             {
-                rxdata = serialPort.ReadChar();
+                rxdata = serialPort.ReadByte();
                 tout.check();
-            } while (rxdata != Configuration.CFG_LOAD_PROCEED);
+            } while (rxdata != reply);
+
+            Debug.Print("waitTargetReply -> " + reply.ToString());
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
@@ -202,25 +204,25 @@ namespace configtool
                 {
                     serialPort.Write("c");
 
-                    waitTargetProceed();
+                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
 
                     Debug.Print("Proceed received");
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getSize())), 0, 1);
                     Debug.Print(cfg.getSize().ToString());
-                    waitTargetProceed();
+                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getNumItems())), 0, 1);
                     Debug.Print(cfg.getNumItems().ToString());
-                    waitTargetProceed();
+                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getProductId())), 0, 1);
                     Debug.Print(cfg.getProductId().ToString());
-                    waitTargetProceed();
+                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getVersionId())), 0, 1);
                     Debug.Print(cfg.getVersionId().ToString());
-                    waitTargetProceed();
+                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
 
                     Debug.Print("header written");
 
@@ -235,7 +237,8 @@ namespace configtool
                             Debug.Print(s2);
                             serialPort.Write(raw, j, 1);
                             Debug.Print("data written");
-                            waitTargetProceed();
+                       //     waitTargetProceed();
+                            waitTargetReply(Configuration.CFG_LOAD_PROCEED);
                             Debug.Print("Proceed received");
                             tout.check();
                         }
@@ -641,13 +644,19 @@ namespace configtool
                 serialPort.BaudRate = 115200;
                 serialPort.Open();
                 serialPort.Write("e");
-
-                do
-                {
-                    rxdata = serialPort.ReadChar();
-                    tout.check();
-                } while (rxdata != Configuration.CFG_ERASED);
-
+                Debug.Print("erase command sent");
+                /*             do
+                             {
+                                 rxdata = serialPort.ReadChar();
+                                 tout.check();
+                             } while (rxdata != Configuration.CFG_ERASED);
+                             */
+                waitTargetReply(Configuration.CFG_ASK_CONFIRM_ERASE);
+                Debug.Print("CFG_ASK_CONFIRM_ERASE recv");
+                serialPort.Write("E");
+                Debug.Print("CFG_CONFIRM_ERASE sent");
+                waitTargetReply(Configuration.CFG_ERASED);
+                Debug.Print("CFG_ERASED recv");
                 serialPort.Close();
                 Cursor.Current = Cursors.Default;
                 MessageBox.Show(msgBoxStrings[MSG_ERASED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);

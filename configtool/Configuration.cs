@@ -30,6 +30,8 @@ namespace configtool
         public static int CFG_NOT_CONFIGURED = 3;
         public static int CFG_ERASED = 7;
         public static int CFG_PRESENT = 0xA5;
+        public static int CFG_ASK_CONFIRM_ERASE = 15;
+        public static int CFG_CMD_ERR = 10;
 
         public Configuration()
         {
