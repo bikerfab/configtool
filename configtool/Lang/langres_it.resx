@@ -142,7 +142,7 @@
     <value>Template mancante per prodotto {0} versione {1}</value>
   </data>
   <data name="msgNotResp" xml:space="preserve">
-    <value>Il dispositivo non risponde</value>
+    <value>Timeout. Spegnere e riaccendere il dispositivo</value>
   </data>
   <data name="msgSent" xml:space="preserve">
     <value>Configurazione inviata</value>

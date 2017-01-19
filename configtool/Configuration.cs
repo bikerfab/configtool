@@ -27,8 +27,8 @@ namespace configtool
         public static int CFG_LOAD_OK = 1;
         public static int CFG_LOAD_WRONGCHECK = 2;
         public static int CFG_LOAD_PROCEED = 8;
-        public static int CFG_NOT_CONFIGURED = 9;
-        public static int CFG_ERASED = 10;
+        public static int CFG_NOT_CONFIGURED = 3;
+        public static int CFG_ERASED = 7;
         public static int CFG_PRESENT = 0xA5;
 
         public Configuration()

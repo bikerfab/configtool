@@ -151,7 +151,7 @@ namespace configtool.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Il dispositivo non risponde.
+        ///   Looks up a localized string similar to Timeout. Spegnere e riaccendere il dispositivo.
         /// </summary>
         internal static string msgNotResp {
             get {
