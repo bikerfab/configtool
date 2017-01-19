@@ -39,8 +39,9 @@ namespace configtool
         public void updateHeader()
         {
             header.numItems = (byte)data.Count();
+            header.size = 0;
 
-            foreach(configItem item in data)
+            foreach (configItem item in data)
             {
                 header.size += item.getSize();
             }

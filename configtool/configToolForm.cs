@@ -76,6 +76,8 @@ namespace configtool
 
             setAdmin(adminMode);    // true shows admin menu items
 
+            stopEditing();      // no edit mode at startup
+
             cfg = new Configuration();
 
             string[] ports = SerialPort.GetPortNames();
@@ -162,6 +164,17 @@ namespace configtool
 
         }
 
+        private void waitTargetProceed()
+        {
+            int rxdata = 0;
+
+            do
+            {
+                rxdata = serialPort.ReadChar();
+                tout.check();
+            } while (rxdata != Configuration.CFG_LOAD_PROCEED);
+        }
+
         private void buttonSend_Click(object sender, EventArgs e)
         {            
             int j = 0;
@@ -170,7 +183,7 @@ namespace configtool
 
             if (cfg.checkData())
             {
-                tout = new Timeout(5000);
+                tout = new Timeout(10000);
                 Cursor.Current = Cursors.WaitCursor;
 
                 gridViewToData(true);
@@ -189,19 +202,28 @@ namespace configtool
                 {
                     serialPort.Write("c");
 
-                    do
-                    {
-                        rxdata = serialPort.ReadChar();
-                        tout.check();
-                    } while (rxdata != Configuration.CFG_LOAD_PROCEED);
-
+                    waitTargetProceed();
 
                     Debug.Print("Proceed received");
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getSize())), 0, 1);
+                    Debug.Print(cfg.getSize().ToString());
+                    waitTargetProceed();
+
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getNumItems())), 0, 1);
+                    Debug.Print(cfg.getNumItems().ToString());
+                    waitTargetProceed();
+
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getProductId())), 0, 1);
+                    Debug.Print(cfg.getProductId().ToString());
+                    waitTargetProceed();
+
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getVersionId())), 0, 1);
+                    Debug.Print(cfg.getVersionId().ToString());
+                    waitTargetProceed();
+
+                    Debug.Print("header written");
+
 
                     foreach (configItem item in cfg.getData())
                     {
@@ -212,17 +234,26 @@ namespace configtool
                             String s2 = String.Format("{0}", raw[j]);
                             Debug.Print(s2);
                             serialPort.Write(raw, j, 1);
+                            Debug.Print("data written");
+                            waitTargetProceed();
+                            Debug.Print("Proceed received");
                             tout.check();
                         }
                     }
 
+                    Debug.Print("data written");
+
                     serialPort.Write(BitConverter.GetBytes(cfg.checksum()), 0, 1);
+                    
+                    Debug.Print("checksum written");
 
                     do
                     {
                         rxdata = serialPort.ReadChar();
                         tout.check();
                     } while (rxdata != Configuration.CFG_LOAD_OK && rxdata != Configuration.CFG_LOAD_WRONGCHECK);
+
+                    Debug.Print("reply received");
 
 
                     if (rxdata == Configuration.CFG_LOAD_OK)
@@ -285,30 +316,35 @@ namespace configtool
             }
         }
 
-        private void buttonLoad_Click(object sender, EventArgs e)
+        void configFileOpen()
         {
             OpenFileDialog cfgSelect = new OpenFileDialog();
 
-            // http://stackoverflow.com/questions/6751188/openfiledialog-c-slow-on-any-file-better-solution
-            cfgSelect.AutoUpgradeEnabled = false;
-            cfgSelect.DereferenceLinks = false;
+                        // http://stackoverflow.com/questions/6751188/openfiledialog-c-slow-on-any-file-better-solution
+                        cfgSelect.AutoUpgradeEnabled = false;
+                        cfgSelect.DereferenceLinks = false;
             
-            cfgSelect.Title = "Open Configuration";
-            cfgSelect.Filter = "cfg files|*.cfg";
+                        cfgSelect.Title = "Open Configuration";
+                        cfgSelect.Filter = "cfg files|*.cfg";
      
-            if (cfgSelect.ShowDialog() == DialogResult.OK)
-            {                
-                if (!cfg.isEmpty())
-                    cfg.clear();
+                        if (cfgSelect.ShowDialog() == DialogResult.OK)
+                        {                
+                            if (!cfg.isEmpty())
+                                cfg.clear();
 
-                if (cfg.loadData(cfgSelect.FileName.ToString()))
-                {
-                    initGridView();
-                    setLanguage(languageCode);
-                }
-                else
-                    MessageBox.Show(msgBoxStrings[MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+                            if (cfg.loadData(cfgSelect.FileName.ToString()))
+                            {
+                                initGridView();
+                                setLanguage(languageCode);
+                            }
+                            else
+                                MessageBox.Show(msgBoxStrings[MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }            
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            configFileOpen();
         }
 
         private void modifyConfigurationStructureToolStripMenuItem_Click(object sender, EventArgs e)
@@ -316,7 +352,10 @@ namespace configtool
             dataGridViewConfig.AllowUserToAddRows = true;
             dataGridViewConfig.AllowUserToDeleteRows = true;
             dataGridViewConfig.Columns["param"].ReadOnly = false;
-            dataGridViewConfig.Columns["dataType"].Visible = true;          
+            dataGridViewConfig.Columns["dataType"].Visible = true;
+
+            allowEditing();
+
             editMode = true;
         }
 
@@ -370,7 +409,7 @@ namespace configtool
             int i=0;
             byte[] buffer = new byte[256];
             configHeader cfgHeader = new configHeader();
-            tout = new Timeout(5000);
+            tout = new Timeout(50000);
 
             serialPort.PortName = comboBoxPorts.GetItemText(comboBoxPorts.SelectedItem);
             serialPort.BaudRate = 115200;
@@ -443,7 +482,28 @@ namespace configtool
             dataGridViewConfig.AllowUserToDeleteRows = false;
             dataGridViewConfig.Columns["param"].ReadOnly = true;
             dataGridViewConfig.Columns["dataType"].Visible = false;
+            stopEditingToolStripMenuItem.Enabled = false;
+            modifyConfigurationStructureToolStripMenuItem.Enabled = true;
+            newToolStripMenuItem.Enabled = true;
+            removeSelectedFieldToolStripMenuItem.Enabled = false;
+            createTemplateToolStripMenuItem.Enabled = false;
+
             editMode = false;
+        }
+
+        void allowEditing()
+        {
+            dataGridViewConfig.AllowUserToAddRows = true;
+            dataGridViewConfig.AllowUserToDeleteRows = true;
+            dataGridViewConfig.Columns["param"].ReadOnly = false;
+            dataGridViewConfig.Columns["dataType"].Visible = true;
+            stopEditingToolStripMenuItem.Enabled = true;
+            modifyConfigurationStructureToolStripMenuItem.Enabled = false;
+            newToolStripMenuItem.Enabled = false;
+            removeSelectedFieldToolStripMenuItem.Enabled = true;
+            createTemplateToolStripMenuItem.Enabled = true;
+
+            editMode = true;
         }
 
         private void stopEditingToolStripMenuItem_Click(object sender, EventArgs e)
@@ -488,13 +548,14 @@ namespace configtool
         private void createTemplateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             configItem item;
-            String sParam;
-            String sDataType;
-            String desc;
+            String sParam = "";
+            String sDataType = "";
+            String desc = "";
             byte size = 0;
             templateDlg dlg;
+            bool inputError = false;
 
-            if (dataGridViewConfig.Rows.Count == 0)
+            if (dataGridViewConfig.Rows.Count == 0 || dataGridViewConfig.Rows[0].Cells["param"].Value == null)
             {
                 MessageBox.Show(msgBoxStrings[MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -506,38 +567,65 @@ namespace configtool
                 }
 
                 cfg.setNumItems(dataGridViewConfig.RowCount);
+                cfg.clear();
 
                 foreach (DataGridViewRow row in dataGridViewConfig.Rows)
                 {
                     if (row.Index < dataGridViewConfig.RowCount)
                     {
-                        sParam = row.Cells["param"].Value.ToString();
-                        sDataType = row.Cells["dataType"].Value.ToString();
-                        desc = row.Cells["description"].Value.ToString();
-                        item = new configItem(sParam, "", sDataType, desc);
-                        size += item.getSize();
+                        if (row.Cells["param"].Value != null)
+                            sParam = row.Cells["param"].Value.ToString();
+                        else
+                            inputError = true;
 
-                        cfg.addItem(item);
+                        if (row.Cells["dataType"].Value != null)
+                            sDataType = row.Cells["dataType"].Value.ToString();
+                        else
+                            inputError = true;
+
+                        if (row.Cells["description"].Value != null)
+                            desc = row.Cells["description"].Value.ToString();
+                        else
+                            inputError = true;
+
+                        if (!inputError)
+                        {
+                            item = new configItem(sParam, "", sDataType, desc);
+                            size += item.getSize();
+
+                            cfg.addItem(item);
+                        }
+                        else
+                            MessageBox.Show("Mandatory data missing", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
-                dlg = new templateDlg();
-
-                if (dlg.ShowDialog() == DialogResult.OK)
+                if (!inputError)
                 {
-                    cfg.setProductId(dlg.getProductID());
-                    cfg.setVersionId(dlg.getVersionID());
-                    SaveFileDialog cfgSelect = new SaveFileDialog();
+                    dlg = new templateDlg();
 
-                    cfgSelect.Title = "Save template";
-                    cfgSelect.Filter = "Configuration template files|*.cft";
-                    cfgSelect.InitialDirectory = Application.StartupPath;
-                    if (cfgSelect.ShowDialog() == DialogResult.OK)
+                    cfg.updateHeader();
+
+                    if (dlg.ShowDialog() == DialogResult.OK)
                     {
-                 //       gridViewToData(false);
-                        cfg.saveData(cfgSelect.FileName.ToString());
+                        cfg.setProductId(dlg.getProductID());
+                        cfg.setVersionId(dlg.getVersionID());
+                        SaveFileDialog cfgSelect = new SaveFileDialog();
+
+                        cfgSelect.Title = "Save template";
+                        cfgSelect.Filter = "Configuration template files|*.cft";
+                        cfgSelect.InitialDirectory = Application.StartupPath;
+                        if (cfgSelect.ShowDialog() == DialogResult.OK)
+                        {
+                            //       gridViewToData(false);
+                            cfg.saveData(cfgSelect.FileName.ToString());
+                        }
                     }
+                    else
+                        allowEditing();
                 }
+                else
+                    allowEditing();
             }
         }
 
@@ -623,6 +711,11 @@ namespace configtool
         private void dataGridViewConfig_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             Debug.Print(e.ToString());
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            configFileOpen();
         }
     }
 }
