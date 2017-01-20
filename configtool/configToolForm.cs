@@ -10,6 +10,8 @@ namespace configtool
     public partial class FormConfig : Form
     {
         Configuration cfg;
+        Configuration tempCfg;       // for template loading
+
         bool bIsComboBox = false;
         delegate void SetComboBoxCellType(int iRowIndex);
         bool editMode = false;
@@ -396,6 +398,7 @@ namespace configtool
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             templateDlg dlg;
+            String templateName="";
 
             cfg.clear();
             initGridView();
@@ -408,7 +411,7 @@ namespace configtool
                 cfg.setProductId(dlg.getProductID());
                 cfg.setVersionId(dlg.getVersionID());
 
-                if (cfg.loadTemplate(cfg.getProductId(), cfg.getVersionId(), Application.StartupPath))
+                if (cfg.loadTemplate(cfg.getProductId(), cfg.getVersionId(), Application.StartupPath, ref templateName))
                 {
                     initGridView();
                     setLanguage(languageCode);
@@ -440,6 +443,7 @@ namespace configtool
 
         private void buttonFromDevice_Click(object sender, EventArgs e)
         {
+            String templateName = "";
             int i=0;
             byte[] buffer = new byte[256];
             configHeader cfgHeader = new configHeader();
@@ -492,7 +496,7 @@ namespace configtool
                     cfgHeader.prodId = (byte)buffer[3]; //prod id
                     cfgHeader.versionId = (byte)buffer[4]; //version id                              
 
-                    if (cfg.loadTemplate(cfgHeader.prodId, cfgHeader.versionId, Application.StartupPath))
+                    if (cfg.loadTemplate(cfgHeader.prodId, cfgHeader.versionId, Application.StartupPath, ref templateName))
                     {
                         Cursor.Current = Cursors.Default;
                         cfg.fromBuffer(buffer);
@@ -618,7 +622,11 @@ namespace configtool
                 }
 
                 cfg.setNumItems(dataGridViewConfig.RowCount);
-                cfg.clear();
+
+                if (cfg.getProductId() == 0)     // if product/version ID existing, just update
+                    cfg.clear();
+                else
+                    cfg.clearDataOnly();
 
                 foreach (DataGridViewRow row in dataGridViewConfig.Rows)
                 {
@@ -657,23 +665,38 @@ namespace configtool
 
                     cfg.updateHeader();
 
-                    if (dlg.ShowDialog() == DialogResult.OK)
+                    if (cfg.getProductId() == 0)        // if product ID existing, just update
                     {
-                        cfg.setProductId(dlg.getProductID());
-                        cfg.setVersionId(dlg.getVersionID());
-                        SaveFileDialog cfgSelect = new SaveFileDialog();
-
-                        cfgSelect.Title = "Save template";
-                        cfgSelect.Filter = "Configuration template files|*.cft";
-                        cfgSelect.InitialDirectory = Application.StartupPath;
-                        if (cfgSelect.ShowDialog() == DialogResult.OK)
+                        if (dlg.ShowDialog() == DialogResult.OK)
                         {
-                            //       gridViewToData(false);
-                            cfg.saveData(cfgSelect.FileName.ToString());
+                            cfg.setProductId(dlg.getProductID());
+                            cfg.setVersionId(dlg.getVersionID());
+                            SaveFileDialog cfgSelect = new SaveFileDialog();
+
+                            cfgSelect.Title = "Save template";
+                            cfgSelect.Filter = "Configuration template files|*.cft";
+                            cfgSelect.InitialDirectory = Application.StartupPath;
+                            if (cfgSelect.ShowDialog() == DialogResult.OK)
+                            {
+                                //       gridViewToData(false);
+                                cfg.saveData(cfgSelect.FileName.ToString());
+                            }
                         }
+                        else
+                            allowEditing();
                     }
                     else
-                        allowEditing();
+                    {
+                        String tmplName = "";
+
+                        tempCfg = new Configuration();
+                        tempCfg.setProductId(cfg.getProductId());
+                        tempCfg.setVersionId(cfg.getVersionId());
+
+                        tempCfg.loadTemplate(cfg.getProductId(), cfg.getVersionId(), Application.StartupPath, ref tmplName);
+                        cfg.saveData(tmplName);
+                    }
+
                 }
                 else
                     allowEditing();

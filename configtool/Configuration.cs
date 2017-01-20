@@ -90,12 +90,14 @@ namespace configtool
         // same product id and version used to get the parameters tags and data types. 
         // Load this config then fill values with the data read from the device.
         // Templates are stored in the application folder (or a user folder)
-        public bool loadTemplate(byte prodId, byte verId, string folder)
+        public bool loadTemplate(byte prodId, byte verId, string folder, ref String name)
         {
             // search for all templates in app folder
             byte pid, vid;
 
             string[] filePaths = Directory.GetFiles(folder, "*.cft");
+
+            name = "";
 
             // open each template
             foreach(string template in filePaths)
@@ -122,6 +124,7 @@ namespace configtool
                 {
                     // if found, load as a config and return true
                     loadData(template);
+                    name = template;
                     return true;
                 }                
             }
