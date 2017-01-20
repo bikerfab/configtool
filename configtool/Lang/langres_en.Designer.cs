@@ -151,7 +151,7 @@ namespace configtool.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timeout, device not responding. Restart device to retry.
+        ///   Looks up a localized string similar to Timeout, device not responding..
         /// </summary>
         internal static string msgNotResp {
             get {

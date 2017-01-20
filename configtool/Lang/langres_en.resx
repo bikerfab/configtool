@@ -142,7 +142,7 @@
     <value>No template for product ID={0} version ID={1}</value>
   </data>
   <data name="msgNotResp" xml:space="preserve">
-    <value>Timeout, device not responding. Restart device to retry</value>
+    <value>Timeout, device not responding.</value>
   </data>
   <data name="msgSent" xml:space="preserve">
     <value>Configuration sent</value>

@@ -26,7 +26,10 @@ namespace configtool
 
         public void check()
         {
-            if (sw.ElapsedMilliseconds > time) throw new TimeoutException();
+            if (!Debugger.IsAttached)
+            {
+                if (sw.ElapsedMilliseconds > time) throw new TimeoutException();
+            }
         }
 
         public void stop()

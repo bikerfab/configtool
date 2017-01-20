@@ -16,23 +16,34 @@ namespace configtool
         bool adminMode = false;
         int languageCode;
 
+        public static int TIMEOUT_LEN = 5000;
+
         Timeout tout;
-        public const int MSG_SENT = 0;
-        public const int MSG_CHKSUM_ERR = 1;
-        public const int MSG_NOT_RESP = 2;
-        public const int MSG_NO_CFG = 3;
-        public const int MSG_NO_TEMPL = 4;
-        public const int MSG_LOADED = 5;
-        public const int MSG_EMPTY = 6;
-        public const int MSG_ERASED = 7;
-        public const int MSG_MISSING_DATA = 8;
-        public const int MSG_FORMAT = 9;
+
+        enum msgStrings
+        {
+            MSG_SENT = 0,
+            MSG_CHKSUM_ERR,
+            MSG_NOT_RESP,
+            MSG_NO_CFG,
+            MSG_NO_TEMPL,
+            MSG_LOADED,
+            MSG_EMPTY,
+            MSG_ERASED,
+            MSG_MISSING_DATA,
+            MSG_FORMAT
+
+        };
 
         String[] msgBoxStrings = new String[10];
 
         public FormConfig()
         {
-            InitializeComponent();               
+            InitializeComponent();
+
+            toolStripStatusLabel.Width = (this.Width-40) / 2;
+            toolStripProgressBar.Width = (this.Width-40) / 2;
+
         }
 
         private void initTable()
@@ -120,16 +131,16 @@ namespace configtool
             dataGridViewConfig.Columns["val"].HeaderText = rm.GetString("tblValueCol");
             dataGridViewConfig.Columns["description"].HeaderText = rm.GetString("tblDescCol");
 
-            msgBoxStrings[MSG_SENT] = rm.GetString("msgSent");
-            msgBoxStrings[MSG_CHKSUM_ERR] = rm.GetString("msgChksum");
-            msgBoxStrings[MSG_NOT_RESP] = rm.GetString("msgNotResp");
-            msgBoxStrings[MSG_NO_CFG] = rm.GetString("msgNotCfg");
-            msgBoxStrings[MSG_NO_TEMPL] = rm.GetString("msgNoTempl");
-            msgBoxStrings[MSG_LOADED] = rm.GetString("msgCfgLoaded");
-            msgBoxStrings[MSG_EMPTY] = rm.GetString("msgCfgEmpty");
-            msgBoxStrings[MSG_ERASED] = rm.GetString("msgErased");
-            msgBoxStrings[MSG_MISSING_DATA] = rm.GetString("msgMissingData");
-            msgBoxStrings[MSG_FORMAT] = rm.GetString("msgFormat");
+            msgBoxStrings[(int)msgStrings.MSG_SENT] = rm.GetString("msgSent");
+            msgBoxStrings[(int)msgStrings.MSG_CHKSUM_ERR] = rm.GetString("msgChksum");
+            msgBoxStrings[(int)msgStrings.MSG_NOT_RESP] = rm.GetString("msgNotResp");
+            msgBoxStrings[(int)msgStrings.MSG_NO_CFG] = rm.GetString("msgNotCfg");
+            msgBoxStrings[(int)msgStrings.MSG_NO_TEMPL] = rm.GetString("msgNoTempl");
+            msgBoxStrings[(int)msgStrings.MSG_LOADED] = rm.GetString("msgCfgLoaded");
+            msgBoxStrings[(int)msgStrings.MSG_EMPTY] = rm.GetString("msgCfgEmpty");
+            msgBoxStrings[(int)msgStrings.MSG_ERASED] = rm.GetString("msgErased");
+            msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA] = rm.GetString("msgMissingData");
+            msgBoxStrings[(int)msgStrings.MSG_FORMAT] = rm.GetString("msgFormat");
         }
 
         // hides admin menu items if no admin user
@@ -164,7 +175,7 @@ namespace configtool
 
         }
     
-        private void waitTargetReply(int reply)
+        private void waitTargetReply(Configuration.cfgReply reply)
         {
             int rxdata = 0;
 
@@ -172,9 +183,17 @@ namespace configtool
             {
                 rxdata = serialPort.ReadByte();
                 tout.check();
-            } while (rxdata != reply);
+            } while (rxdata != (int)reply);
 
             Debug.Print("waitTargetReply -> " + reply.ToString());
+        }
+
+        private void sendCommand(Configuration.cfgCommand cmd)
+        {
+            byte[] buff = new byte[1];
+
+            buff[0] = (byte)cmd;
+            serialPort.Write(buff, 0, 1);
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
@@ -185,10 +204,15 @@ namespace configtool
 
             if (cfg.checkData())
             {
-                tout = new Timeout(10000);
+                tout = new Timeout(TIMEOUT_LEN);
                 Cursor.Current = Cursors.WaitCursor;
 
                 gridViewToData(true);
+
+                toolStripProgressBar.Maximum = cfg.getSize();
+                toolStripProgressBar.Step = 1;
+                toolStripProgressBar.Value = 0;
+                statusStrip.Refresh();
 
                 int chk = cfg.checksum();
 
@@ -202,27 +226,27 @@ namespace configtool
 
                 try
                 {
-                    serialPort.Write("c");
+                    sendCommand(Configuration.cfgCommand.CFG_CONFIG);
 
-                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
+                    waitTargetReply(Configuration.cfgReply.CFG_LOAD_PROCEED);
 
                     Debug.Print("Proceed received");
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getSize())), 0, 1);
                     Debug.Print(cfg.getSize().ToString());
-                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
+                    waitTargetReply(Configuration.cfgReply.CFG_LOAD_PROCEED);
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getNumItems())), 0, 1);
                     Debug.Print(cfg.getNumItems().ToString());
-                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
+                    waitTargetReply(Configuration.cfgReply.CFG_LOAD_PROCEED);
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getProductId())), 0, 1);
                     Debug.Print(cfg.getProductId().ToString());
-                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
+                    waitTargetReply(Configuration.cfgReply.CFG_LOAD_PROCEED);
 
                     serialPort.Write(BitConverter.GetBytes(Convert.ToByte(cfg.getVersionId())), 0, 1);
                     Debug.Print(cfg.getVersionId().ToString());
-                    waitTargetReply(Configuration.CFG_LOAD_PROCEED);
+                    waitTargetReply(Configuration.cfgReply.CFG_LOAD_PROCEED);
 
                     Debug.Print("header written");
 
@@ -237,10 +261,12 @@ namespace configtool
                             Debug.Print(s2);
                             serialPort.Write(raw, j, 1);
                             Debug.Print("data written");
-                       //     waitTargetProceed();
-                            waitTargetReply(Configuration.CFG_LOAD_PROCEED);
+                            waitTargetReply(Configuration.cfgReply.CFG_LOAD_PROCEED);
                             Debug.Print("Proceed received");
                             tout.check();
+
+                            toolStripProgressBar.PerformStep();
+                            statusStrip.Refresh();
                         }
                     }
 
@@ -254,16 +280,21 @@ namespace configtool
                     {
                         rxdata = serialPort.ReadChar();
                         tout.check();
-                    } while (rxdata != Configuration.CFG_LOAD_OK && rxdata != Configuration.CFG_LOAD_WRONGCHECK);
+                    } while (rxdata != (int)Configuration.cfgReply.CFG_LOAD_OK && rxdata != (int)Configuration.cfgReply.CFG_LOAD_WRONGCHECK);
 
                     Debug.Print("reply received");
 
 
-                    if (rxdata == Configuration.CFG_LOAD_OK)
-                        MessageBox.Show(msgBoxStrings[MSG_SENT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (rxdata == (int)Configuration.cfgReply.CFG_LOAD_OK)
+                        toolStripStatusLabel.Text = msgBoxStrings[(int)msgStrings.MSG_SENT];
+       //                 MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_SENT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    if (rxdata == Configuration.CFG_LOAD_WRONGCHECK)
-                        MessageBox.Show(msgBoxStrings[MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+                    if (rxdata == (int)Configuration.cfgReply.CFG_LOAD_WRONGCHECK)
+                        MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    statusStrip.Refresh();
 
                     serialPort.Close();
                     Cursor.Current = Cursors.Default;
@@ -274,13 +305,13 @@ namespace configtool
                     Cursor.Current = Cursors.Default;
 
                     Debug.Print("Timeout");
-                    MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     tout.stop();
                     serialPort.Close();
                 }
             }
             else
-                MessageBox.Show(msgBoxStrings[MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         }
 
@@ -296,7 +327,7 @@ namespace configtool
         {
             if (dataGridViewConfig.Rows.Count == 0)
             {
-                MessageBox.Show(msgBoxStrings[MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
@@ -315,7 +346,7 @@ namespace configtool
                     }
                 }
                 else
-                    MessageBox.Show(msgBoxStrings[MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -323,26 +354,26 @@ namespace configtool
         {
             OpenFileDialog cfgSelect = new OpenFileDialog();
 
-                        // http://stackoverflow.com/questions/6751188/openfiledialog-c-slow-on-any-file-better-solution
-                        cfgSelect.AutoUpgradeEnabled = false;
-                        cfgSelect.DereferenceLinks = false;
+            // http://stackoverflow.com/questions/6751188/openfiledialog-c-slow-on-any-file-better-solution
+            cfgSelect.AutoUpgradeEnabled = false;
+            cfgSelect.DereferenceLinks = false;
             
-                        cfgSelect.Title = "Open Configuration";
-                        cfgSelect.Filter = "cfg files|*.cfg";
+            cfgSelect.Title = "Open Configuration";
+            cfgSelect.Filter = "cfg files|*.cfg";
      
-                        if (cfgSelect.ShowDialog() == DialogResult.OK)
-                        {                
-                            if (!cfg.isEmpty())
-                                cfg.clear();
+            if (cfgSelect.ShowDialog() == DialogResult.OK)
+            {                
+                if (!cfg.isEmpty())
+                    cfg.clear();
 
-                            if (cfg.loadData(cfgSelect.FileName.ToString()))
-                            {
-                                initGridView();
-                                setLanguage(languageCode);
-                            }
-                            else
-                                MessageBox.Show(msgBoxStrings[MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }            
+                if (cfg.loadData(cfgSelect.FileName.ToString()))
+                {
+                    initGridView();
+                    setLanguage(languageCode);
+                }
+                else
+                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }            
         }
 
         private void buttonLoad_Click(object sender, EventArgs e)
@@ -384,7 +415,7 @@ namespace configtool
                 }
                 else
                 {
-                    String msg = String.Format(msgBoxStrings[MSG_NO_TEMPL],
+                    String msg = String.Format(msgBoxStrings[(int)msgStrings.MSG_NO_TEMPL],
                                                 dlg.getProductID(),
                                                 dlg.getVersionID());
                     MessageBox.Show(msg,
@@ -412,17 +443,24 @@ namespace configtool
             int i=0;
             byte[] buffer = new byte[256];
             configHeader cfgHeader = new configHeader();
-            tout = new Timeout(50000);
+            tout = new Timeout(TIMEOUT_LEN);
 
             serialPort.PortName = comboBoxPorts.GetItemText(comboBoxPorts.SelectedItem);
             serialPort.BaudRate = 115200;
             serialPort.WriteTimeout = 5000;
             serialPort.ReadTimeout = 5000;
             serialPort.Open();
+
+            toolStripProgressBar.Maximum = cfg.getSize();
+            toolStripProgressBar.Step = 1;
+            toolStripProgressBar.Value = 0;
+            
+            statusStrip.Refresh();
+
             Cursor.Current = Cursors.WaitCursor;
             try
             {
-                serialPort.Write("d");
+                sendCommand(Configuration.cfgCommand.CFG_DUMP);
 
                 do
                 {
@@ -430,12 +468,21 @@ namespace configtool
                     Debug.Print(Convert.ToString(buffer[i]));
                     i++;
                     tout.check();
+
+                    toolStripProgressBar.PerformStep();                    
+                    statusStrip.Refresh();
+
                 } while (serialPort.BytesToRead > 0);
 
+                statusStrip.Refresh();
                 Debug.Print("received");
 
-                if (buffer[0] == Configuration.CFG_NOT_CONFIGURED)
-                    MessageBox.Show(msgBoxStrings[MSG_NO_CFG], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (buffer[0] == (int)Configuration.cfgReply.CFG_NOT_CONFIGURED)
+                {
+                    toolStripProgressBar.Value = 0;
+                    statusStrip.Refresh();
+                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_NO_CFG], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
                 else if (buffer[0] == Configuration.CFG_PRESENT)
                 {
                     Debug.Print("load configuration from device");
@@ -451,12 +498,13 @@ namespace configtool
                         cfg.fromBuffer(buffer);
                         initGridView();
                         setLanguage(languageCode);
-                        MessageBox.Show(msgBoxStrings[MSG_LOADED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_LOADED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        toolStripStatusLabel.Text = msgBoxStrings[(int)msgStrings.MSG_LOADED];
                     }
                     else
                     {
                         Cursor.Current = Cursors.Default;
-                        String msg = String.Format(msgBoxStrings[MSG_NO_TEMPL],
+                        String msg = String.Format(msgBoxStrings[(int)msgStrings.MSG_NO_TEMPL],
                                                     cfgHeader.prodId,
                                                     cfgHeader.versionId);
                         MessageBox.Show(msg,
@@ -473,7 +521,7 @@ namespace configtool
             {
                 Cursor.Current = Cursors.WaitCursor;
                 Debug.Print("Timeout");
-                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 serialPort.Close();
             }
  
@@ -560,7 +608,7 @@ namespace configtool
 
             if (dataGridViewConfig.Rows.Count == 0 || dataGridViewConfig.Rows[0].Cells["param"].Value == null)
             {
-                MessageBox.Show(msgBoxStrings[MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
@@ -634,8 +682,7 @@ namespace configtool
 
         private void buttonErase_Click(object sender, EventArgs e)
         {
-            int rxdata = 0;
-            tout = new Timeout(5000);
+            tout = new Timeout(TIMEOUT_LEN);
             Cursor.Current = Cursors.WaitCursor;
 
             try
@@ -643,29 +690,30 @@ namespace configtool
                 serialPort.PortName = comboBoxPorts.GetItemText(comboBoxPorts.SelectedItem);
                 serialPort.BaudRate = 115200;
                 serialPort.Open();
-                serialPort.Write("e");
+
+                sendCommand(Configuration.cfgCommand.CFG_ERASE);
                 Debug.Print("erase command sent");
-                /*             do
-                             {
-                                 rxdata = serialPort.ReadChar();
-                                 tout.check();
-                             } while (rxdata != Configuration.CFG_ERASED);
-                             */
-                waitTargetReply(Configuration.CFG_ASK_CONFIRM_ERASE);
+  
+                waitTargetReply(Configuration.cfgReply.CFG_ASK_CONFIRM_ERASE);
                 Debug.Print("CFG_ASK_CONFIRM_ERASE recv");
-                serialPort.Write("E");
+
+
+                sendCommand(Configuration.cfgCommand.CFG_CONFIRM_ERASE);
                 Debug.Print("CFG_CONFIRM_ERASE sent");
-                waitTargetReply(Configuration.CFG_ERASED);
+                waitTargetReply(Configuration.cfgReply.CFG_ERASED);
+
                 Debug.Print("CFG_ERASED recv");
                 serialPort.Close();
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show(msgBoxStrings[MSG_ERASED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+          //      MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_ERASED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                toolStripStatusLabel.Text = msgBoxStrings[(int)msgStrings.MSG_ERASED];
+
             }
             catch (TimeoutException)
             {
                 Debug.Print("Timeout");
                 Cursor.Current = Cursors.Default;
-                MessageBox.Show(msgBoxStrings[MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 serialPort.Close();
             }
         }
@@ -725,6 +773,21 @@ namespace configtool
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             configFileOpen();
+        }
+
+        private void toolStripStatusLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripProgressBar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void statusStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }
