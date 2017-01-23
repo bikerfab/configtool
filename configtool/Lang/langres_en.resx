@@ -166,7 +166,7 @@
     <value>Value</value>
   </data>
   <data name="msgMissingData" xml:space="preserve">
-    <value>Missing data</value>
+    <value>Missing or wrong data</value>
   </data>
   <data name="msgFormat" xml:space="preserve">
     <value>Invalid file format</value>

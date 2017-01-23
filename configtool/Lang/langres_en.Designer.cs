@@ -124,7 +124,7 @@ namespace configtool.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing data.
+        ///   Looks up a localized string similar to Missing or wrong data.
         /// </summary>
         internal static string msgMissingData {
             get {

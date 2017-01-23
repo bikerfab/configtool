@@ -124,7 +124,7 @@ namespace configtool.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tabella dati incompleta.
+        ///   Looks up a localized string similar to Valori errati o tabella dati incompleta.
         /// </summary>
         internal static string msgMissingData {
             get {

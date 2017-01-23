@@ -166,7 +166,7 @@
     <value>Valore</value>
   </data>
   <data name="msgMissingData" xml:space="preserve">
-    <value>Tabella dati incompleta</value>
+    <value>Valori errati o tabella dati incompleta</value>
   </data>
   <data name="msgFormat" xml:space="preserve">
     <value>Formato file non valido</value>

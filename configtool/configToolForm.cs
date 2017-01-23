@@ -212,7 +212,7 @@ namespace configtool
             byte[] rx = new byte[16];
             int rxdata = 0;
 
-            if (cfg.checkData())
+            if (cfg.checkData() && validateGridData())
             {
                 tout = new Timeout(TIMEOUT_LEN);
                 Cursor.Current = Cursors.WaitCursor;
@@ -341,11 +341,13 @@ namespace configtool
                 cfg.clearDataOnly();
                 gridViewToData(false);
 
-                if (cfg.checkData())
+                if (cfg.checkData() && validateGridData())
                 {
                     SaveFileDialog cfgSave = new SaveFileDialog();
                     cfgSave.Title = "Save Configuration";
                     cfgSave.Filter = "cfg files|*.cfg";
+
+                    cfgSave.FileName = cfg.name;
 
                     if (cfgSave.ShowDialog() == DialogResult.OK)
                     {
@@ -409,17 +411,16 @@ namespace configtool
 
         private void updateLabels(Configuration cfg)
         {
-            labelCfgName.Text = cfg.name;
+            if(cfg.name == "" || cfg.name == null)
+                labelCfgName.Text = "Read from target";
+            else
+                labelCfgName.Text = cfg.name;
+
             labelIdentifiers.Text = "Product ID:" + cfg.getProductId().ToString() + " Version ID:" + cfg.getVersionId().ToString();
         }
 
         private void modifyConfigurationStructureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-       /*     dataGridViewConfig.AllowUserToAddRows = true;
-            dataGridViewConfig.AllowUserToDeleteRows = true;
-            dataGridViewConfig.Columns["param"].ReadOnly = false;
-            dataGridViewConfig.Columns["dataType"].Visible = true;
-            */
             allowEditing();
 
             editMode = true;
@@ -534,6 +535,7 @@ namespace configtool
                         setLanguage(languageCode);
                         //    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_LOADED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         toolStripStatusLabel.Text = msgBoxStrings[(int)msgStrings.MSG_LOADED];
+                        updateLabels(cfg);
                     }
                     else
                     {
@@ -581,6 +583,7 @@ namespace configtool
             dataGridViewConfig.AllowUserToDeleteRows = false;
             dataGridViewConfig.Columns["param"].ReadOnly = true;
             dataGridViewConfig.Columns["dataType"].Visible = false;
+            dataGridViewConfig.Columns["val"].ReadOnly = false;
 
             setGridBackgroundColor(System.Drawing.Color.White);
 
@@ -599,6 +602,7 @@ namespace configtool
             dataGridViewConfig.AllowUserToDeleteRows = true;
             dataGridViewConfig.Columns["param"].ReadOnly = false;
             dataGridViewConfig.Columns["dataType"].Visible = true;
+            dataGridViewConfig.Columns["val"].ReadOnly = true;
 
             setGridBackgroundColor(System.Drawing.Color.Yellow);
 
@@ -609,6 +613,52 @@ namespace configtool
             createTemplateToolStripMenuItem.Enabled = true;
 
             editMode = true;
+        }
+
+
+        bool validateGridData()
+        {
+            bool inputError = false;
+            Int32 i32;
+            Int16 i16;
+            UInt32 ui32;
+            UInt16 ui16;
+            Double d;
+
+            foreach (DataGridViewRow row in dataGridViewConfig.Rows)
+            {
+                if (row.Index < dataGridViewConfig.RowCount)
+                {
+                    if (row.Cells["param"].Value == null)                       
+                        inputError = true;
+
+                    if (row.Cells["dataType"].Value == null)
+                        inputError = true;
+
+                    if (row.Cells["description"].Value == null)
+                        inputError = true;
+
+                    if (row.Cells["val"].Value == null)
+                        inputError = true;
+
+                    if(row.Cells["dataType"].Value.ToString() == "Int32" && !Int32.TryParse(row.Cells["val"].Value.ToString(), out i32))
+                        inputError = true;
+
+                    if (row.Cells["dataType"].Value.ToString() == "UInt32" && !UInt32.TryParse(row.Cells["val"].Value.ToString(), out ui32))
+                        inputError = true;
+
+                    if (row.Cells["dataType"].Value.ToString() == "Int16" && !Int16.TryParse(row.Cells["val"].Value.ToString(), out i16))
+                        inputError = true;
+
+                    if (row.Cells["dataType"].Value.ToString() == "UInt16" && !UInt16.TryParse(row.Cells["val"].Value.ToString(), out ui16))
+                        inputError = true;
+
+                    if (row.Cells["dataType"].Value.ToString() == "Float" && !Double.TryParse(row.Cells["val"].Value.ToString(), out d))
+                        inputError = true;
+                }
+            }
+
+            return !inputError;
         }
 
         private void stopEditingToolStripMenuItem_Click(object sender, EventArgs e)
@@ -658,7 +708,7 @@ namespace configtool
             String desc = "";
             byte size = 0;
             templateDlg dlg;
-            bool inputError = false;
+            bool inputError = false;           
 
             if (dataGridViewConfig.Rows.Count == 0 || dataGridViewConfig.Rows[0].Cells["param"].Value == null)
             {
@@ -697,7 +747,7 @@ namespace configtool
                         else
                             inputError = true;
 
-                        if (!inputError)
+                        if (inputError == false)
                         {
                             item = new configItem(sParam, "", sDataType, desc);
                             size += item.getSize();
@@ -705,11 +755,11 @@ namespace configtool
                             cfg.addItem(item);
                         }
                         else
-                            MessageBox.Show("Mandatory data missing", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Mandatory data missing - Row : "+ row.Index, "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
-                if (!inputError)
+                if (inputError == false)
                 {
                     dlg = new templateDlg();
 
@@ -862,6 +912,11 @@ namespace configtool
         private void statusStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void dataGridViewConfig_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            setGridBackgroundColor(System.Drawing.Color.Yellow);
         }
     }
 }
