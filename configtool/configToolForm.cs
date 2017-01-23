@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Data;
 using System.Globalization;
+using System.Reflection;
 
 namespace configtool
 {
@@ -17,6 +18,9 @@ namespace configtool
         bool editMode = false;
         bool adminMode = false;
         int languageCode;
+
+        String dataFolder;
+        String version;
 
         public static int TIMEOUT_LEN = 5000;
 
@@ -46,6 +50,10 @@ namespace configtool
             toolStripStatusLabel.Width = (this.Width-40) / 2;
             toolStripProgressBar.Width = (this.Width-40) / 2;
 
+            dataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\ConfigurationTool";
+            version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+
+            this.Text = "Configuration Tool " + version;
         }
 
         private void initTable()
@@ -289,9 +297,6 @@ namespace configtool
 
                     if (rxdata == (int)Configuration.cfgReply.CFG_LOAD_OK)
                         toolStripStatusLabel.Text = msgBoxStrings[(int)msgStrings.MSG_SENT];
-       //                 MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_SENT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
 
                     if (rxdata == (int)Configuration.cfgReply.CFG_LOAD_WRONGCHECK)
                         MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_CHKSUM_ERR], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -352,7 +357,7 @@ namespace configtool
             }
         }
 
-        void configFileOpen()
+        string configFileOpen()
         {
             OpenFileDialog cfgSelect = new OpenFileDialog();
 
@@ -362,9 +367,9 @@ namespace configtool
             
             cfgSelect.Title = "Open Configuration";
             cfgSelect.Filter = "cfg files|*.cfg";
-     
+
             if (cfgSelect.ShowDialog() == DialogResult.OK)
-            {                
+            {
                 if (!cfg.isEmpty())
                     cfg.clear();
 
@@ -372,24 +377,49 @@ namespace configtool
                 {
                     initGridView();
                     setLanguage(languageCode);
+                    return cfgSelect.FileName.ToString();
                 }
                 else
-                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+                {
+                    return "";
+                }
+            }
+            else
+                return "";           
         }
 
+        void openConfigurationFile()
+        {
+            cfg.name = configFileOpen();
+
+            if (cfg.name != "")
+            {
+                labelCfgName.Text = cfg.name;
+                //      labelIdentifiers.Text = "Product ID:"+cfg.getProductId().ToString() + " Version ID:" + cfg.getVersionId().ToString();
+
+                updateLabels(cfg);
+            }
+            else
+                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
         private void buttonLoad_Click(object sender, EventArgs e)
         {
-            configFileOpen();
+            openConfigurationFile();
+        }
+
+        private void updateLabels(Configuration cfg)
+        {
+            labelCfgName.Text = cfg.name;
+            labelIdentifiers.Text = "Product ID:" + cfg.getProductId().ToString() + " Version ID:" + cfg.getVersionId().ToString();
         }
 
         private void modifyConfigurationStructureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            dataGridViewConfig.AllowUserToAddRows = true;
+       /*     dataGridViewConfig.AllowUserToAddRows = true;
             dataGridViewConfig.AllowUserToDeleteRows = true;
             dataGridViewConfig.Columns["param"].ReadOnly = false;
             dataGridViewConfig.Columns["dataType"].Visible = true;
-
+            */
             allowEditing();
 
             editMode = true;
@@ -496,7 +526,7 @@ namespace configtool
                     cfgHeader.prodId = (byte)buffer[3]; //prod id
                     cfgHeader.versionId = (byte)buffer[4]; //version id                              
 
-                    if (cfg.loadTemplate(cfgHeader.prodId, cfgHeader.versionId, Application.StartupPath, ref templateName))
+                    if (cfg.loadTemplate(cfgHeader.prodId, cfgHeader.versionId, dataFolder, ref templateName))
                     {
                         Cursor.Current = Cursors.Default;
                         cfg.fromBuffer(buffer);
@@ -531,12 +561,29 @@ namespace configtool
  
         }
 
+        void setGridBackgroundColor(System.Drawing.Color clr)
+        {
+            int i;
+
+            DataGridViewCellStyle style = new DataGridViewCellStyle();
+            style.BackColor = clr;
+            style.ForeColor = System.Drawing.Color.Black;
+            foreach (DataGridViewRow row in dataGridViewConfig.Rows)
+            {
+                for (i = 0; i < dataGridViewConfig.ColumnCount; i++)
+                    row.Cells[i].Style = style;
+            }
+        }
+
         void stopEditing()
         {
             dataGridViewConfig.AllowUserToAddRows = false;
             dataGridViewConfig.AllowUserToDeleteRows = false;
             dataGridViewConfig.Columns["param"].ReadOnly = true;
             dataGridViewConfig.Columns["dataType"].Visible = false;
+
+            setGridBackgroundColor(System.Drawing.Color.White);
+
             stopEditingToolStripMenuItem.Enabled = false;
             modifyConfigurationStructureToolStripMenuItem.Enabled = true;
             newToolStripMenuItem.Enabled = true;
@@ -552,6 +599,9 @@ namespace configtool
             dataGridViewConfig.AllowUserToDeleteRows = true;
             dataGridViewConfig.Columns["param"].ReadOnly = false;
             dataGridViewConfig.Columns["dataType"].Visible = true;
+
+            setGridBackgroundColor(System.Drawing.Color.Yellow);
+
             stopEditingToolStripMenuItem.Enabled = true;
             modifyConfigurationStructureToolStripMenuItem.Enabled = false;
             newToolStripMenuItem.Enabled = false;
@@ -664,39 +714,41 @@ namespace configtool
                     dlg = new templateDlg();
 
                     cfg.updateHeader();
+                    
+                    // show current values
+                    dlg.setProductID(cfg.getProductId());
+                    dlg.setVersionID(cfg.getVersionId());
 
-                    if (cfg.getProductId() == 0)        // if product ID existing, just update
+                    dlg.Refresh();
+
+                    if (dlg.ShowDialog() == DialogResult.OK)
                     {
-                        if (dlg.ShowDialog() == DialogResult.OK)
-                        {
-                            cfg.setProductId(dlg.getProductID());
-                            cfg.setVersionId(dlg.getVersionID());
-                            SaveFileDialog cfgSelect = new SaveFileDialog();
+                        cfg.setProductId(dlg.getProductID());
+                        cfg.setVersionId(dlg.getVersionID());
+                        SaveFileDialog cfgSelect = new SaveFileDialog();
 
-                            cfgSelect.Title = "Save template";
-                            cfgSelect.Filter = "Configuration template files|*.cft";
-                            cfgSelect.InitialDirectory = Application.StartupPath;
-                            if (cfgSelect.ShowDialog() == DialogResult.OK)
-                            {
-                                //       gridViewToData(false);
-                                cfg.saveData(cfgSelect.FileName.ToString());
-                            }
+                        cfgSelect.Title = "Save template";
+                        cfgSelect.Filter = "Configuration template files|*.cft";
+                        cfgSelect.InitialDirectory = Application.StartupPath;
+                        if (cfgSelect.ShowDialog() == DialogResult.OK)
+                        {
+                            //       gridViewToData(false);
+                            cfg.saveData(cfgSelect.FileName.ToString());
+
+                            String tmplName = "";
+
+                            tempCfg = new Configuration();
+                            tempCfg.setProductId(cfg.getProductId());
+                            tempCfg.setVersionId(cfg.getVersionId());
+
+                            tempCfg.loadTemplate(cfg.getProductId(), cfg.getVersionId(), Application.StartupPath, ref tmplName);
+                            cfg.saveData(tmplName);
+
+                            updateLabels(cfg);
                         }
-                        else
-                            allowEditing();
                     }
                     else
-                    {
-                        String tmplName = "";
-
-                        tempCfg = new Configuration();
-                        tempCfg.setProductId(cfg.getProductId());
-                        tempCfg.setVersionId(cfg.getVersionId());
-
-                        tempCfg.loadTemplate(cfg.getProductId(), cfg.getVersionId(), Application.StartupPath, ref tmplName);
-                        cfg.saveData(tmplName);
-                    }
-
+                        allowEditing();                   
                 }
                 else
                     allowEditing();
@@ -728,7 +780,6 @@ namespace configtool
                 Debug.Print("CFG_ERASED recv");
                 serialPort.Close();
                 Cursor.Current = Cursors.Default;
-          //      MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_ERASED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 toolStripStatusLabel.Text = msgBoxStrings[(int)msgStrings.MSG_ERASED];
 
             }
@@ -795,7 +846,7 @@ namespace configtool
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            configFileOpen();
+            openConfigurationFile();
         }
 
         private void toolStripStatusLabel_Click(object sender, EventArgs e)

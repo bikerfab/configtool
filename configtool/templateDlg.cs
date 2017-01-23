@@ -25,6 +25,18 @@ namespace configtool
             return Convert.ToByte(productId);
         }
 
+        public void setProductID(int pid)
+        {
+            productId = pid.ToString();
+            textBoxProdId.Text = productId;
+        }
+
+        public void setVersionID(int vid)
+        {
+            versionId = vid.ToString();
+            textBoxVerId.Text = versionId;
+        }
+
         public byte getVersionID()
         {
             return Convert.ToByte(versionId);

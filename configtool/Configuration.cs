@@ -21,6 +21,7 @@ namespace configtool
     [Serializable]
     public class Configuration
     {
+        public String name;
         configHeader header;
         List<configItem> data = new List<configItem>();
 

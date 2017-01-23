@@ -340,6 +340,9 @@
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>ISX_DEFAULTCOMPONENT</td><td>{3A0CE0D0-14E3-456D-B545-179D03616C92}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{D5F91274-9F47-47E5-BD22-1217A2E1F23E}</td><td>AppDataFolder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{7A6B4F26-40D4-4865-929B-ACEE59B2EA41}</td><td>CONFIGURATIONTOOL</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT3</td><td>{AB9C4FCA-AC2A-4054-BC98-DE88B7E55F83}</td><td>CONFIGURATIONTOOL</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>configtool.exe</td><td>{E963CFE1-7F59-42F0-9813-DDC0EE3B6EBF}</td><td>INSTALLDIR</td><td>2</td><td/><td>configtool.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>configtool.vshost.exe</td><td>{37C00AF6-9BCB-4211-B659-54CC77DC723F}</td><td>INSTALLDIR</td><td>2</td><td/><td>configtool.vshost.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
@@ -1050,6 +1053,12 @@
 	<table name="CreateFolder">
 		<col key="yes" def="s72">Directory_</col>
 		<col key="yes" def="s72">Component_</col>
+		<row><td>AppDataFolder</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>CONFIGURATIONTOOL</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>CONFIGURATIONTOOL</td><td>ISX_DEFAULTCOMPONENT3</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT3</td></row>
 	</table>
 
 	<table name="CustomAction">
@@ -1133,6 +1142,7 @@
 		<row><td>AdminToolsFolder</td><td>TARGETDIR</td><td>.:Admint~1|AdminTools</td><td/><td>0</td><td/></row>
 		<row><td>AppDataFolder</td><td>TARGETDIR</td><td>.:APPLIC~1|Application Data</td><td/><td>0</td><td/></row>
 		<row><td>CONFIGTOOL</td><td>ProgramFilesFolder</td><td>CONFIG~1|ConfigTool</td><td/><td>0</td><td/></row>
+		<row><td>CONFIGURATIONTOOL</td><td>AppDataFolder</td><td>CONFIG~1|ConfigurationTool</td><td/><td>0</td><td/></row>
 		<row><td>CommonAppDataFolder</td><td>TARGETDIR</td><td>.:Common~1|CommonAppData</td><td/><td>0</td><td/></row>
 		<row><td>CommonFiles64Folder</td><td>TARGETDIR</td><td>.:Common64</td><td/><td>0</td><td/></row>
 		<row><td>CommonFilesFolder</td><td>TARGETDIR</td><td>.:Common</td><td/><td>0</td><td/></row>
@@ -1150,6 +1160,7 @@
 		<row><td>MY_PRODUCT_NAME</td><td>ABB</td><td>MYPROD~1|My Product Name</td><td/><td>0</td><td/></row>
 		<row><td>MY_PRODUCT_NAME1</td><td>ProgramFilesFolder</td><td>MYPROD~1|My Product Name</td><td/><td>0</td><td/></row>
 		<row><td>MyPicturesFolder</td><td>TARGETDIR</td><td>.:MyPict~1|MyPictures</td><td/><td>0</td><td/></row>
+		<row><td>NEW_FOLDER_1</td><td>TARGETDIR</td><td>NEW_FOLDER_1</td><td/><td>0</td><td/></row>
 		<row><td>NetHoodFolder</td><td>TARGETDIR</td><td>.:NetHood</td><td/><td>0</td><td/></row>
 		<row><td>PersonalFolder</td><td>TARGETDIR</td><td>.:Personal</td><td/><td>0</td><td/></row>
 		<row><td>PrimaryVolumePath</td><td>TARGETDIR</td><td>.:Primar~1|PrimaryVolumePath</td><td/><td>0</td><td/></row>
@@ -1170,6 +1181,8 @@
 		<row><td>USERPROFILE</td><td>TARGETDIR</td><td>.:USERPR~1|UserProfile</td><td/><td>0</td><td/></row>
 		<row><td>WindowsFolder</td><td>TARGETDIR</td><td>.:Windows</td><td/><td>0</td><td/></row>
 		<row><td>WindowsVolume</td><td>TARGETDIR</td><td>.:WinRoot</td><td/><td>0</td><td/></row>
+		<row><td>newfolder1</td><td>TARGETDIR</td><td>##ID_STRING3##</td><td/><td>1</td><td/></row>
+		<row><td>newfolder2</td><td>ProgramMenuFolder</td><td>##ID_STRING6##</td><td/><td>1</td><td/></row>
 	</table>
 
 	<table name="DrLocator">
@@ -1862,6 +1875,9 @@
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT3</td></row>
 		<row><td>AlwaysInstall</td><td>configtool.exe</td></row>
 		<row><td>AlwaysInstall</td><td>configtool.vshost.exe</td></row>
 	</table>
@@ -1884,6 +1900,7 @@
 		<row><td>configtool.vshost.exe</td><td>configtool.vshost.exe</td><td>CONFIG~1.EXE|configtool.vshost.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\personal\elettronica\progetti\visualstudio\configtool\configtool\bin\Debug\configtool.vshost.exe</td><td>1</td><td/></row>
 		<row><td>configtool.vshost.exe.config</td><td>ISX_DEFAULTCOMPONENT</td><td>CONFIG~1.CON|configtool.vshost.exe.config</td><td>0</td><td/><td/><td/><td>1</td><td>C:\personal\elettronica\progetti\visualstudio\configtool\configtool\bin\Debug\configtool.vshost.exe.config</td><td>1</td><td/></row>
 		<row><td>configtool.vshost.exe.manife</td><td>ISX_DEFAULTCOMPONENT</td><td>CONFIG~1.MAN|configtool.vshost.exe.manifest</td><td>0</td><td/><td/><td/><td>1</td><td>C:\personal\elettronica\progetti\visualstudio\configtool\configtool\bin\Debug\configtool.vshost.exe.manifest</td><td>1</td><td/></row>
+		<row><td>dcms.cft1</td><td>ISX_DEFAULTCOMPONENT3</td><td>dcms.cft</td><td>0</td><td/><td/><td/><td>1</td><td>C:\personal\elettronica\progetti\visualstudio\configtool\configtool\bin\Debug\dcms.cft</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2028,6 +2045,9 @@
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
 		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_A65806C4_AAC8_4368_8003_7BA950F52DC9_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_E5A19396_4804_4D86_810C_666F44E54D76_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_89EAEFE0_3511_426F_9AE7_2C40608D36E2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT3</td><td/><td/><td>_EE545375_057B_4FF8_A71C_B96E51ACB02E_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>configtool.exe</td><td/><td/><td>_77A1637C_C248_4B52_8142_BA473E362F8E_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>configtool.vshost.exe</td><td/><td/><td>_DA46DDD6_B10D_4870_8D51_91E09879C6E7_FILTER</td><td/><td/><td/><td/></row>
 	</table>
@@ -3742,6 +3762,11 @@
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>1033</td><td>The screen resolution is not adequate for running [ProductName].</td><td>0</td><td/><td>-1448905547</td></row>
 		<row><td>ID_STRING1</td><td>1033</td><td>http://www.MSP.com</td><td>0</td><td/><td>-190561685</td></row>
 		<row><td>ID_STRING2</td><td>1033</td><td>MSP</td><td>0</td><td/><td>-190561685</td></row>
+		<row><td>ID_STRING3</td><td>1033</td><td>CONFIG~1|Configuration Tool</td><td>0</td><td/><td>-1331324078</td></row>
+		<row><td>ID_STRING4</td><td>1033</td><td>CONFIG~1|Configuration Tool</td><td>0</td><td/><td>-1331332238</td></row>
+		<row><td>ID_STRING6</td><td>1033</td><td>CONFIG~1|Configuration Tool</td><td>0</td><td/><td>-1197098352</td></row>
+		<row><td>ID_STRING7</td><td>1033</td><td>CONFIG~1|Configuration Tool</td><td>0</td><td/><td>-1197118800</td></row>
+		<row><td>ID_STRING8</td><td>1033</td><td>UNINST~1|Uninstall Configuration Tool</td><td>0</td><td/><td>-1197104464</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1033</td><td>This feature will remain uninstalled.</td><td>0</td><td/><td>-1448905547</td></row>
 	</table>
 
@@ -3856,6 +3881,9 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\setupicon.ico</td><td>0</td></row>
+		<row><td>NewShortcut1_C3E8882258A14A598F3ECA0043D2E5F9.exe</td><td/><td>C:\personal\elettronica\progetti\visualstudio\configtool\configtool\bin\Debug\configtool.exe</td><td>0</td></row>
+		<row><td>NewShortcut3_8F8F667A1A9F448E91902C7C231D0D1E.exe</td><td/><td>C:\personal\elettronica\progetti\visualstudio\configtool\configtool\bin\Debug\configtool.exe</td><td>0</td></row>
+		<row><td>NewShortcut4_E8B2F394BFA3401FA8EE352F6741FDE8.exe</td><td/><td>C:\Program Files (x86)\InstallShield\2015LE\Redist\Language Independent\OS Independent\uninstall.ico</td><td>0</td></row>
 	</table>
 
 	<table name="IniFile">
@@ -4437,6 +4465,8 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="L255">FileName</col>
 		<col def="s72">DirProperty</col>
 		<col def="i2">InstallMode</col>
+		<row><td>NewShortcut3</td><td>configtool.exe</td><td/><td>newfolder2</td><td>2</td></row>
+		<row><td>NewShortcut4</td><td>ISX_DEFAULTCOMPONENT</td><td/><td>newfolder2</td><td>2</td></row>
 	</table>
 
 	<table name="RemoveIniFile">
@@ -4522,6 +4552,9 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISComments</col>
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
+		<row><td>NewShortcut1</td><td>DesktopFolder</td><td>##ID_STRING4##</td><td>configtool.exe</td><td>[INSTALLDIR]configtool.exe</td><td>1 0</td><td/><td/><td>NewShortcut1_C3E8882258A14A598F3ECA0043D2E5F9.exe</td><td>1</td><td>1</td><td>LocalAppDataFolder</td><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut3</td><td>newfolder2</td><td>##ID_STRING7##</td><td>configtool.exe</td><td>[INSTALLDIR]configtool.exe</td><td>1 0</td><td/><td/><td>NewShortcut3_8F8F667A1A9F448E91902C7C231D0D1E.exe</td><td>1</td><td>1</td><td>LocalAppDataFolder</td><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>NewShortcut4</td><td>newfolder2</td><td>##ID_STRING8##</td><td>ISX_DEFAULTCOMPONENT</td><td>[SystemFolder]MsiExec.exe</td><td>/x [ProductCode]</td><td/><td/><td>NewShortcut4_E8B2F394BFA3401FA8EE352F6741FDE8.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">

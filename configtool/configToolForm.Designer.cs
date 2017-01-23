@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConfig));
             this.dataGridViewConfig = new System.Windows.Forms.DataGridView();
             this.buttonSend = new System.Windows.Forms.Button();
@@ -51,6 +51,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.labelCfgName = new System.Windows.Forms.Label();
+            this.labelIdentifiers = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConfig)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -59,26 +61,26 @@
             // dataGridViewConfig
             // 
             this.dataGridViewConfig.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewConfig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewConfig.Location = new System.Drawing.Point(12, 27);
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle6;
+            this.dataGridViewConfig.Location = new System.Drawing.Point(12, 78);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
-            this.dataGridViewConfig.Size = new System.Drawing.Size(544, 386);
+            this.dataGridViewConfig.Size = new System.Drawing.Size(544, 366);
             this.dataGridViewConfig.TabIndex = 0;
             this.dataGridViewConfig.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellEnter);
             this.dataGridViewConfig.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellLeave);
@@ -224,7 +226,7 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel,
             this.toolStripProgressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 424);
+            this.statusStrip.Location = new System.Drawing.Point(0, 447);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(759, 22);
             this.statusStrip.TabIndex = 9;
@@ -244,11 +246,32 @@
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(220, 16);
             // 
+            // labelCfgName
+            // 
+            this.labelCfgName.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.labelCfgName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.labelCfgName.Location = new System.Drawing.Point(12, 27);
+            this.labelCfgName.Name = "labelCfgName";
+            this.labelCfgName.Size = new System.Drawing.Size(544, 24);
+            this.labelCfgName.TabIndex = 10;
+            this.labelCfgName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelIdentifiers
+            // 
+            this.labelIdentifiers.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.labelIdentifiers.Location = new System.Drawing.Point(12, 52);
+            this.labelIdentifiers.Name = "labelIdentifiers";
+            this.labelIdentifiers.Size = new System.Drawing.Size(544, 23);
+            this.labelIdentifiers.TabIndex = 11;
+            this.labelIdentifiers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // FormConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(759, 446);
+            this.ClientSize = new System.Drawing.Size(759, 469);
+            this.Controls.Add(this.labelIdentifiers);
+            this.Controls.Add(this.labelCfgName);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.buttonErase);
             this.Controls.Add(this.buttonFromDevice);
@@ -295,6 +318,8 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private System.Windows.Forms.Label labelCfgName;
+        private System.Windows.Forms.Label labelIdentifiers;
     }
 }
 
