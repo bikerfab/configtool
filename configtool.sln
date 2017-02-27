@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "configtool", "configtool\configtool.csproj", "{656F18C1-0E41-4E1F-972F-F1A034A81CED}"
 EndProject
 Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "cfgToolSetup", "cfgToolSetup\cfgToolSetup.isproj", "{18FC1AF2-DFBB-494E-B77D-39AA3FAF5D8C}"
+EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "dcms_setup", "dcms_setup\dcms_setup.isproj", "{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,16 @@ Global
 		{18FC1AF2-DFBB-494E-B77D-39AA3FAF5D8C}.Release|Any CPU.Build.0 = SingleImage
 		{18FC1AF2-DFBB-494E-B77D-39AA3FAF5D8C}.SingleImage|Any CPU.ActiveCfg = SingleImage
 		{18FC1AF2-DFBB-494E-B77D-39AA3FAF5D8C}.SingleImage|Any CPU.Build.0 = SingleImage
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.Debug|Any CPU.ActiveCfg = DVD-5
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.Debug|Any CPU.Build.0 = DVD-5
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.DVD-5|Any CPU.Build.0 = DVD-5
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.Release|Any CPU.ActiveCfg = SingleImage
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.Release|Any CPU.Build.0 = SingleImage
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{613499AD-79C9-4FF6-83AE-FDA3DB28BAFA}.SingleImage|Any CPU.Build.0 = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
