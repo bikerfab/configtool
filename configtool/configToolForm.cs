@@ -779,7 +779,7 @@ namespace configtool
 
                         cfgSelect.Title = "Save template";
                         cfgSelect.Filter = "Configuration template files|*.cft";
-                        cfgSelect.InitialDirectory = Application.StartupPath;
+                        cfgSelect.InitialDirectory = dataFolder;
                         if (cfgSelect.ShowDialog() == DialogResult.OK)
                         {
                             //       gridViewToData(false);
@@ -791,7 +791,7 @@ namespace configtool
                             tempCfg.setProductId(cfg.getProductId());
                             tempCfg.setVersionId(cfg.getVersionId());
 
-                            tempCfg.loadTemplate(cfg.getProductId(), cfg.getVersionId(), Application.StartupPath, ref tmplName);
+                            tempCfg.loadTemplate(cfg.getProductId(), cfg.getVersionId(), dataFolder, ref tmplName);
                             cfg.saveData(tmplName);
 
                             updateLabels(cfg);
