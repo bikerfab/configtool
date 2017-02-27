@@ -96,38 +96,45 @@ namespace configtool
             // search for all templates in app folder
             byte pid, vid;
 
-            string[] filePaths = Directory.GetFiles(folder, "*.cft");
-
-            name = "";
-
-            // open each template
-            foreach(string template in filePaths)
+            try
             {
-                try
-                {
-                    using (Stream stream = File.Open(template, FileMode.Open))
-                    {
-                        var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                string[] filePaths = Directory.GetFiles(folder, "*.cft");
 
-                        bformatter.Deserialize(stream);
-                        bformatter.Deserialize(stream);
-                        pid = (byte)bformatter.Deserialize(stream);
-                        vid = (byte)bformatter.Deserialize(stream);
+                name = "";
+
+                // open each template
+                foreach (string template in filePaths)
+                {
+                    try
+                    {
+                        using (Stream stream = File.Open(template, FileMode.Open))
+                        {
+                            var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                            bformatter.Deserialize(stream);
+                            bformatter.Deserialize(stream);
+                            pid = (byte)bformatter.Deserialize(stream);
+                            vid = (byte)bformatter.Deserialize(stream);
+                        }
+                    }
+                    catch (SerializationException e)
+                    {
+                        return false;
+                    }
+
+                    // check for prodId,verId
+                    if (prodId == pid && verId == vid)
+                    {
+                        // if found, load as a config and return true
+                        loadData(template);
+                        name = template;
+                        return true;
                     }
                 }
-                catch(SerializationException e)
-                {
-                    return false;
-                }
-
-                // check for prodId,verId
-                if (prodId == pid && verId == vid)
-                {
-                    // if found, load as a config and return true
-                    loadData(template);
-                    name = template;
-                    return true;
-                }                
+            }
+            catch(Exception e)
+            {
+                return false;
             }
                                    
             // if not found return false

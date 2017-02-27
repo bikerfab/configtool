@@ -366,7 +366,8 @@ namespace configtool
             // http://stackoverflow.com/questions/6751188/openfiledialog-c-slow-on-any-file-better-solution
             cfgSelect.AutoUpgradeEnabled = false;
             cfgSelect.DereferenceLinks = false;
-            
+
+            cfgSelect.InitialDirectory = dataFolder + "\\cfg";
             cfgSelect.Title = "Open Configuration";
             cfgSelect.Filter = "cfg files|*.cfg";
 
@@ -484,81 +485,88 @@ namespace configtool
             serialPort.BaudRate = 115200;
             serialPort.WriteTimeout = 5000;
             serialPort.ReadTimeout = 5000;
-            serialPort.Open();
-
-            toolStripProgressBar.Maximum = cfg.getSize();
-            toolStripProgressBar.Step = 1;
-            toolStripProgressBar.Value = 0;
-            
-            statusStrip.Refresh();
-
-            Cursor.Current = Cursors.WaitCursor;
             try
             {
-                sendCommand(Configuration.cfgCommand.CFG_DUMP);
+                serialPort.Open();
 
-                do
-                {
-                    buffer[i] = (byte)serialPort.ReadByte();
-                    Debug.Print(Convert.ToString(buffer[i]));
-                    i++;
-                    tout.check();
-
-                    toolStripProgressBar.PerformStep();                    
-                    statusStrip.Refresh();
-
-                } while (serialPort.BytesToRead > 0);
+                toolStripProgressBar.Maximum = cfg.getSize();
+                toolStripProgressBar.Step = 1;
+                toolStripProgressBar.Value = 0;
 
                 statusStrip.Refresh();
-                Debug.Print("received");
 
-                if (buffer[0] == (int)Configuration.cfgReply.CFG_NOT_CONFIGURED)
-                {
-                    toolStripProgressBar.Value = 0;
-                    statusStrip.Refresh();
-                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_NO_CFG], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else if (buffer[0] == Configuration.CFG_PRESENT)
-                {
-                    Debug.Print("load configuration from device");
-                    // load config dump
-                    cfgHeader.size = (byte)buffer[1]; //size
-                    cfgHeader.numItems = (byte)buffer[2]; //num items
-                    cfgHeader.prodId = (byte)buffer[3]; //prod id
-                    cfgHeader.versionId = (byte)buffer[4]; //version id                              
-
-                    if (cfg.loadTemplate(cfgHeader.prodId, cfgHeader.versionId, dataFolder, ref templateName))
-                    {
-                        Cursor.Current = Cursors.Default;
-                        cfg.fromBuffer(buffer);
-                        initGridView();
-                        setLanguage(languageCode);
-                        //    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_LOADED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        toolStripStatusLabel.Text = msgBoxStrings[(int)msgStrings.MSG_LOADED];
-                        updateLabels(cfg);
-                    }
-                    else
-                    {
-                        Cursor.Current = Cursors.Default;
-                        String msg = String.Format(msgBoxStrings[(int)msgStrings.MSG_NO_TEMPL],
-                                                    cfgHeader.prodId,
-                                                    cfgHeader.versionId);
-                        MessageBox.Show(msg,
-                                        "Error",
-                                        MessageBoxButtons.OK,
-                                        MessageBoxIcon.Error);
-                    }
-
-                }
-
-                serialPort.Close();
-            }
-            catch(TimeoutException)
-            {
                 Cursor.Current = Cursors.WaitCursor;
-                Debug.Print("Timeout");
-                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                serialPort.Close();
+                try
+                {
+                    sendCommand(Configuration.cfgCommand.CFG_DUMP);
+
+                    do
+                    {
+                        buffer[i] = (byte)serialPort.ReadByte();
+                        Debug.Print(Convert.ToString(buffer[i]));
+                        i++;
+                        tout.check();
+
+                        toolStripProgressBar.PerformStep();
+                        statusStrip.Refresh();
+
+                    } while (serialPort.BytesToRead > 0);
+
+                    statusStrip.Refresh();
+                    Debug.Print("received");
+
+                    if (buffer[0] == (int)Configuration.cfgReply.CFG_NOT_CONFIGURED)
+                    {
+                        toolStripProgressBar.Value = 0;
+                        statusStrip.Refresh();
+                        MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_NO_CFG], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else if (buffer[0] == Configuration.CFG_PRESENT)
+                    {
+                        Debug.Print("load configuration from device");
+                        // load config dump
+                        cfgHeader.size = (byte)buffer[1]; //size
+                        cfgHeader.numItems = (byte)buffer[2]; //num items
+                        cfgHeader.prodId = (byte)buffer[3]; //prod id
+                        cfgHeader.versionId = (byte)buffer[4]; //version id                              
+
+                        if (cfg.loadTemplate(cfgHeader.prodId, cfgHeader.versionId, dataFolder + "\\cft", ref templateName))
+                        {
+                            Cursor.Current = Cursors.Default;
+                            cfg.fromBuffer(buffer);
+                            initGridView();
+                            setLanguage(languageCode);
+                            //    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_LOADED], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            toolStripStatusLabel.Text = msgBoxStrings[(int)msgStrings.MSG_LOADED];
+                            updateLabels(cfg);
+                        }
+                        else
+                        {
+                            Cursor.Current = Cursors.Default;
+                            String msg = String.Format(msgBoxStrings[(int)msgStrings.MSG_NO_TEMPL],
+                                                        cfgHeader.prodId,
+                                                        cfgHeader.versionId);
+                            MessageBox.Show(msg,
+                                            "Error",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Error);
+                        }
+
+                    }
+
+                    serialPort.Close();
+                }
+                catch (TimeoutException)
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                    Debug.Print("Timeout");
+                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_NOT_RESP], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    serialPort.Close();
+                }
+            }
+            catch(UnauthorizedAccessException)
+            {
+                MessageBox.Show("COM port ERR", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
  
         }
