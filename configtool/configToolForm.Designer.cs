@@ -53,6 +53,8 @@
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.labelCfgName = new System.Windows.Forms.Label();
             this.labelIdentifiers = new System.Windows.Forms.Label();
+            this.buttonQR = new System.Windows.Forms.Button();
+            this.textBoxData = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConfig)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -78,9 +80,11 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewConfig.Location = new System.Drawing.Point(12, 78);
+            this.dataGridViewConfig.Location = new System.Drawing.Point(16, 96);
+            this.dataGridViewConfig.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
-            this.dataGridViewConfig.Size = new System.Drawing.Size(544, 366);
+            this.dataGridViewConfig.RowHeadersWidth = 51;
+            this.dataGridViewConfig.Size = new System.Drawing.Size(839, 448);
             this.dataGridViewConfig.TabIndex = 0;
             this.dataGridViewConfig.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellEnter);
             this.dataGridViewConfig.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellLeave);
@@ -92,9 +96,10 @@
             // 
             this.buttonSend.Image = ((System.Drawing.Image)(resources.GetObject("buttonSend.Image")));
             this.buttonSend.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonSend.Location = new System.Drawing.Point(576, 123);
+            this.buttonSend.Location = new System.Drawing.Point(863, 150);
+            this.buttonSend.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(165, 39);
+            this.buttonSend.Size = new System.Drawing.Size(220, 48);
             this.buttonSend.TabIndex = 1;
             this.buttonSend.Text = "Send to device";
             this.buttonSend.UseVisualStyleBackColor = true;
@@ -104,9 +109,10 @@
             // 
             this.buttonSave.Image = ((System.Drawing.Image)(resources.GetObject("buttonSave.Image")));
             this.buttonSave.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonSave.Location = new System.Drawing.Point(576, 75);
+            this.buttonSave.Location = new System.Drawing.Point(863, 91);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(165, 39);
+            this.buttonSave.Size = new System.Drawing.Size(220, 48);
             this.buttonSave.TabIndex = 2;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -116,9 +122,10 @@
             // 
             this.buttonOpen.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpen.Image")));
             this.buttonOpen.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonOpen.Location = new System.Drawing.Point(576, 27);
+            this.buttonOpen.Location = new System.Drawing.Point(863, 32);
+            this.buttonOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(165, 39);
+            this.buttonOpen.Size = new System.Drawing.Size(220, 48);
             this.buttonOpen.TabIndex = 3;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
@@ -127,9 +134,10 @@
             // comboBoxPorts
             // 
             this.comboBoxPorts.FormattingEnabled = true;
-            this.comboBoxPorts.Location = new System.Drawing.Point(576, 333);
+            this.comboBoxPorts.Location = new System.Drawing.Point(863, 409);
+            this.comboBoxPorts.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxPorts.Name = "comboBoxPorts";
-            this.comboBoxPorts.Size = new System.Drawing.Size(94, 21);
+            this.comboBoxPorts.Size = new System.Drawing.Size(124, 24);
             this.comboBoxPorts.TabIndex = 4;
             // 
             // menuStrip1
@@ -139,7 +147,8 @@
             this.editToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(759, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(1096, 28);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -153,48 +162,48 @@
             this.removeSelectedFieldToolStripMenuItem,
             this.createTemplateToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // modifyConfigurationStructureToolStripMenuItem
             // 
             this.modifyConfigurationStructureToolStripMenuItem.Name = "modifyConfigurationStructureToolStripMenuItem";
-            this.modifyConfigurationStructureToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.modifyConfigurationStructureToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
             this.modifyConfigurationStructureToolStripMenuItem.Text = "Edit fields";
             this.modifyConfigurationStructureToolStripMenuItem.Click += new System.EventHandler(this.modifyConfigurationStructureToolStripMenuItem_Click);
             // 
             // stopEditingToolStripMenuItem
             // 
             this.stopEditingToolStripMenuItem.Name = "stopEditingToolStripMenuItem";
-            this.stopEditingToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.stopEditingToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
             this.stopEditingToolStripMenuItem.Text = "Stop editing";
             this.stopEditingToolStripMenuItem.Click += new System.EventHandler(this.stopEditingToolStripMenuItem_Click);
             // 
             // removeSelectedFieldToolStripMenuItem
             // 
             this.removeSelectedFieldToolStripMenuItem.Name = "removeSelectedFieldToolStripMenuItem";
-            this.removeSelectedFieldToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.removeSelectedFieldToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
             this.removeSelectedFieldToolStripMenuItem.Text = "Remove selected parameter";
             this.removeSelectedFieldToolStripMenuItem.Click += new System.EventHandler(this.removeSelectedFieldToolStripMenuItem_Click);
             // 
             // createTemplateToolStripMenuItem
             // 
             this.createTemplateToolStripMenuItem.Name = "createTemplateToolStripMenuItem";
-            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.createTemplateToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
             this.createTemplateToolStripMenuItem.Text = "Create template";
             this.createTemplateToolStripMenuItem.Click += new System.EventHandler(this.createTemplateToolStripMenuItem_Click);
             // 
@@ -202,9 +211,10 @@
             // 
             this.buttonFromDevice.Image = ((System.Drawing.Image)(resources.GetObject("buttonFromDevice.Image")));
             this.buttonFromDevice.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonFromDevice.Location = new System.Drawing.Point(576, 173);
+            this.buttonFromDevice.Location = new System.Drawing.Point(863, 212);
+            this.buttonFromDevice.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonFromDevice.Name = "buttonFromDevice";
-            this.buttonFromDevice.Size = new System.Drawing.Size(165, 39);
+            this.buttonFromDevice.Size = new System.Drawing.Size(220, 48);
             this.buttonFromDevice.TabIndex = 6;
             this.buttonFromDevice.Text = "Load from device";
             this.buttonFromDevice.UseVisualStyleBackColor = true;
@@ -214,9 +224,10 @@
             // 
             this.buttonErase.Image = ((System.Drawing.Image)(resources.GetObject("buttonErase.Image")));
             this.buttonErase.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonErase.Location = new System.Drawing.Point(576, 222);
+            this.buttonErase.Location = new System.Drawing.Point(863, 272);
+            this.buttonErase.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonErase.Name = "buttonErase";
-            this.buttonErase.Size = new System.Drawing.Size(165, 39);
+            this.buttonErase.Size = new System.Drawing.Size(220, 48);
             this.buttonErase.TabIndex = 7;
             this.buttonErase.Text = "Erase device";
             this.buttonErase.UseVisualStyleBackColor = true;
@@ -224,12 +235,14 @@
             // 
             // statusStrip
             // 
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel,
             this.toolStripProgressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 447);
+            this.statusStrip.Location = new System.Drawing.Point(0, 548);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(759, 22);
+            this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip.Size = new System.Drawing.Size(1096, 29);
             this.statusStrip.TabIndex = 9;
             this.statusStrip.Text = "statusStrip1";
             this.statusStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip_ItemClicked);
@@ -238,39 +251,65 @@
             // 
             this.toolStripStatusLabel.AutoSize = false;
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(250, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(250, 23);
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.AutoSize = false;
             this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(220, 16);
+            this.toolStripProgressBar.Size = new System.Drawing.Size(293, 21);
             // 
             // labelCfgName
             // 
             this.labelCfgName.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.labelCfgName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.labelCfgName.Location = new System.Drawing.Point(12, 27);
+            this.labelCfgName.Location = new System.Drawing.Point(16, 33);
+            this.labelCfgName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCfgName.Name = "labelCfgName";
-            this.labelCfgName.Size = new System.Drawing.Size(544, 24);
+            this.labelCfgName.Size = new System.Drawing.Size(725, 30);
             this.labelCfgName.TabIndex = 10;
             this.labelCfgName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelIdentifiers
             // 
             this.labelIdentifiers.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.labelIdentifiers.Location = new System.Drawing.Point(12, 52);
+            this.labelIdentifiers.Location = new System.Drawing.Point(16, 64);
+            this.labelIdentifiers.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelIdentifiers.Name = "labelIdentifiers";
-            this.labelIdentifiers.Size = new System.Drawing.Size(544, 23);
+            this.labelIdentifiers.Size = new System.Drawing.Size(725, 28);
             this.labelIdentifiers.TabIndex = 11;
             this.labelIdentifiers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // buttonQR
+            // 
+            this.buttonQR.Location = new System.Drawing.Point(863, 337);
+            this.buttonQR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonQR.Name = "buttonQR";
+            this.buttonQR.Size = new System.Drawing.Size(220, 48);
+            this.buttonQR.TabIndex = 12;
+            this.buttonQR.Text = "QR Code";
+            this.buttonQR.UseVisualStyleBackColor = true;
+            this.buttonQR.Click += new System.EventHandler(this.buttonQRCode_Click);
+            // 
+            // textBoxData
+            // 
+            this.textBoxData.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.textBoxData.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxData.Location = new System.Drawing.Point(494, 114);
+            this.textBoxData.Multiline = true;
+            this.textBoxData.Name = "textBoxData";
+            this.textBoxData.Size = new System.Drawing.Size(345, 414);
+            this.textBoxData.TabIndex = 13;
+            // 
             // FormConfig
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(759, 469);
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.ClientSize = new System.Drawing.Size(1096, 577);
+            this.Controls.Add(this.textBoxData);
+            this.Controls.Add(this.buttonQR);
             this.Controls.Add(this.labelIdentifiers);
             this.Controls.Add(this.labelCfgName);
             this.Controls.Add(this.statusStrip);
@@ -285,6 +324,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FormConfig";
             this.Text = "Configuration Tool";
             this.Load += new System.EventHandler(this.FormConfig_Load);
@@ -321,6 +361,8 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.Label labelCfgName;
         private System.Windows.Forms.Label labelIdentifiers;
+        private System.Windows.Forms.Button buttonQR;
+        private System.Windows.Forms.TextBox textBoxData;
     }
 }
 

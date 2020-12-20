@@ -15,8 +15,8 @@ namespace configtool
         public String descript;
         public int typeCode;
         public byte numBytes;
-        public static String[] dataTypeNames = { "Float", "UInt16", "Int16", "UInt32", "Int32" };
-        static byte[] itemNumBytes = { 4, 2, 2, 4, 4 };
+        public static String[] dataTypeNames = { "Float", "UInt16", "Int16", "UInt32", "Int32", "Int8", "String8" };
+        static byte[] itemNumBytes = { 4, 2, 2, 4, 4, 1, 8 };
 
         public configItem(String t, String v, String ty, String desc)
         {
@@ -70,6 +70,14 @@ namespace configtool
                     raw = BitConverter.GetBytes(Convert.ToInt32(value));
                     break;
 
+                case 5: // Uint8
+                    raw = BitConverter.GetBytes(Convert.ToUInt16(value) & 0xFF);
+                    break;
+
+                case 6: // String 8
+                    byte[] str8 = Encoding.ASCII.GetBytes(value);
+                    return str8;
+
                 default:
                     raw = null;
                     break;
@@ -99,6 +107,14 @@ namespace configtool
 
                 case 4:     // 32 bit int
                     value = BitConverter.ToInt32(buffer, offset).ToString();
+                    break;
+
+                case 5: // 8 bit uint
+                    value = BitConverter.ToChar(buffer, offset).ToString();
+                    break;
+
+                case 6: // String 8
+                    value = System.Text.Encoding.Default.GetString(buffer);
                     break;
 
                 default:

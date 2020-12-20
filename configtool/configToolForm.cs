@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Data;
 using System.Globalization;
 using System.Reflection;
+using QRCoder;
 
 namespace configtool
 {
@@ -18,6 +19,9 @@ namespace configtool
         bool editMode = false;
         bool adminMode = false;
         int languageCode;
+        bool qrShown;
+
+        PictureBox pbQR;
 
         String dataFolder;
         String version;
@@ -54,6 +58,8 @@ namespace configtool
             version = Assembly.GetEntryAssembly().GetName().Version.ToString();
 
             this.Text = "Configuration Tool " + version;
+            pbQR = new PictureBox();
+            qrShown = false;
         }
 
         private void initTable()
@@ -74,6 +80,7 @@ namespace configtool
         private void FormConfig_Load(object sender, EventArgs e)
         {
             initTable();
+            textBoxData.Visible = false;
 
             String[] args = Environment.GetCommandLineArgs();
             if (args.Length == 1)   // no arguments
@@ -407,6 +414,8 @@ namespace configtool
         }
         private void buttonLoad_Click(object sender, EventArgs e)
         {
+            showDataGrid();
+
             openConfigurationFile();
         }
 
@@ -632,6 +641,7 @@ namespace configtool
             UInt32 ui32;
             UInt16 ui16;
             Double d;
+            Byte b;
 
             foreach (DataGridViewRow row in dataGridViewConfig.Rows)
             {
@@ -662,6 +672,9 @@ namespace configtool
                         inputError = true;
 
                     if (row.Cells["dataType"].Value.ToString() == "Float" && !Double.TryParse(row.Cells["val"].Value.ToString(), out d))
+                        inputError = true;
+
+                    if(row.Cells["dataType"].Value.ToString() == "UInt8" && !Byte.TryParse(row.Cells["val"].Value.ToString(), out b))
                         inputError = true;
                 }
             }
@@ -697,7 +710,11 @@ namespace configtool
                     else
                         sValue = "";
 
-                    description = row.Cells["description"].Value.ToString();
+                    if (row.Cells["description"].Value != null)
+                        description = row.Cells["description"].Value.ToString();
+                    else
+                        description = "";
+
                     item = new configItem(sParam, sValue, dataType, description);
                     size += item.getSize();
 
@@ -860,7 +877,7 @@ namespace configtool
                 DataTable dt = new DataTable();              
                 dt.Columns.Add("dataType", typeof(string));
 
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < configItem.dataTypeNames.Length; i++)
                 {
                     DataRow dr = dt.NewRow();
 
@@ -907,16 +924,6 @@ namespace configtool
             openConfigurationFile();
         }
 
-        private void toolStripStatusLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripProgressBar_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void statusStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
@@ -925,6 +932,98 @@ namespace configtool
         private void dataGridViewConfig_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
             setGridBackgroundColor(System.Drawing.Color.Yellow);
+        }
+
+        private void showDataGrid()
+        {
+            this.Controls.Remove(pbQR);
+            dataGridViewConfig.Visible = true;
+            qrShown = false;
+
+            buttonQR.Text = "QR Code";
+        }
+
+        private void hideDataGrid()
+        {
+            this.Controls.Add(pbQR);
+            dataGridViewConfig.Visible = false;
+            qrShown = true;
+
+            buttonQR.Text = "Data grid";
+        }
+
+        private void buttonQRCode_Click(object sender, EventArgs e)
+        {
+            int j = 0;
+            int i = 0;
+            String data = "@0000\r\n";
+            String qrData = "";
+
+            if(qrShown)
+            {
+                showDataGrid();
+                textBoxData.Visible = false;
+            }
+            else
+            {
+                textBoxData.Visible = true;
+
+                if (cfg.checkData() && validateGridData())
+                {
+                    gridViewToData(true);
+
+                    foreach (configItem item in cfg.getData())
+                    {
+                        byte[] raw = item.getRawData();
+
+                        if (item.typeCode == 6)
+                            item.numBytes = (byte)item.value.Length;
+
+                        for (j = 0; j < item.numBytes; j++)
+                        {
+                            i++;
+                            String s2 = String.Format("{0:X2}", raw[j])+" ";
+                            Debug.Print(s2);
+                            qrData += s2;
+                            data += s2;
+
+                            if (i % 16 == 0)
+                                data += "\r\n";
+
+                        }
+
+                        
+                    }
+
+                    Debug.Print(data);
+                    
+                    dataGridViewConfig.Visible = false;
+
+                    System.Drawing.Point location = dataGridViewConfig.Location;
+                    location.Offset(10, 10);
+                    
+                    pbQR.Location = location;
+                
+
+                    pbQR.Size = new System.Drawing.Size(300, 300);
+
+                    // https://github.com/codebude/QRCoder
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrData, QRCodeGenerator.ECCLevel.L);
+                    QRCode qrCode = new QRCode(qrCodeData);
+                    System.Drawing.Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+                    pbQR.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pbQR.Image = qrCodeImage;
+                    hideDataGrid();
+
+                    textBoxData.Text = data;
+                }
+                else
+                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            }
+            
         }
     }
 }
