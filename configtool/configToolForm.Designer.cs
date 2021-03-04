@@ -55,6 +55,7 @@
             this.labelIdentifiers = new System.Windows.Forms.Label();
             this.buttonQR = new System.Windows.Forms.Button();
             this.textBoxData = new System.Windows.Forms.TextBox();
+            this.addParameterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConfig)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -80,8 +81,8 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewConfig.Location = new System.Drawing.Point(16, 96);
-            this.dataGridViewConfig.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridViewConfig.Location = new System.Drawing.Point(13, 91);
+            this.dataGridViewConfig.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
             this.dataGridViewConfig.RowHeadersWidth = 51;
             this.dataGridViewConfig.Size = new System.Drawing.Size(839, 448);
@@ -97,7 +98,7 @@
             this.buttonSend.Image = ((System.Drawing.Image)(resources.GetObject("buttonSend.Image")));
             this.buttonSend.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonSend.Location = new System.Drawing.Point(863, 150);
-            this.buttonSend.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonSend.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSend.Name = "buttonSend";
             this.buttonSend.Size = new System.Drawing.Size(220, 48);
             this.buttonSend.TabIndex = 1;
@@ -110,7 +111,7 @@
             this.buttonSave.Image = ((System.Drawing.Image)(resources.GetObject("buttonSave.Image")));
             this.buttonSave.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonSave.Location = new System.Drawing.Point(863, 91);
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(220, 48);
             this.buttonSave.TabIndex = 2;
@@ -123,7 +124,7 @@
             this.buttonOpen.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpen.Image")));
             this.buttonOpen.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonOpen.Location = new System.Drawing.Point(863, 32);
-            this.buttonOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonOpen.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOpen.Name = "buttonOpen";
             this.buttonOpen.Size = new System.Drawing.Size(220, 48);
             this.buttonOpen.TabIndex = 3;
@@ -135,7 +136,7 @@
             // 
             this.comboBoxPorts.FormattingEnabled = true;
             this.comboBoxPorts.Location = new System.Drawing.Point(863, 409);
-            this.comboBoxPorts.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxPorts.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxPorts.Name = "comboBoxPorts";
             this.comboBoxPorts.Size = new System.Drawing.Size(124, 24);
             this.comboBoxPorts.TabIndex = 4;
@@ -160,6 +161,7 @@
             this.modifyConfigurationStructureToolStripMenuItem,
             this.stopEditingToolStripMenuItem,
             this.removeSelectedFieldToolStripMenuItem,
+            this.addParameterToolStripMenuItem,
             this.createTemplateToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
@@ -212,7 +214,7 @@
             this.buttonFromDevice.Image = ((System.Drawing.Image)(resources.GetObject("buttonFromDevice.Image")));
             this.buttonFromDevice.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonFromDevice.Location = new System.Drawing.Point(863, 212);
-            this.buttonFromDevice.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonFromDevice.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFromDevice.Name = "buttonFromDevice";
             this.buttonFromDevice.Size = new System.Drawing.Size(220, 48);
             this.buttonFromDevice.TabIndex = 6;
@@ -225,7 +227,7 @@
             this.buttonErase.Image = ((System.Drawing.Image)(resources.GetObject("buttonErase.Image")));
             this.buttonErase.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonErase.Location = new System.Drawing.Point(863, 272);
-            this.buttonErase.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonErase.Margin = new System.Windows.Forms.Padding(4);
             this.buttonErase.Name = "buttonErase";
             this.buttonErase.Size = new System.Drawing.Size(220, 48);
             this.buttonErase.TabIndex = 7;
@@ -302,6 +304,13 @@
             this.textBoxData.Size = new System.Drawing.Size(345, 414);
             this.textBoxData.TabIndex = 13;
             // 
+            // addParameterToolStripMenuItem
+            // 
+            this.addParameterToolStripMenuItem.Name = "addParameterToolStripMenuItem";
+            this.addParameterToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
+            this.addParameterToolStripMenuItem.Text = "Add parameter";
+            this.addParameterToolStripMenuItem.Click += new System.EventHandler(this.addParameterToolStripMenuItem_Click);
+            // 
             // FormConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -324,7 +333,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormConfig";
             this.Text = "Configuration Tool";
             this.Load += new System.EventHandler(this.FormConfig_Load);
@@ -363,6 +372,7 @@
         private System.Windows.Forms.Label labelIdentifiers;
         private System.Windows.Forms.Button buttonQR;
         private System.Windows.Forms.TextBox textBoxData;
+        private System.Windows.Forms.ToolStripMenuItem addParameterToolStripMenuItem;
     }
 }
 

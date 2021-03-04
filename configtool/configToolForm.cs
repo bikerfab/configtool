@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO.Ports;
@@ -977,8 +978,14 @@ namespace configtool
                         byte[] raw = item.getRawData();
 
                         if (item.typeCode == 6)
-                            item.numBytes = (byte)item.value.Length;
+                        {
+                            item.numBytes = 8;
+                            if (item.value.Length < 8)
+                                item.value += new string(' ', 8 - item.value.Length);
 
+                            raw = Encoding.ASCII.GetBytes(item.value);
+                        }
+                            
                         for (j = 0; j < item.numBytes; j++)
                         {
                             i++;
@@ -1023,6 +1030,19 @@ namespace configtool
                     MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             }
+            
+        }
+
+        private void addParameterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Int32 selectedRowIndex = dataGridViewConfig.CurrentRow.Index;
+
+            String[] row = new String[] { "",
+                                              "",
+                                              "",
+                                              ""};
+
+            dataGridViewConfig.Rows.Insert(selectedRowIndex, row);
             
         }
     }
