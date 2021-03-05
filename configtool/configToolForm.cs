@@ -996,10 +996,7 @@ namespace configtool
 
                             if (i % 16 == 0)
                                 data += "\r\n";
-
                         }
-
-                        
                     }
 
                     Debug.Print(data);
@@ -1024,7 +1021,7 @@ namespace configtool
                     pbQR.Image = qrCodeImage;
                     hideDataGrid();
 
-                    textBoxData.Text = data;
+                    textBoxData.Text = data + "\r\n\r\nsize: " + i;
                 }
                 else
                     MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);

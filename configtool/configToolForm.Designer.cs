@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConfig));
             this.dataGridViewConfig = new System.Windows.Forms.DataGridView();
             this.buttonSend = new System.Windows.Forms.Button();
@@ -45,6 +45,7 @@
             this.modifyConfigurationStructureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopEditingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeSelectedFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addParameterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonFromDevice = new System.Windows.Forms.Button();
             this.buttonErase = new System.Windows.Forms.Button();
@@ -55,7 +56,6 @@
             this.labelIdentifiers = new System.Windows.Forms.Label();
             this.buttonQR = new System.Windows.Forms.Button();
             this.textBoxData = new System.Windows.Forms.TextBox();
-            this.addParameterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConfig)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -64,23 +64,23 @@
             // dataGridViewConfig
             // 
             this.dataGridViewConfig.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewConfig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewConfig.Location = new System.Drawing.Point(13, 91);
             this.dataGridViewConfig.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
@@ -149,7 +149,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1096, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1096, 30);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -164,7 +164,7 @@
             this.addParameterToolStripMenuItem,
             this.createTemplateToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 26);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // openToolStripMenuItem
@@ -201,6 +201,13 @@
             this.removeSelectedFieldToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
             this.removeSelectedFieldToolStripMenuItem.Text = "Remove selected parameter";
             this.removeSelectedFieldToolStripMenuItem.Click += new System.EventHandler(this.removeSelectedFieldToolStripMenuItem_Click);
+            // 
+            // addParameterToolStripMenuItem
+            // 
+            this.addParameterToolStripMenuItem.Name = "addParameterToolStripMenuItem";
+            this.addParameterToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
+            this.addParameterToolStripMenuItem.Text = "Add parameter";
+            this.addParameterToolStripMenuItem.Click += new System.EventHandler(this.addParameterToolStripMenuItem_Click);
             // 
             // createTemplateToolStripMenuItem
             // 
@@ -269,7 +276,7 @@
             this.labelCfgName.Location = new System.Drawing.Point(16, 33);
             this.labelCfgName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCfgName.Name = "labelCfgName";
-            this.labelCfgName.Size = new System.Drawing.Size(725, 30);
+            this.labelCfgName.Size = new System.Drawing.Size(836, 30);
             this.labelCfgName.TabIndex = 10;
             this.labelCfgName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -279,7 +286,7 @@
             this.labelIdentifiers.Location = new System.Drawing.Point(16, 64);
             this.labelIdentifiers.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelIdentifiers.Name = "labelIdentifiers";
-            this.labelIdentifiers.Size = new System.Drawing.Size(725, 28);
+            this.labelIdentifiers.Size = new System.Drawing.Size(836, 28);
             this.labelIdentifiers.TabIndex = 11;
             this.labelIdentifiers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -298,18 +305,12 @@
             // 
             this.textBoxData.BackColor = System.Drawing.SystemColors.ControlLight;
             this.textBoxData.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxData.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxData.Location = new System.Drawing.Point(494, 114);
             this.textBoxData.Multiline = true;
             this.textBoxData.Name = "textBoxData";
             this.textBoxData.Size = new System.Drawing.Size(345, 414);
             this.textBoxData.TabIndex = 13;
-            // 
-            // addParameterToolStripMenuItem
-            // 
-            this.addParameterToolStripMenuItem.Name = "addParameterToolStripMenuItem";
-            this.addParameterToolStripMenuItem.Size = new System.Drawing.Size(278, 26);
-            this.addParameterToolStripMenuItem.Text = "Add parameter";
-            this.addParameterToolStripMenuItem.Click += new System.EventHandler(this.addParameterToolStripMenuItem_Click);
             // 
             // FormConfig
             // 
