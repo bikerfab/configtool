@@ -990,7 +990,7 @@ namespace configtool
                         {
                             i++;
                             String s2 = String.Format("{0:X2}", raw[j])+" ";
-                            Debug.Print(s2);
+                        //    Debug.Print(s2);
                             qrData += s2;
                             data += s2;
 
