@@ -959,6 +959,7 @@ namespace configtool
             int i = 0;
             String data = "@0000\r\n";
             String qrData = "";
+            String qrParams = "";
 
             if(qrShown)
             {
@@ -997,8 +998,13 @@ namespace configtool
                             if (i % 16 == 0)
                                 data += "\r\n";
                         }
+
+                        qrParams += (item.tag+";");
                     }
 
+                    qrData += ";"+ qrParams;
+
+                    Debug.Print("qrData = " + qrData);
                     Debug.Print(data);
                     
                     dataGridViewConfig.Visible = false;
@@ -1021,7 +1027,7 @@ namespace configtool
                     pbQR.Image = qrCodeImage;
                     hideDataGrid();
 
-                    textBoxData.Text = data + "\r\n\r\nsize: " + i;
+                    textBoxData.Text = qrData + "\r\n\r\nsize: " + i;
                 }
                 else
                     MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
