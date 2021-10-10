@@ -999,7 +999,7 @@ namespace configtool
                                 data += "\r\n";
                         }
 
-                        qrParams += (item.tag+";");
+                        qrParams += (item.tag+","+item.typeCode+";");
                     }
 
                     qrData += ";"+ qrParams;
