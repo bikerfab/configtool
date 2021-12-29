@@ -73,6 +73,12 @@ namespace configtool
             dataGridViewConfig.Columns.Add("dataType", "Type");
             dataGridViewConfig.Columns.Add("description", "Description");
 
+            // BLE data
+            dataGridViewConfig.Columns.Add("uuid", "UUID");
+            dataGridViewConfig.Columns.Add("r", "Read");
+            dataGridViewConfig.Columns.Add("w", "Write");
+            dataGridViewConfig.Columns.Add("n", "Notify");
+
             DataGridViewColumn colDesc = dataGridViewConfig.Columns[3];
             colDesc.Width = 300;
             dataGridViewConfig.AllowUserToAddRows = false;
@@ -189,7 +195,12 @@ namespace configtool
                 String[] row = new String[] { cfg.getItem(i).tag,
                                               cfg.getItem(i).value,
                                               Convert.ToString(cfg.getItem(i).type),
-                                              cfg.getItem(i).descript};
+                                              cfg.getItem(i).descript,
+                                              cfg.getItem(i).ble.uuid,
+                                              cfg.getItem(i).ble.r.ToString(),
+                                              cfg.getItem(i).ble.w.ToString(),
+                                              cfg.getItem(i).ble.n.ToString()
+                };
                 dataGridViewConfig.Rows.Add(row);
             }
 
@@ -429,7 +440,7 @@ namespace configtool
 
         private void updateLabels(Configuration cfg)
         {
-            if(cfg.name == "" || cfg.name == null)
+            if (cfg.name == "" || cfg.name == null)
                 labelCfgName.Text = "Read from target";
             else
                 labelCfgName.Text = cfg.name;
@@ -447,7 +458,7 @@ namespace configtool
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             templateDlg dlg;
-            String templateName="";
+            String templateName = "";
 
             cfg.clear();
             initGridView();
@@ -493,7 +504,7 @@ namespace configtool
         private void buttonFromDevice_Click(object sender, EventArgs e)
         {
             String templateName = "";
-            int i=0;
+            int i = 0;
             byte[] buffer = new byte[256];
             configHeader cfgHeader = new configHeader();
             tout = new Timeout(TIMEOUT_LEN);
@@ -581,11 +592,11 @@ namespace configtool
                     serialPort.Close();
                 }
             }
-            catch(UnauthorizedAccessException)
+            catch (UnauthorizedAccessException)
             {
                 MessageBox.Show("COM port ERR", "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
- 
+
         }
 
         void setGridBackgroundColor(System.Drawing.Color clr)
@@ -655,7 +666,7 @@ namespace configtool
             {
                 if (row.Index < dataGridViewConfig.RowCount)
                 {
-                    if (row.Cells["param"].Value == null)                       
+                    if (row.Cells["param"].Value == null)
                         inputError = true;
 
                     if (row.Cells["dataType"].Value == null)
@@ -667,22 +678,22 @@ namespace configtool
                     if (row.Cells["val"].Value == null)
                         inputError = true;
 
-                    if(row.Cells["dataType"].Value.ToString() == "Int32" && !Int32.TryParse(row.Cells["val"].Value.ToString(), out i32))
+                    if (row.Cells["dataType"].Value.ToString() == configItem.getTypeName(configItem.TYPES.INT32) && !Int32.TryParse(row.Cells["val"].Value.ToString(), out i32))
                         inputError = true;
 
-                    if (row.Cells["dataType"].Value.ToString() == "UInt32" && !UInt32.TryParse(row.Cells["val"].Value.ToString(), out ui32))
+                    if (row.Cells["dataType"].Value.ToString() == configItem.getTypeName(configItem.TYPES.UINT32) && !UInt32.TryParse(row.Cells["val"].Value.ToString(), out ui32))
                         inputError = true;
 
-                    if (row.Cells["dataType"].Value.ToString() == "Int16" && !Int16.TryParse(row.Cells["val"].Value.ToString(), out i16))
+                    if (row.Cells["dataType"].Value.ToString() == configItem.getTypeName(configItem.TYPES.INT16) && !Int16.TryParse(row.Cells["val"].Value.ToString(), out i16))
                         inputError = true;
 
-                    if (row.Cells["dataType"].Value.ToString() == "UInt16" && !UInt16.TryParse(row.Cells["val"].Value.ToString(), out ui16))
+                    if (row.Cells["dataType"].Value.ToString() == configItem.getTypeName(configItem.TYPES.UINT16) && !UInt16.TryParse(row.Cells["val"].Value.ToString(), out ui16))
                         inputError = true;
 
-                    if (row.Cells["dataType"].Value.ToString() == "Float" && !Double.TryParse(row.Cells["val"].Value.ToString(), out d))
+                    if (row.Cells["dataType"].Value.ToString() == configItem.getTypeName(configItem.TYPES.FLOAT) && !Double.TryParse(row.Cells["val"].Value.ToString(), out d))
                         inputError = true;
 
-                    if(row.Cells["dataType"].Value.ToString() == "UInt8" && !Byte.TryParse(row.Cells["val"].Value.ToString(), out b))
+                    if (row.Cells["dataType"].Value.ToString() == configItem.getTypeName(configItem.TYPES.UINT8) && !Byte.TryParse(row.Cells["val"].Value.ToString(), out b))
                         inputError = true;
                 }
             }
@@ -702,9 +713,17 @@ namespace configtool
             String dataType;
             String sValue;
             String description;
+
+            String uuidValue;
+            bool rValue;
+            bool wValue;
+            bool nValue;
+
+            bleData ble;
+
             byte size = 0;
 
-            if(clr == true)
+            if (clr == true)
                 cfg.clearDataOnly();
 
             foreach (DataGridViewRow row in dataGridViewConfig.Rows)
@@ -723,7 +742,29 @@ namespace configtool
                     else
                         description = "";
 
-                    item = new configItem(sParam, sValue, dataType, description);
+                    if (row.Cells["uuid"].Value != null)
+                        uuidValue = row.Cells["uuid"].Value.ToString();
+                    else
+                        uuidValue = "";
+
+                    if (row.Cells["r"].Value != null)
+                        rValue = row.Cells["r"].Value.Equals("True") ? true : false;
+                    else
+                        rValue = false;
+
+                    if (row.Cells["w"].Value != null)
+                        wValue = row.Cells["w"].Value.Equals("True") ? true : false;
+                    else
+                        wValue = false;
+
+                    if (row.Cells["n"].Value != null)
+                        nValue = row.Cells["n"].Value.Equals("True") ? true : false;
+                    else
+                        nValue = false;
+
+                    ble = new bleData(uuidValue, rValue, wValue, nValue);
+
+                    item = new configItem(sParam, sValue, dataType, description, ble);
                     size += item.getSize();
 
                     cfg.addItem(item);
@@ -741,7 +782,7 @@ namespace configtool
             String desc = "";
             byte size = 0;
             templateDlg dlg;
-            bool inputError = false;           
+            bool inputError = false;
 
             if (dataGridViewConfig.Rows.Count == 0 || dataGridViewConfig.Rows[0].Cells["param"].Value == null)
             {
@@ -782,13 +823,13 @@ namespace configtool
 
                         if (inputError == false)
                         {
-                            item = new configItem(sParam, "", sDataType, desc);
+                            item = new configItem(sParam, "", sDataType, desc, new bleData("", false, false, false));
                             size += item.getSize();
 
                             cfg.addItem(item);
                         }
                         else
-                            MessageBox.Show("Mandatory data missing - Row : "+ row.Index, "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Mandatory data missing - Row : " + row.Index, "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
@@ -797,7 +838,7 @@ namespace configtool
                     dlg = new templateDlg();
 
                     cfg.updateHeader();
-                    
+
                     // show current values
                     dlg.setProductID(cfg.getProductId());
                     dlg.setVersionID(cfg.getVersionId());
@@ -831,7 +872,7 @@ namespace configtool
                         }
                     }
                     else
-                        allowEditing();                   
+                        allowEditing();
                 }
                 else
                     allowEditing();
@@ -851,7 +892,7 @@ namespace configtool
 
                 sendCommand(Configuration.cfgCommand.CFG_ERASE);
                 Debug.Print("erase command sent");
-  
+
                 waitTargetReply(Configuration.cfgReply.CFG_ASK_CONFIRM_ERASE);
                 Debug.Print("CFG_ASK_CONFIRM_ERASE recv");
 
@@ -882,7 +923,7 @@ namespace configtool
                 DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
 
                 dgComboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-                DataTable dt = new DataTable();              
+                DataTable dt = new DataTable();
                 dt.Columns.Add("dataType", typeof(string));
 
                 for (int i = 0; i < configItem.dataTypeNames.Length; i++)
@@ -910,13 +951,13 @@ namespace configtool
             {
                 this.dataGridViewConfig.BeginInvoke(objChangeCellType, e.RowIndex);
                 bIsComboBox = false;
-            } 
+            }
         }
 
         private void dataGridViewConfig_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == this.dataGridViewConfig.Columns["dataType"].Index)
-            {              
+            {
                 DataGridViewRow row = dataGridViewConfig.Rows[e.RowIndex];
                 row.Cells["dataType"].Value = configItem.dataTypeNames[e.ColumnIndex];
             }
@@ -968,7 +1009,7 @@ namespace configtool
             String qrData = "";
             String qrParams = "";
 
-            if(qrShown)
+            if (qrShown)
             {
                 showDataGrid();
                 textBoxData.Visible = false;
@@ -993,11 +1034,11 @@ namespace configtool
 
                             raw = Encoding.ASCII.GetBytes(item.value);
                         }
-                            
+
                         for (j = 0; j < item.numBytes; j++)
                         {
                             i++;
-                            String s2 = String.Format("{0:X2}", raw[j])+" ";
+                            String s2 = String.Format("{0:X2}", raw[j]) + " ";
                             qrData += s2;
                             data += s2;
 
@@ -1005,23 +1046,23 @@ namespace configtool
                                 data += "\r\n";
                         }
 
-                        qrParams += (item.tag+","+item.typeCode+";");
+                        qrParams += (item.tag + "," + item.typeCode + ";");
                     }
 
                     exportTxtData = qrParams;
 
-                    qrData += ";"+ qrParams;
+                    qrData += ";" + qrParams;
 
                     Debug.Print("qrData = " + qrData);
                     Debug.Print(data);
-                    
+
                     dataGridViewConfig.Visible = false;
 
                     System.Drawing.Point location = dataGridViewConfig.Location;
                     location.Offset(10, 10);
-                    
+
                     pbQR.Location = location;
-                
+
 
                     pbQR.Size = new System.Drawing.Size(300, 300);
 
@@ -1041,7 +1082,7 @@ namespace configtool
                     MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             }
-            
+
         }
 
         private void addParameterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1054,7 +1095,7 @@ namespace configtool
                                               ""};
 
             dataGridViewConfig.Rows.Insert(selectedRowIndex, row);
-            
+
         }
 
         private void labelIdentifiers_Click(object sender, EventArgs e)
@@ -1133,14 +1174,14 @@ typedef struct
 
             foreach (configItem item in cfg.getData())
             {
-                listing += "    "+item.type;
+                listing += "    " + item.type;
                 listing += " ";
                 listing += item.tag;
-                listing += ";   // "+item.descript +"\r\n";
+                listing += ";   // " + item.descript + "\r\n";
 
             }
 
-                listing += @"} CFG_PARAMS;
+            listing += @"} CFG_PARAMS;
 
 CFG_PARAMS* getConfig();
 void loadConfig(void);
@@ -1150,13 +1191,20 @@ void eraseConfig(void);
 
 #endif /* INCLUDE_CONFIG_H_ */";
 
+            exportSource("Export C header file", "H files|*.h", "config.h", listing);
+
+      
+        }
+
+        void exportSource(String title, String filter, String filename, String listing)
+        {
             SaveFileDialog exportCFileDialog = new SaveFileDialog();
-            exportCFileDialog.Title = "Export C header file";
-            exportCFileDialog.Filter = "H files|*.h";
+            exportCFileDialog.Title = title;
+            exportCFileDialog.Filter = filter;
 
-            exportCFileDialog.FileName = "config.h";
+            exportCFileDialog.FileName = filename;
 
-            
+
             if (exportCFileDialog.ShowDialog() == DialogResult.OK)
             {
                 StreamWriter stream = new StreamWriter(exportCFileDialog.FileName, false);
@@ -1168,6 +1216,138 @@ void eraseConfig(void);
 
                 stream.Close();
             }
+        }
+        private void exportBLEProfileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            String srvUuid = "0x1234";
+
+            String listing = @"// code generated by configtool, DO NOT EDIT
+
+// service UUID
+#define BLE_SERVICE_UUID    "+ srvUuid+@"
+
+// characteristics UUIDs
+
+";
+
+            foreach (configItem item in cfg.getData())
+            {
+                listing += "#define BLE_SERVICE_" + item.tag+"  " + index+ "\r\n";
+                listing += "#define BLE_SERVICE_" + item.tag + "_UUID   " + index+"\r\n";
+                listing += "#define BLE_SERVICE_" + item.tag + "_LEN    " + item.getSize()+ "\r\n";
+                listing += "\r\n";
+                index++;
+            }
+
+            exportSource("Export C header file", "H files|*.h", "ble_uuids.h", listing);
+
+
+            listing = @"typedef struct
+{
+    uint8_t paramID;
+    gattAttribute_t *gattAttr;
+    gattAttribute_t *config;
+    uint8_t size;
+
+} CHARACTERISTIC_DATA;
+
+/*********************************************************************
+* GLOBAL VARIABLES
+*/
+CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
+{
+  TI_BASE_UUID_128(BLE_SERVICE_UUID)
+};
+
+";
+
+            foreach (configItem item in cfg.getData())
+            {
+                listing += "CONST uint8_t service_" + item.tag + "UUID[ATT_UUID_SIZE] = \r\n{\r\n";
+                listing += "TI_BASE_UUID_128(BLE_SERVICE_"+ item.tag + "_UUID)\r\n";
+                listing += "}\r\n";
+                listing += "\r\n";
+            }
+
+            listing += @"
+/*********************************************************************
+* Profile Attributes - variables
+*/
+
+/* properties GATT_PROP_READ/WRITE are from host point of view
+   READ is a data read by the host and transferred from the target
+   WRITE is a data written by the host and tranferred to the target
+
+*/
+// Service declaration
+";
+
+            listing += "static CONST gattAttrType_t serviceDecl = { ATT_UUID_SIZE, serviceUUID };\r\n";
+
+            foreach (configItem item in cfg.getData())
+            {
+                listing += @"// Characteristic """+item.tag+@""" Properties (for declaration) "+item.numBytes+ "byte read by host\r\n";
+                listing += @"static " + configItem.getTypeName((configItem.TYPES)item.typeCode) + " service_" + item.tag + "Props = ";
+                if (item.ble.r)
+                    listing += "GATT_PROP_READ ";
+                if (item.ble.w)
+                    listing += "GATT_PROP_WRITE ";
+                if (item.ble.n)
+                    listing += "GATT_PROP_NOTIFY ";
+
+                listing += "\r\n";
+
+                listing +=@"// Characteristic """+item.tag+@""" Value variable
+";
+                listing += @"static " + configItem.getTypeName((configItem.TYPES)item.typeCode) + " service_" + item.tag + "Val[BLE_SERVICE_" + item.tag + "_LEN];\r\n";
+              //  static uint8_t demoService_data1rVal[DEMO_SERVICE_DATA1R_LEN] = { 0 };
+
+
+            }
+
+
+            listing += @"/*********************************************************************
+* Profile Attributes - Table
+*/";
+
+            listing += @"static gattAttribute_t serviceAttrTbl[] =
+{
+    //  Service Declaration      0
+    {
+        { ATT_BT_UUID_SIZE, primaryServiceUUID },
+            GATT_PERMIT_READ,
+            0,
+            (uint8_t *)&serviceDecl
+    },";
+            foreach (configItem item in cfg.getData())
+            {
+                /*
+                // data1r Characteristic Declaration        1
+                {
+                    { ATT_BT_UUID_SIZE, characterUUID },
+        GATT_PERMIT_READ,
+        0,
+        &demoService_data1rProps
+                },
+    // data1r Characteristic Value      2
+    {
+                    { ATT_UUID_SIZE, demoService_data1rUUID },
+        GATT_PERMIT_READ,
+        0,
+        demoService_data1rVal
+    },*/
+            }
+
+            // attribute table
+
+
+            listing += @"CHARACTERISTIC_DATA charactData[] = {";
+            
+            exportSource("Export C source file", "C files|*.c", "ble_service.c", listing);
+
+
         }
     }
 }

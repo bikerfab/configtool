@@ -7,22 +7,35 @@ namespace configtool
     [Serializable]
     public class configItem
     {
+        public enum TYPES
+        {
+            FLOAT = 0,
+            UINT16,
+            INT16,
+            UINT32,
+            INT32,
+            UINT8,
+            CHAR
+        };
+
         public String tag;
         public String value;
         public String type;
         public String descript;
+        public bleData ble;
         public int typeCode;
         public byte numBytes;
-        public static String[] dataTypeNames = { "Float", "UInt16", "Int16", "UInt32", "Int32", "Int8", "String8" };
+        public static String[] dataTypeNames = { "float", "uint16_t", "int16_t", "uint32_t", "int32_t", "uint8_t", "char" };
         static byte[] itemNumBytes = { 4, 2, 2, 4, 4, 1, 8 };
 
-        public configItem(String t, String v, String ty, String desc)
+        public configItem(String t, String v, String ty, String desc, bleData bledata)
         {
             tag = t;
             value = v;
             type = ty;
             descript = desc;
             typeCode = getTypeCode(ty);
+            ble = bledata;
             numBytes = configItem.itemNumBytes[typeCode];
         }
 
@@ -35,6 +48,11 @@ namespace configtool
             }
 
             return -1;
+        }
+
+        public static String getTypeName(configItem.TYPES code)
+        {
+            return dataTypeNames[(int)code];
         }
 
         public byte getSize()
