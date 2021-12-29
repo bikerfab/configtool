@@ -1092,5 +1092,45 @@ namespace configtool
         {
             saveConfigurationFile();
         }
+
+        private void exportCSourceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String listing = @"#ifndef INCLUDE_CONFIG_H_ 
+#define INCLUDE_CONFIG_H_
+#include ""stdio.h""
+
+#define CONFIG_KEY      0xA5
+#define CONFIG_VERSION  1
+
+
+// configuration
+typedef struct
+{";
+
+            listing += @"} CFG_PARAMS;
+
+CFG_PARAMS* getConfig();
+void loadConfig(void);
+void saveConfig(void);
+uint8_t isConfigValid(CFG_PARAMS* cfg);
+void eraseConfig(void);
+
+#endif /* INCLUDE_CONFIG_H_ */";
+
+            SaveFileDialog exportCFileDialog = new SaveFileDialog();
+            exportCFileDialog.Title = "Export C file";
+            exportCFileDialog.Filter = "H files|*.h";
+
+            exportCFileDialog.FileName = "config.h";
+
+            if (exportCFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (Stream stream = File.Open(exportCFileDialog.FileName, FileMode.Create))
+                {
+                    stream.Write(Encoding.ASCII.GetBytes(listing), 0, listing.Length);
+
+                }
+            }
+        }
     }
 }

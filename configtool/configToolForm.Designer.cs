@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConfig));
             this.dataGridViewConfig = new System.Windows.Forms.DataGridView();
             this.buttonSend = new System.Windows.Forms.Button();
@@ -39,6 +39,11 @@
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.comboBoxPorts = new System.Windows.Forms.ComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportStructureFiletxtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportBLEProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,11 +61,7 @@
             this.labelIdentifiers = new System.Windows.Forms.Label();
             this.buttonQR = new System.Windows.Forms.Button();
             this.textBoxData = new System.Windows.Forms.TextBox();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportStructureFiletxtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportBLEProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConfig)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -69,23 +70,23 @@
             // dataGridViewConfig
             // 
             this.dataGridViewConfig.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewConfig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewConfig.Location = new System.Drawing.Point(13, 91);
             this.dataGridViewConfig.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
@@ -158,6 +159,45 @@
             this.menuStrip1.Size = new System.Drawing.Size(1096, 28);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem1,
+            this.saveToolStripMenuItem,
+            this.exportStructureFiletxtToolStripMenuItem,
+            this.exportCSourceToolStripMenuItem,
+            this.exportBLEProfileToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // openToolStripMenuItem1
+            // 
+            this.openToolStripMenuItem1.Name = "openToolStripMenuItem1";
+            this.openToolStripMenuItem1.Size = new System.Drawing.Size(252, 26);
+            this.openToolStripMenuItem1.Text = "Open";
+            this.openToolStripMenuItem1.Click += new System.EventHandler(this.openToolStripMenuItem1_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // exportStructureFiletxtToolStripMenuItem
+            // 
+            this.exportStructureFiletxtToolStripMenuItem.Name = "exportStructureFiletxtToolStripMenuItem";
+            this.exportStructureFiletxtToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
+            this.exportStructureFiletxtToolStripMenuItem.Text = "Export structure file (txt)";
+            this.exportStructureFiletxtToolStripMenuItem.Click += new System.EventHandler(this.exportStructureFiletxtToolStripMenuItem_Click);
+            // 
+            // exportBLEProfileToolStripMenuItem
+            // 
+            this.exportBLEProfileToolStripMenuItem.Name = "exportBLEProfileToolStripMenuItem";
+            this.exportBLEProfileToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
+            this.exportBLEProfileToolStripMenuItem.Text = "Export BLE profile";
             // 
             // editToolStripMenuItem
             // 
@@ -319,43 +359,12 @@
             this.textBoxData.Size = new System.Drawing.Size(345, 414);
             this.textBoxData.TabIndex = 13;
             // 
-            // fileToolStripMenuItem
+            // exportCSourceToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem1,
-            this.saveToolStripMenuItem,
-            this.exportStructureFiletxtToolStripMenuItem,
-            this.exportBLEProfileToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // openToolStripMenuItem1
-            // 
-            this.openToolStripMenuItem1.Name = "openToolStripMenuItem1";
-            this.openToolStripMenuItem1.Size = new System.Drawing.Size(252, 26);
-            this.openToolStripMenuItem1.Text = "Open";
-            this.openToolStripMenuItem1.Click += new System.EventHandler(this.openToolStripMenuItem1_Click);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // exportStructureFiletxtToolStripMenuItem
-            // 
-            this.exportStructureFiletxtToolStripMenuItem.Name = "exportStructureFiletxtToolStripMenuItem";
-            this.exportStructureFiletxtToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
-            this.exportStructureFiletxtToolStripMenuItem.Text = "Export structure file (txt)";
-            this.exportStructureFiletxtToolStripMenuItem.Click += new System.EventHandler(this.exportStructureFiletxtToolStripMenuItem_Click);
-            // 
-            // exportBLEProfileToolStripMenuItem
-            // 
-            this.exportBLEProfileToolStripMenuItem.Name = "exportBLEProfileToolStripMenuItem";
-            this.exportBLEProfileToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
-            this.exportBLEProfileToolStripMenuItem.Text = "Export BLE profile";
+            this.exportCSourceToolStripMenuItem.Name = "exportCSourceToolStripMenuItem";
+            this.exportCSourceToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
+            this.exportCSourceToolStripMenuItem.Text = "Export C source";
+            this.exportCSourceToolStripMenuItem.Click += new System.EventHandler(this.exportCSourceToolStripMenuItem_Click);
             // 
             // FormConfig
             // 
@@ -424,6 +433,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportStructureFiletxtToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportBLEProfileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportCSourceToolStripMenuItem;
     }
 }
 
