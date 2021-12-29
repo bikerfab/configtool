@@ -7,6 +7,7 @@ using System.Data;
 using System.Globalization;
 using System.Reflection;
 using QRCoder;
+using System.IO;
 
 namespace configtool
 {
@@ -21,6 +22,7 @@ namespace configtool
         bool adminMode = false;
         int languageCode;
         bool qrShown;
+        String exportTxtData;
 
         PictureBox pbQR;
 
@@ -52,10 +54,10 @@ namespace configtool
         {
             InitializeComponent();
 
-            toolStripStatusLabel.Width = (this.Width-40) / 2;
-            toolStripProgressBar.Width = (this.Width-40) / 2;
+            toolStripStatusLabel.Width = (this.Width - 40) / 2;
+            toolStripProgressBar.Width = (this.Width - 40) / 2;
 
-            dataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\ConfigurationTool";
+            dataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\ConfigurationTool";
             version = Assembly.GetEntryAssembly().GetName().Version.ToString();
 
             this.Text = "Configuration Tool " + version;
@@ -85,7 +87,7 @@ namespace configtool
 
             String[] args = Environment.GetCommandLineArgs();
             if (args.Length == 1)   // no arguments
-                languageCode =-1;    // system default language
+                languageCode = -1;    // system default language
             else
                 languageCode = int.Parse(args[1]);  // force language 0-1 (EN-IT)
 
@@ -164,7 +166,7 @@ namespace configtool
         // hides admin menu items if no admin user
         private void setAdmin(bool mode)
         {
-            if(mode == false)
+            if (mode == false)
             {
                 modifyConfigurationStructureToolStripMenuItem.Visible = false;
                 stopEditingToolStripMenuItem.Visible = false;
@@ -175,7 +177,7 @@ namespace configtool
         }
 
         private void initGridView()
-        {                                
+        {
             int i = 0;
 
             initTable();
@@ -184,15 +186,15 @@ namespace configtool
 
             for (i = 0; i < cfg.getNumItems(); i++)
             {
-                String[] row = new String[] { cfg.getItem(i).tag, 
-                                              cfg.getItem(i).value, 
+                String[] row = new String[] { cfg.getItem(i).tag,
+                                              cfg.getItem(i).value,
                                               Convert.ToString(cfg.getItem(i).type),
                                               cfg.getItem(i).descript};
                 dataGridViewConfig.Rows.Add(row);
             }
 
         }
-    
+
         private void waitTargetReply(Configuration.cfgReply reply)
         {
             int rxdata = 0;
@@ -215,7 +217,7 @@ namespace configtool
         }
 
         private void buttonSend_Click(object sender, EventArgs e)
-        {            
+        {
             int j = 0;
             byte[] rx = new byte[16];
             int rxdata = 0;
@@ -291,7 +293,7 @@ namespace configtool
                     Debug.Print("data written");
 
                     serialPort.Write(BitConverter.GetBytes(cfg.checksum()), 0, 1);
-                    
+
                     Debug.Print("checksum written");
 
                     do
@@ -332,39 +334,15 @@ namespace configtool
 
         private void dataGridViewConfig_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-    //        Debug.Print("edit");
-    ////        Debug.Print(cfg.getItem(e.RowIndex).tag);
-    //        if (dataGridViewConfig.Rows[e.RowIndex].Cells["val"].Value != null)
-    //            cfg.getItem(e.RowIndex).value = Convert.ToString(dataGridViewConfig.Rows[e.RowIndex].Cells["val"].Value);
+            //        Debug.Print("edit");
+            ////        Debug.Print(cfg.getItem(e.RowIndex).tag);
+            //        if (dataGridViewConfig.Rows[e.RowIndex].Cells["val"].Value != null)
+            //            cfg.getItem(e.RowIndex).value = Convert.ToString(dataGridViewConfig.Rows[e.RowIndex].Cells["val"].Value);
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            if (dataGridViewConfig.Rows.Count == 0)
-            {
-                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                cfg.clearDataOnly();
-                gridViewToData(false);
-
-                if (cfg.checkData() && validateGridData())
-                {
-                    SaveFileDialog cfgSave = new SaveFileDialog();
-                    cfgSave.Title = "Save Configuration";
-                    cfgSave.Filter = "cfg files|*.cfg";
-
-                    cfgSave.FileName = cfg.name;
-
-                    if (cfgSave.ShowDialog() == DialogResult.OK)
-                    {
-                        cfg.saveData(cfgSave.FileName.ToString());
-                    }
-                }
-                else
-                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            saveConfigurationFile();
         }
 
         string configFileOpen()
@@ -396,7 +374,7 @@ namespace configtool
                 }
             }
             else
-                return "";           
+                return "";
         }
 
         void openConfigurationFile()
@@ -412,6 +390,35 @@ namespace configtool
             }
             else
                 MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_FORMAT], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        void saveConfigurationFile()
+        {
+            if (dataGridViewConfig.Rows.Count == 0)
+            {
+                MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_EMPTY], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                cfg.clearDataOnly();
+                gridViewToData(false);
+
+                if (cfg.checkData() && validateGridData())
+                {
+                    SaveFileDialog cfgSave = new SaveFileDialog();
+                    cfgSave.Title = "Save Configuration";
+                    cfgSave.Filter = "cfg files|*.cfg";
+
+                    cfgSave.FileName = cfg.name;
+
+                    if (cfgSave.ShowDialog() == DialogResult.OK)
+                    {
+                        cfg.saveData(cfgSave.FileName.ToString());
+                    }
+                }
+                else
+                    MessageBox.Show(msgBoxStrings[(int)msgStrings.MSG_MISSING_DATA], "Configuration Tool", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
         private void buttonLoad_Click(object sender, EventArgs e)
         {
@@ -1002,6 +1009,8 @@ namespace configtool
                         qrParams += (item.tag+","+item.typeCode+";");
                     }
 
+                    exportTxtData = qrParams;
+
                     qrData += ";"+ qrParams;
 
                     Debug.Print("qrData = " + qrData);
@@ -1047,6 +1056,41 @@ namespace configtool
 
             dataGridViewConfig.Rows.Insert(selectedRowIndex, row);
             
+        }
+
+        private void labelIdentifiers_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exportStructureFiletxtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog exportStructureFileDialog = new SaveFileDialog();
+            exportStructureFileDialog.Title = "Export structure file";
+            exportStructureFileDialog.Filter = "txt files|*.txt";
+
+            exportStructureFileDialog.FileName = cfg.name.Split('.')[0];
+
+            if (exportStructureFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (Stream stream = File.Open(exportStructureFileDialog.FileName, FileMode.Create))
+                {
+                    stream.Write(Encoding.ASCII.GetBytes(exportTxtData), 0, exportTxtData.Length);
+ 
+                }
+            }
+        }
+
+        private void openToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            showDataGrid();
+
+            openConfigurationFile();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveConfigurationFile();
         }
     }
 }
