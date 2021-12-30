@@ -1292,12 +1292,20 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
                 listing += @"static " + configItem.getTypeName((configItem.TYPES)item.typeCode) + " service_" + item.tag + "Props = ";
                 if (item.ble.r)
                     listing += "GATT_PROP_READ ";
+
+                if (item.ble.r && (item.ble.w || item.ble.n))
+                    listing += " | ";
+
                 if (item.ble.w)
                     listing += "GATT_PROP_WRITE ";
+
+                if (item.ble.w && item.ble.n)
+                    listing += " | ";
+
                 if (item.ble.n)
                     listing += "GATT_PROP_NOTIFY ";
 
-                listing += "\r\n";
+                listing += ";\r\n";
 
                 listing +=@"// Characteristic """+item.tag+@""" Value variable
 ";
@@ -1320,29 +1328,52 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
             GATT_PERMIT_READ,
             0,
             (uint8_t *)&serviceDecl
-    },";
+    },
+";
             foreach (configItem item in cfg.getData())
             {
-                /*
-                // data1r Characteristic Declaration        1
-                {
-                    { ATT_BT_UUID_SIZE, characterUUID },
+                listing += @"
+
+    // " + item.tag + @" Characteristic declaration
+    {  
+        { ATT_BT_UUID_SIZE, characterUUID },
         GATT_PERMIT_READ,
         0,
-        &demoService_data1rProps
-                },
-    // data1r Characteristic Value      2
+        &service_" + item.tag + @"Props 
+    },
+    // " + item.tag + @" Characteristic value
     {
-                    { ATT_UUID_SIZE, demoService_data1rUUID },
-        GATT_PERMIT_READ,
+        { ATT_UUID_SIZE, service_" + item.tag + @"UUID },
+        ";
+
+                if (item.ble.r)
+                    listing += "GATT_PROP_READ ";
+                if (item.ble.w)
+                    listing += "GATT_PROP_WRITE ";
+
+                listing += @",
         0,
-        demoService_data1rVal
-    },*/
+        service_" + item.tag + @"Val
+    },";
+
+                if (item.ble.n)
+                {
+                    listing += @"   // " + item.tag + @" CCCD
+    {
+        { ATT_BT_UUID_SIZE, clientCharCfgUUID },
+        GATT_PERMIT_READ | GATT_PERMIT_WRITE,
+        0,
+        (uint8*)service_" + item.tag + @"Config
+        },
+    }";
+                }
             }
 
-            // attribute table
+            listing += @"
+};
 
-
+";
+ // attribute table
             listing += @"CHARACTERISTIC_DATA charactData[] = {";
             
             exportSource("Export C source file", "C files|*.c", "ble_service.c", listing);
