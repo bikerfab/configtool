@@ -1192,8 +1192,6 @@ void eraseConfig(void);
 #endif /* INCLUDE_CONFIG_H_ */";
 
             exportSource("Export C header file", "H files|*.h", "config.h", listing);
-
-      
         }
 
         void exportSource(String title, String filter, String filename, String listing)
@@ -1373,9 +1371,39 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 };
 
 ";
- // attribute table
+            // attribute table
+            index = 2;
             listing += @"CHARACTERISTIC_DATA charactData[] = {";
-            
+            int cnt = 0;
+            foreach (configItem item in cfg.getData())
+            {
+
+                listing += @"   
+                                {
+                                    BLE_SERVICE_" + item.tag + @",  
+                                    &serviceAttrTbl[" + index + @"],
+                                    ";
+                if (item.ble.n)
+                {
+                    listing += "&serviceAttrTbl[" + (++index) + @"],
+                               ";
+                }
+                else
+                {
+                    listing += @"NULL,
+                                ";
+                }
+
+                listing += "    BLE_SERVICE_" + item.tag + @"_LEN
+                                },";
+
+                index += 2;
+            }
+
+            listing += "};";
+
+
+
             exportSource("Export C source file", "C files|*.c", "ble_service.c", listing);
 
 
