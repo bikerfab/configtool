@@ -22,9 +22,10 @@ namespace configtool
         {
             InitializeComponent();
         }
-        void selectFolder(String title)
+        void selectFolder(String title, String startingFolder)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = startingFolder;
             DialogResult result = fbd.ShowDialog();
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
@@ -34,8 +35,8 @@ namespace configtool
 
         private void buttonFolder_Click(object sender, EventArgs e)
         {
-            selectFolder("Export folder");
-            labelFolder.Text = folder;
+            selectFolder("Export folder", textBoxFolder.Text);
+            textBoxFolder.Text = folder;
         }
 
         private void label6_Click(object sender, EventArgs e)
@@ -59,7 +60,7 @@ namespace configtool
             srvUUID = textBoxServiceUUID.Text;
             charFirstUUID = textBoxCharFirstUuid.Text;
             baseName = textBoxBaseName.Text;
-            folder = labelFolder.Text;
+            folder = textBoxFolder.Text;
 
             this.Close();
         }

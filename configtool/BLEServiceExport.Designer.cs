@@ -38,12 +38,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxBaseName = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.labelFolder = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.labelUuidsFileName = new System.Windows.Forms.Label();
             this.labelServiceFileName = new System.Windows.Forms.Label();
             this.buttonGenerateCode = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.textBoxFolder = new System.Windows.Forms.TextBox();
             buttonFolder = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -132,17 +132,6 @@
             this.label5.TabIndex = 8;
             this.label5.Text = "Folder";
             // 
-            // labelFolder
-            // 
-            this.labelFolder.AutoSize = true;
-            this.labelFolder.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.labelFolder.Location = new System.Drawing.Point(192, 246);
-            this.labelFolder.MinimumSize = new System.Drawing.Size(400, 15);
-            this.labelFolder.Name = "labelFolder";
-            this.labelFolder.Size = new System.Drawing.Size(400, 19);
-            this.labelFolder.TabIndex = 10;
-            this.labelFolder.Click += new System.EventHandler(this.label6_Click);
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -195,17 +184,24 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // textBoxFolder
+            // 
+            this.textBoxFolder.Location = new System.Drawing.Point(192, 249);
+            this.textBoxFolder.Name = "textBoxFolder";
+            this.textBoxFolder.Size = new System.Drawing.Size(332, 22);
+            this.textBoxFolder.TabIndex = 15;
+            // 
             // BLEServiceExportDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(616, 367);
+            this.Controls.Add(this.textBoxFolder);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonGenerateCode);
             this.Controls.Add(this.labelServiceFileName);
             this.Controls.Add(this.labelUuidsFileName);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.labelFolder);
             this.Controls.Add(buttonFolder);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBoxBaseName);
@@ -235,11 +231,11 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBoxBaseName;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label labelFolder;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label labelUuidsFileName;
         private System.Windows.Forms.Label labelServiceFileName;
         private System.Windows.Forms.Button buttonGenerateCode;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBoxFolder;
     }
 }

@@ -1191,6 +1191,7 @@ void eraseConfig(void);
 
 #endif /* INCLUDE_CONFIG_H_ */";
 
+            // TODO save file dialog scelta nome "config.h" default
             exportSource("config.h", listing);
         }
 
@@ -1246,7 +1247,7 @@ void eraseConfig(void);
                 index++;
             }
 
-            exportSource(baseName+"_uuids.h", listing);
+            exportSource(folder+"\\"+baseName+"_uuids.h", listing);
 
 
             listing = @"typedef struct
@@ -1263,16 +1264,16 @@ void eraseConfig(void);
 */
 CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 {
-  TI_BASE_UUID_128(BLE_SERVICE_UUID)
+  TI_BASE_UUID_128("+srvNameTag+@"UUID)
 };
 
 ";
 
             foreach (configItem item in cfg.getData())
             {
-                listing += "CONST uint8_t "+ srvNameTag+"_" + item.tag + "UUID[ATT_UUID_SIZE] = \r\n{\r\n";
+                listing += "CONST uint8_t " + (srvNameTag + item.tag).ToUpper() + "_UUID[ATT_UUID_SIZE] = \r\n{\r\n";
                 listing += "TI_BASE_UUID_128("+ srvNameTag + item.tag + "_UUID)\r\n";
-                listing += "}\r\n";
+                listing += "};\r\n";
                 listing += "\r\n";
             }
 
@@ -1294,7 +1295,7 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
             foreach (configItem item in cfg.getData())
             {
                 listing += @"// Characteristic """+item.tag+@""" Properties (for declaration) "+item.numBytes+ "byte read by host\r\n";
-                listing += @"static " + configItem.getTypeName((configItem.TYPES)item.typeCode) + " service_" + item.tag + "Props = ";
+                listing += @"static uint8_t "+ srvNameTag + item.tag + "Props = ";
                 if (item.ble.r)
                     listing += "GATT_PROP_READ ";
 
@@ -1314,9 +1315,11 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 
                 listing +=@"// Characteristic """+item.tag+@""" Value variable
 ";
-                listing += @"static " + configItem.getTypeName((configItem.TYPES)item.typeCode) + " service_" + item.tag + "Val[BLE_SERVICE_" + item.tag + "_LEN];\r\n";
-              //  static uint8_t demoService_data1rVal[DEMO_SERVICE_DATA1R_LEN] = { 0 };
+                listing += @"static uint8_t "+srvNameTag + item.tag + "Val["+ srvNameTag + item.tag + "_LEN];\r\n";
+                //  static uint8_t demoService_data1rVal[DEMO_SERVICE_DATA1R_LEN] = { 0 };
 
+                if (item.ble.n)
+                    listing += @"static gattCharCfg_t *" + srvNameTag + item.tag + "Config;\r\n";
 
             }
 
@@ -1344,21 +1347,25 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
         { ATT_BT_UUID_SIZE, characterUUID },
         GATT_PERMIT_READ,
         0,
-        &service_" + item.tag + @"Props 
+        &"+srvNameTag + item.tag + @"Props 
     },
     // " + item.tag + @" Characteristic value
     {
-        { ATT_UUID_SIZE, service_" + item.tag + @"UUID },
+        { ATT_UUID_SIZE, " + (srvNameTag + item.tag).ToUpper() + @"_UUID },
         ";
 
                 if (item.ble.r)
                     listing += "GATT_PROP_READ ";
+
+                if (item.ble.r && item.ble.w)
+                    listing += " | ";
+
                 if (item.ble.w)
                     listing += "GATT_PROP_WRITE ";
 
                 listing += @",
         0,
-        service_" + item.tag + @"Val
+        " + srvNameTag + item.tag + @"Val
     },";
 
                 if (item.ble.n)
@@ -1368,9 +1375,8 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
         { ATT_BT_UUID_SIZE, clientCharCfgUUID },
         GATT_PERMIT_READ | GATT_PERMIT_WRITE,
         0,
-        (uint8*)service_" + item.tag + @"Config
-        },
-    }";
+        (uint8*)&" + srvNameTag + item.tag + @"Config
+    },";
                 }
             }
 
@@ -1412,7 +1418,7 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 
 
 
-            exportSource(baseName+"_service.c", listing);
+            exportSource(folder + "\\" + baseName +"_service.c", listing);
 
 
         }
