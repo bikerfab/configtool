@@ -79,6 +79,7 @@
     <Compile Include="BLEServiceExport.Designer.cs">
       <DependentUpon>BLEServiceExport.cs</DependentUpon>
     </Compile>
+    <Compile Include="BLEServiceExportInfo.cs" />
     <Compile Include="configItem.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="configToolForm.cs">
@@ -124,6 +125,7 @@
     <EmbeddedResource Include="Lang\langres_en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>langres_en.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

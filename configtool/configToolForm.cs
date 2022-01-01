@@ -185,14 +185,17 @@ namespace configtool
         private void initGridView()
         {
             int i = 0;
-
+            String[] row;
             initTable();
 
             dataGridViewConfig.Columns["param"].ReadOnly = true;
 
             for (i = 0; i < cfg.getNumItems(); i++)
             {
-                String[] row = new String[] { cfg.getItem(i).tag,
+
+                if(cfg.getItem(i).ble != null)
+                {
+                    row = new String[] { cfg.getItem(i).tag,
                                               cfg.getItem(i).value,
                                               Convert.ToString(cfg.getItem(i).type),
                                               cfg.getItem(i).descript,
@@ -200,7 +203,21 @@ namespace configtool
                                               cfg.getItem(i).ble.r.ToString(),
                                               cfg.getItem(i).ble.w.ToString(),
                                               cfg.getItem(i).ble.n.ToString()
-                };
+                                            };
+                }
+                else
+                {
+                    row = new String[] { cfg.getItem(i).tag,
+                                              cfg.getItem(i).value,
+                                              Convert.ToString(cfg.getItem(i).type),
+                                              cfg.getItem(i).descript,
+                                              "",
+                                              "",
+                                              "",
+                                              ""
+                                            };
+                }
+                
                 dataGridViewConfig.Rows.Add(row);
             }
 
@@ -485,6 +502,9 @@ namespace configtool
                                     "Error",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
+
+                    initGridView();
+                    setLanguage(languageCode);
                 }
             }
         }
@@ -1209,14 +1229,18 @@ void eraseConfig(void);
 
         private void exportBLEProfileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BLEServiceExportDlg bLEServiceExportDlg = new BLEServiceExportDlg();
-            
+            BLEServiceExportDlg bLEServiceExportDlg = new BLEServiceExportDlg(cfg.serviceExportInfo);
+      //      bLEServiceExportDlg.info = cfg.serviceExportInfo;
+            bLEServiceExportDlg.cfg = cfg;
+
             bLEServiceExportDlg.ShowDialog();
-            exportBLEProfile(bLEServiceExportDlg.srvName,
-                             bLEServiceExportDlg.srvUUID,
-                             bLEServiceExportDlg.charFirstUUID,
-                             bLEServiceExportDlg.folder,
-                             bLEServiceExportDlg.baseName);
+            exportBLEProfile(bLEServiceExportDlg.info.srvName,
+                             bLEServiceExportDlg.info.srvUUID,
+                             bLEServiceExportDlg.info.charFirstUUID,
+                             bLEServiceExportDlg.info.folder,
+                             bLEServiceExportDlg.info.baseName);
+
+
         }
 
         void exportBLEProfile(String srvName, String srvUUID, String charFirstUUID, String folder, String baseName)

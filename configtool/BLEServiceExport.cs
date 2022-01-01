@@ -12,15 +12,20 @@ namespace configtool
 {
     public partial class BLEServiceExportDlg : Form
     {
-        public String folder;
-        public String srvName;
-        public String srvUUID;
-        public String charFirstUUID;
-        public String baseName;
+        public BLEServiceExportInfo info;
+        public Configuration cfg;
         
-        public BLEServiceExportDlg()
+        public BLEServiceExportDlg(BLEServiceExportInfo exportInfo)
         {
+            info = exportInfo;
+
             InitializeComponent();
+
+            textBoxServiceName.Text = info.srvName;
+            textBoxServiceUUID.Text = info.srvUUID;
+            textBoxCharFirstUuid.Text = info.charFirstUUID;
+            textBoxBaseName.Text = info.baseName;
+            textBoxFolder.Text = info.folder;
         }
         void selectFolder(String title, String startingFolder)
         {
@@ -29,14 +34,14 @@ namespace configtool
             DialogResult result = fbd.ShowDialog();
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
-                folder = fbd.SelectedPath;
+                info.folder = fbd.SelectedPath;
             }
         }
 
         private void buttonFolder_Click(object sender, EventArgs e)
         {
             selectFolder("Export folder", textBoxFolder.Text);
-            textBoxFolder.Text = folder;
+            textBoxFolder.Text = info.folder;
         }
 
         private void label6_Click(object sender, EventArgs e)
@@ -56,11 +61,13 @@ namespace configtool
 
         private void buttonGenerateCode_Click(object sender, EventArgs e)
         {
-            srvName = textBoxServiceName.Text;
-            srvUUID = textBoxServiceUUID.Text;
-            charFirstUUID = textBoxCharFirstUuid.Text;
-            baseName = textBoxBaseName.Text;
-            folder = textBoxFolder.Text;
+            info.srvName = textBoxServiceName.Text;
+            info.srvUUID = textBoxServiceUUID.Text;
+            info.charFirstUUID = textBoxCharFirstUuid.Text;
+            info.baseName = textBoxBaseName.Text;
+            info.folder = textBoxFolder.Text;
+
+            cfg.saveData();
 
             this.Close();
         }
