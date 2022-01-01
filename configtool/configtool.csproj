@@ -73,6 +73,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bleData.cs" />
+    <Compile Include="BLEServiceExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BLEServiceExport.Designer.cs">
+      <DependentUpon>BLEServiceExport.cs</DependentUpon>
+    </Compile>
     <Compile Include="configItem.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="configToolForm.cs">
@@ -105,6 +111,9 @@
       <DependentUpon>templateDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Timeout.cs" />
+    <EmbeddedResource Include="BLEServiceExport.resx">
+      <DependentUpon>BLEServiceExport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="configToolForm.resx">
       <DependentUpon>configToolForm.cs</DependentUpon>
     </EmbeddedResource>
