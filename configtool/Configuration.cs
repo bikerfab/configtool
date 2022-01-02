@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Windows.Forms;
 
 namespace configtool
 {
@@ -22,8 +23,10 @@ namespace configtool
     public class Configuration
     {
         public String name;
+        public String fileName;
         configHeader header;
         List<configItem> data = new List<configItem>();
+        public BLEServiceExportInfo serviceExportInfo;
 
         public enum cfgReply
         {
@@ -48,6 +51,7 @@ namespace configtool
         public Configuration()
         {
             header = new configHeader();
+            serviceExportInfo = new BLEServiceExportInfo();
         }
                
         public void updateHeader()
@@ -70,18 +74,30 @@ namespace configtool
                 using (Stream stream = File.Open(filename, FileMode.Open))
                 {
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
+                    bool noInfo = false;
+                    try
+                    {
+                        fileName = (String)bformatter.Deserialize(stream);
+                    }
+                    catch(Exception e)
+                    {
+                        noInfo = true;
+                        stream.Position = 0;
+                    }
+                    
                     header.size = (byte)bformatter.Deserialize(stream);
                     header.numItems = (byte)bformatter.Deserialize(stream);
                     header.prodId = (byte)bformatter.Deserialize(stream);
                     header.versionId = (byte)bformatter.Deserialize(stream);
 
                     data = (List<configItem>)bformatter.Deserialize(stream);
+                    if(!noInfo)
+                        serviceExportInfo = (BLEServiceExportInfo)bformatter.Deserialize(stream);
 
                     return true;
                 }
             }
-            catch(SerializationException e)
+            catch(Exception e)
             {
                 return false;
             }
@@ -165,12 +181,46 @@ namespace configtool
             {
                 var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
+                bformatter.Serialize(stream, filename);
                 bformatter.Serialize(stream, header.size);
                 bformatter.Serialize(stream, header.numItems);
                 bformatter.Serialize(stream, header.prodId);
                 bformatter.Serialize(stream, header.versionId);
                 bformatter.Serialize(stream, data);
+                if(serviceExportInfo.baseName != null)
+                {
+                    bformatter.Serialize(stream, serviceExportInfo);
+                }
+                else
+                {
+                    serviceExportInfo.baseName = "";
+                    serviceExportInfo.charFirstUUID = "";
+                    serviceExportInfo.srvName = "";
+                    serviceExportInfo.srvUUID = "";
+                    serviceExportInfo.folder = "";
+                    bformatter.Serialize(stream, serviceExportInfo);
+                }
             }
+        }
+
+        public void saveData()
+        {
+            if (fileName == null)
+            {
+                SaveFileDialog cfgSave = new SaveFileDialog();
+                cfgSave.Title = "Save Configuration";
+                cfgSave.Filter = "cfg files|*.cfg";
+
+                cfgSave.FileName = name;
+
+                if (cfgSave.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = cfgSave.FileName.ToString();
+                    saveData(fileName);
+                }
+            }
+            else
+                saveData(fileName); // use stored name
         }
 
         public void addItem(configItem item)
