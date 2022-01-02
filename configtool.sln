@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "configtool", "configtool\configtool.csproj", "{656F18C1-0E41-4E1F-972F-F1A034A81CED}"
 EndProject
@@ -26,8 +26,8 @@ Global
 		{656F18C1-0E41-4E1F-972F-F1A034A81CED}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{656F18C1-0E41-4E1F-972F-F1A034A81CED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{656F18C1-0E41-4E1F-972F-F1A034A81CED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{656F18C1-0E41-4E1F-972F-F1A034A81CED}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
-		{656F18C1-0E41-4E1F-972F-F1A034A81CED}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{656F18C1-0E41-4E1F-972F-F1A034A81CED}.SingleImage|Any CPU.ActiveCfg = Debug|Any CPU
+		{656F18C1-0E41-4E1F-972F-F1A034A81CED}.SingleImage|Any CPU.Build.0 = Debug|Any CPU
 		{18FC1AF2-DFBB-494E-B77D-39AA3FAF5D8C}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
 		{18FC1AF2-DFBB-494E-B77D-39AA3FAF5D8C}.CD_ROM|Any CPU.Build.0 = CD_ROM
 		{18FC1AF2-DFBB-494E-B77D-39AA3FAF5D8C}.Debug|Any CPU.ActiveCfg = SingleImage
