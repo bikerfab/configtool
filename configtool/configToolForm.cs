@@ -1305,8 +1305,8 @@ void eraseConfig(void);
 
 // service UUID
 
-#define " + srvNameTag + "UUID    " + srvUuid + @"
-#define " + srvNameTag + "NUM_CHARACT  " + cfg.getData().Count + @"
+#define " + srvNameTag + "UUID          " + srvUuid + @"
+#define " + srvNameTag + "NUM_CHARACT   " + cfg.getData().Count + @"
 
 // characteristics UUIDs
 
@@ -1315,9 +1315,9 @@ void eraseConfig(void);
             foreach (configItem item in cfg.getData())
             {
                 charctTag = (srvNameTag + item.tag).ToUpper();
-                listing += "#define " + charctTag + "  " + index+ "\r\n";
-                listing += "#define " + charctTag + "_UUID   "+ string.Format("0x{0:x16}", (charFirstUUIDVal + index)) +"\r\n";
-                listing += "#define " + charctTag + "_LEN    " + item.getSize()+ "\r\n";
+                listing += "#define " + charctTag + new String(' ', 30 - charctTag.Length) + index+ "\r\n";
+                listing += "#define " + charctTag + "_UUID"+ new String(' ', 25 - charctTag.Length)+ string.Format("0x{0:X4}", (charFirstUUIDVal + index)) +"\r\n";
+                listing += "#define " + charctTag + "_LEN"+ new String(' ', 26 - charctTag.Length) + item.getSize()+ "\r\n";
                 listing += "\r\n";
                 index++;
             }
@@ -1495,11 +1495,22 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 
             exportSource(folder + "\\" + baseName +"_service.c", listing);
 
+            listing = @"#include """+srvName+@"_uuids.h"""+@"
+BLE_SERVICE_DATA *" + srvName + @"ServiceInit(void);
+void "+ srvName+@"ServiceDataUpdate(void *pData);
+void "+srvName+@"ServiceDataInit(void *pData);
+bStatus_t "+ srvName+ @"_SetParameter( uint8 param, uint8 len, void *value );
+bStatus_t "+ srvName + @"_GetParameter( uint8 param, void *value );
+";
+
+            exportSource(folder + "\\" + baseName + "_service.h", listing);
+
             String[] replaceTags = { "@srv_name", srvName,
                                      "@srv_tag", srvNameTag };
 
             exportServiceCode(folder + "\\"+"service_template.c", folder + "\\"+srvNameTag.ToLower() + "srv.c", replaceTags);
 
+        
 
         }
 
