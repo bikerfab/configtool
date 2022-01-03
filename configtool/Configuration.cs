@@ -93,7 +93,15 @@ namespace configtool
                     data = (List<configItem>)bformatter.Deserialize(stream);
                     if(!noInfo)
                         serviceExportInfo = (BLEServiceExportInfo)bformatter.Deserialize(stream);
-
+                                       
+                    // create ble info if not available
+                    int i;
+                    for(i=0; i< data.Count; i++)
+                    {
+                        if(data.ElementAt(i).ble == null)
+                            data.ElementAt(i).ble = new bleData("", false, false, false);
+                    }
+                   
                     return true;
                 }
             }

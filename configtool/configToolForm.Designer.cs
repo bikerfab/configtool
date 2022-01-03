@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConfig));
             this.dataGridViewConfig = new System.Windows.Forms.DataGridView();
             this.buttonSend = new System.Windows.Forms.Button();
@@ -43,6 +43,7 @@
             this.openToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportStructureFiletxtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportBLEProfileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +62,6 @@
             this.labelIdentifiers = new System.Windows.Forms.Label();
             this.buttonQR = new System.Windows.Forms.Button();
             this.textBoxData = new System.Windows.Forms.TextBox();
-            this.exportCSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConfig)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -70,29 +70,31 @@
             // dataGridViewConfig
             // 
             this.dataGridViewConfig.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewConfig.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewConfig.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewConfig.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewConfig.Location = new System.Drawing.Point(13, 91);
             this.dataGridViewConfig.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewConfig.Name = "dataGridViewConfig";
             this.dataGridViewConfig.RowHeadersWidth = 51;
             this.dataGridViewConfig.Size = new System.Drawing.Size(963, 448);
             this.dataGridViewConfig.TabIndex = 0;
+            this.dataGridViewConfig.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellClick);
+            this.dataGridViewConfig.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellContentClick);
             this.dataGridViewConfig.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellEnter);
             this.dataGridViewConfig.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellLeave);
             this.dataGridViewConfig.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConfig_CellValueChanged);
@@ -192,6 +194,13 @@
             this.exportStructureFiletxtToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
             this.exportStructureFiletxtToolStripMenuItem.Text = "Export structure file (txt)";
             this.exportStructureFiletxtToolStripMenuItem.Click += new System.EventHandler(this.exportStructureFiletxtToolStripMenuItem_Click);
+            // 
+            // exportCSourceToolStripMenuItem
+            // 
+            this.exportCSourceToolStripMenuItem.Name = "exportCSourceToolStripMenuItem";
+            this.exportCSourceToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
+            this.exportCSourceToolStripMenuItem.Text = "Export C header file";
+            this.exportCSourceToolStripMenuItem.Click += new System.EventHandler(this.exportCSourceToolStripMenuItem_Click);
             // 
             // exportBLEProfileToolStripMenuItem
             // 
@@ -359,13 +368,6 @@
             this.textBoxData.Name = "textBoxData";
             this.textBoxData.Size = new System.Drawing.Size(345, 414);
             this.textBoxData.TabIndex = 13;
-            // 
-            // exportCSourceToolStripMenuItem
-            // 
-            this.exportCSourceToolStripMenuItem.Name = "exportCSourceToolStripMenuItem";
-            this.exportCSourceToolStripMenuItem.Size = new System.Drawing.Size(252, 26);
-            this.exportCSourceToolStripMenuItem.Text = "Export C header file";
-            this.exportCSourceToolStripMenuItem.Click += new System.EventHandler(this.exportCSourceToolStripMenuItem_Click);
             // 
             // FormConfig
             // 
