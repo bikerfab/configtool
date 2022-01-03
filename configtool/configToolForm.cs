@@ -1322,7 +1322,7 @@ void eraseConfig(void);
                 index++;
             }
 
-            exportSource(folder+"\\"+baseName+"_uuids.h", listing);
+            exportSource(folder+"\\include\\"+baseName+"_uuids.h", listing);
 
 
             listing = @"
@@ -1457,7 +1457,7 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 ";
             // attribute table
             index = 2;
-            listing += @"CHARACTERISTIC_DATA charactData[] = {";
+            listing += @"static CHARACTERISTIC_DATA charactData[] = {";
 
             foreach (configItem item in cfg.getData())
             {
@@ -1503,7 +1503,7 @@ bStatus_t "+ srvName+ @"_SetParameter( uint8 param, uint8 len, void *value );
 bStatus_t "+ srvName + @"_GetParameter( uint8 param, void *value );
 ";
 
-            exportSource(folder + "\\" + baseName + "_service.h", listing);
+            exportSource(folder + "\\include\\" + baseName + "_service.h", listing);
 
             String[] replaceTags = { "@srv_name", srvName,
                                      "@srv_tag", srvNameTag };
