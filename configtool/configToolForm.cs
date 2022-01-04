@@ -1311,13 +1311,24 @@ void eraseConfig(void);
 // characteristics UUIDs
 
 ";
+            int maxLen = 0;
+            foreach (configItem item in cfg.getData())
+            {
+                charctTag = (srvNameTag + item.tag).ToUpper();
+                int len = charctTag.Length;
+                if (len > maxLen)
+                    maxLen = len;
+            }
+
+            int spcNum = maxLen + 10;
 
             foreach (configItem item in cfg.getData())
             {
                 charctTag = (srvNameTag + item.tag).ToUpper();
-                listing += "#define " + charctTag + new String(' ', 30 - charctTag.Length) + index+ "\r\n";
-                listing += "#define " + charctTag + "_UUID"+ new String(' ', 25 - charctTag.Length)+ string.Format("0x{0:X4}", (charFirstUUIDVal + index)) +"\r\n";
-                listing += "#define " + charctTag + "_LEN"+ new String(' ', 26 - charctTag.Length) + item.getSize()+ "\r\n";
+
+                listing += "#define " + charctTag + new String(' ', spcNum - charctTag.Length) + index+ "\r\n";
+                listing += "#define " + charctTag + "_UUID"+ new String(' ', (spcNum-5) - charctTag.Length)+ string.Format("0x{0:X4}", (charFirstUUIDVal + index)) +"\r\n";
+                listing += "#define " + charctTag + "_LEN"+ new String(' ', (spcNum-4) - charctTag.Length) + item.getSize()+ "\r\n";
                 listing += "\r\n";
                 index++;
             }
@@ -1341,7 +1352,7 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
             {
                 charctTag = (srvNameTag + item.tag).ToUpper();
                 listing += "CONST uint8_t " + (srvNameTag + item.tag) + "_UUID[ATT_UUID_SIZE] = \r\n{\r\n";
-                listing += "TI_BASE_UUID_128("+ charctTag + "_UUID)\r\n";
+                listing += "    TI_BASE_UUID_128("+ charctTag + "_UUID)\r\n";
                 listing += "};\r\n";
                 listing += "\r\n";
             }
@@ -1385,7 +1396,7 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 
                 listing +=@"// Characteristic """+item.tag+@""" Value variable
 ";
-                listing += @"static uint8_t "+srvNameTag + item.tag + "Val["+ charctTag + "_LEN];\r\n";
+                listing += @"static uint8_t "+srvNameTag + item.tag + "Val["+ charctTag + "_LEN] = {0};\r\n";
                 //  static uint8_t demoService_data1rVal[DEMO_SERVICE_DATA1R_LEN] = { 0 };
 
                 if (item.ble.n)
@@ -1397,10 +1408,10 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
             listing += @"/*********************************************************************
 * Profile Attributes - Table
 */";
-
+            index = 0;
             listing += @"static gattAttribute_t serviceAttrTbl[] =
 {
-    //  Service Declaration      0
+    //  Service Declaration      "+ index++ +@"
     {
         { ATT_BT_UUID_SIZE, primaryServiceUUID },
             GATT_PERMIT_READ,
@@ -1413,26 +1424,26 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
                 charctTag = (srvNameTag + item.tag).ToUpper();
                 listing += @"
 
-    // " + item.tag + @" Characteristic declaration
+    // " + item.tag + @" Characteristic declaration     " + index++ +@"
     {  
         { ATT_BT_UUID_SIZE, characterUUID },
         GATT_PERMIT_READ,
         0,
         &"+srvNameTag + item.tag + @"Props 
     },
-    // " + item.tag + @" Characteristic value
+    // " + item.tag + @" Characteristic value       " + index++ +@"
     {
         { ATT_UUID_SIZE, " + (srvNameTag + item.tag) + @"_UUID },
         ";
 
                 if (item.ble.r)
-                    listing += "GATT_PROP_READ ";
+                    listing += "GATT_PERMIT_READ ";
 
                 if (item.ble.r && item.ble.w)
                     listing += " | ";
 
                 if (item.ble.w)
-                    listing += "GATT_PROP_WRITE ";
+                    listing += "GATT_PERMIT_WRITE ";
 
                 listing += @",
         0,
@@ -1441,7 +1452,7 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 
                 if (item.ble.n)
                 {
-                    listing += @"   // " + item.tag + @" CCCD
+                    listing += @"   // " + item.tag + @" CCCD   "+ index++ +@"
     {
         { ATT_BT_UUID_SIZE, clientCharCfgUUID },
         GATT_PERMIT_READ | GATT_PERMIT_WRITE,
@@ -1457,7 +1468,7 @@ CONST uint8_t serviceUUID[ATT_UUID_SIZE] =
 ";
             // attribute table
             index = 2;
-            listing += @"static CHARACTERISTIC_DATA charactData[] = {";
+            listing += @"static CHARACTERISTIC_DATA "+ srvName + "CharactData[] = {";
 
             foreach (configItem item in cfg.getData())
             {
