@@ -1259,7 +1259,19 @@ void eraseConfig(void);
 #endif /* INCLUDE_CONFIG_H_ */";
 
             // TODO save file dialog scelta nome "config.h" default
-            exportSource("config.h", listing);
+
+            SaveFileDialog cfgSave = new SaveFileDialog();
+            cfgSave.Title = "Save header file";
+            cfgSave.Filter = "H files|*.h";
+
+            cfgSave.FileName = "config.h";
+
+            if (cfgSave.ShowDialog() == DialogResult.OK)
+            {
+                exportSource(cfgSave.FileName, listing);
+            }
+
+
         }
 
         void exportSource(String filename, String listing)
