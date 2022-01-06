@@ -1255,6 +1255,7 @@ void loadConfig(void);
 void saveConfig(void);
 uint8_t isConfigValid(CFG_PARAMS* cfg);
 void eraseConfig(void);
+void printConfig(void);
 
 #endif /* INCLUDE_CONFIG_H_ */";
 
